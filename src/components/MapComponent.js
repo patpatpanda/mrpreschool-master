@@ -535,7 +535,7 @@ const MapComponent = () => {
                   Närmsta 5
                 </Button>
                 <Button onClick={handleTopRanked} variant="contained" color="secondary">
-                  Högst rankheeh
+                  Högst rank
                 </Button>
               </Box>
             )}

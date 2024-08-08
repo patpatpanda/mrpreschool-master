@@ -1,0 +1,545 @@
+/* Global Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Förhindra skrollning */
+}
+body.fixed-position {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.custom-snackbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  margin-bottom: 400px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 500px; /* Maxbredd för att förhindra att den blir för stor på större skärmar */
+  z-index: 1400; /* Se till att den är över andra element */
+}
+
+
+
+/* Container for Map and Cards */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Förhindra skrollning */
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Map Container */
+.map-container {
+  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden; /* Förhindra skrollning */
+}
+
+.search-container {
+ 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 100%;
+  max-width: 700px;
+  font-size: 16px;
+  transition: top 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  
+}
+.detailed-card{
+  z-index: 10000;
+}
+
+.search-container.center {
+  margin-top: 300px;
+  font-size: 16px;
+}
+
+.search-container.top {
+  top: 10px;
+  
+  font-size: 16px;
+}
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.initial-text {
+  position: absolute;
+  top: 80px; /* Justera efter behov */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1333;
+  
+  color: #fff;
+ 
+  padding: 5px 20px;
+  width: 100%; /* Gör elementet fullbredd */
+  max-width: 1000px; /* Maximal bredd för större skärmar */
+  height: 140px; /* Justera höjden */
+  background: url('/public/förskolekollen.png') no-repeat center center;
+  
+ 
+  
+  text-align: center; /* Centrera texten */
+}
+
+@media (max-width: 4000px) {
+  .initial-text {
+    top: 60px; /* Justera position för mindre skärmar */
+    max-width: 600px; /* Anpassa maximal bredd för mindre skärmar */
+    height: 90px; /* Justera höjden för mindre skärmar */
+    background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
+  }
+}
+
+@media (max-width: 480px) {
+  .initial-text {
+    top: 40px; /* Justera position för ännu mindre skärmar */
+    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
+    height: 60px; /* Justera höjden för små skärmar */
+    background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
+  }
+}
+
+
+.cards-container {
+  display: grid;
+  flex-wrap: wrap;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  padding: 15px;
+  background: url('/public/yeye.webp') no-repeat center center;
+  background-size: cover; /* Ensure the image covers the entire container */
+  position: relative;
+  z-index: 100;
+  height: 100vh;
+  padding-top: 400px;
+  
+
+  /* Additional styles to make the background more lively */
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5); /* Add a subtle inner shadow */
+  filter: brightness() saturate(0.7); /* Increase brightness and saturation */
+  
+}
+
+/* Keyframes for the background animation */
+
+
+.cards-container.hidden {
+  display: none;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent bakgrund */
+  backdrop-filter: blur(10px); /* Blur effekten för glaseffekt */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Ljusare kant för glasutseende */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #4CAF50;
+  cursor: pointer;
+  margin: 20px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: column;
+  justify-content: space-between; /* Ensure content is spaced out */
+  width: 450px; /* Full width for smaller screens */
+  height: 500px; /* Set a fixed height */
+  box-sizing: border-box;
+  position: relative; /* Ensure content is positioned relative to the card */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.card-body {
+  margin-top: 10px;
+  flex-grow: 1; /* Allow body to grow */
+  overflow-y: auto; /* Enable scrolling within the card body */
+}
+
+.card-body p {
+  margin: 5px 0;
+}
+
+.details {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.details p {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Allow content to wrap if needed */
+}
+
+.details span {
+  font-weight: bold;
+  color: #FF5722;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Detailed Card */
+
+/* Media Queries for Responsiveness */
+
+/* For tablets and below */
+@media (max-width: 1400px) {
+  .styled-input {
+    width: calc(100% - 80px);
+    font-size: 16px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  }
+  
+
+  .search-container {
+    display: flex;
+    user-select: none;
+
+    touch-action: none;
+    position: absolute;
+    width: 80%;
+    font-size: 16px;
+    background-color: none;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  }
+
+  .search-container.center {
+    margin-top: 300px;
+    font-size: 16px;
+    position: absolute; /* Changed from fixed to absolute */
+  }
+
+  .search-container.top {
+    top:1px;
+    font-size: 16px;
+    
+    position: absolute; /* Changed from fixed to absolute */
+  }
+
+  .styled-button {
+    padding: 10px 20px;
+    font-size: 16px; /* Öka fontstorleken till minst 16px */
+    margin-right: 10px;
+    margin-top: 5px;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 15px;
+    background-color: #FFF;
+    position: relative;
+    z-index: 10;
+    padding-top: 450px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+    background: url('/public/stalin.png') no-repeat center center;
+    background-size: cover; /* Adjust the background size */
+}
+
+
+  .card {
+    padding: 15px;
+    width: 356px; /* Full width for smaller screens */
+    height: 600px; /* Set a fixed height */
+    font-family: Comic Sans MS, Comic Sans;
+    margin-left: 10px; /* Move cards slightly to the left */
+  }
+
+  .card h3 {
+    font-size: 18px;
+    font-family: Comic Sans MS, Comic Sans;
+  }
+
+  .card p {
+    font-size: 16px;
+    font-family: Comic Sans MS, Comic Sans;
+  }
+  .custom-snackbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px; /* Maxbredd för att förhindra att den blir för stor på större skärmar */
+    z-index: 1400; /* Se till att den är över andra element */
+    margin-left:220px;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+
+  
+  .custom-snackbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px; /* Maxbredd för att förhindra att den blir för stor på större skärmar */
+    z-index: 1400; /* Se till att den är över andra element */
+    margin-left:220px;
+  }
+  .cards-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 15px;
+    background-color: #FFF;
+    position: relative;
+    z-index: 10;
+    padding-top: 450px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+    background: url('/public/stalin.png') no-repeat center center;
+    background-size: cover; /* Adjust the background size */
+}
+
+  .search-container {
+    user-select: none;
+   
+    touch-action: none;
+    position: absolute;
+    left: 50%;
+    width: 90%;
+    font-size: 16px;
+    font-family: Comic Sans MS, Comic Sans;
+    overflow-y: auto;
+  overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  }
+
+  .search-container.center {
+    margin-top: 200px;
+    font-size: 16px;
+    position: absolute; /* Changed from fixed to absolute */
+  }
+
+  .search-container.top {
+    top: 1px;
+    
+    font-size: 16px;
+    margin-right: 15px;
+    position: absolute; /* Changed from fixed to absolute */
+  }
+
+  .styled-input {
+    width: calc(100% - 10px); /* Minska subtraktionen för att göra det bredare */
+    font-size: 16px;
+    font-family: Comic Sans MS, Comic Sans;
+}
+
+
+  .styled-button {
+    padding: 5px 10px;
+    font-size: 16px;
+    margin: 5px;
+  }
+
+  .card {
+    width: 350px; /* Full width for smaller screens */
+    height: 520px; /* Set a fixed height */
+    font-size: 16px;
+    margin-left: 10px; /* Move cards slightly to the left */
+  }
+
+  .card h3 {
+    font-size: 16px;
+    font-family: Comic Sans MS, Comic Sans;
+  }
+
+  .card p {
+    font-size: 16px;
+    font-family: Comic Sans MS, Comic Sans;
+  }
+
+  .detailed-card-content {
+    width: 75%;
+    padding: 10px;
+  }
+
+  .detailed-card button {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+}
+
+.detailed-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.detailed-card-content {
+  padding: 20px;
+  position: relative;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1.5em;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 2em;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.pdf-details, .school-details, .contacts {
+  margin-top: 20px;
+}
+
+.walk-time {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+
+/* Ensure the map container handles overflow correctly */
+.map-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.gm-style .gm-style-iw-c {
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  transform: translate3d(10px, -50%, 0);
+  background: #fff;
+ 
+  
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1rem;
+  max-width: 250px; /* Justerat max bredd */
+  max-height: 250px; /* Justerat max höjd */
+  height: auto !important;
+  text-align: left;
+  padding: 10px;
+  font-family: Comic Sans MS, Comic Sans;
+}
+
+.gm-style .gm-style-iw-d {
+  display: flex;
+  overflow: hidden !important;
+}
+
+.gm-style .gm-style-iw-t::after {
+  display: flex;
+  content: none !important;
+}
+
+.gm-style-iw button.gm-ui-hover-effect {
+  display: flex;
+  display: none !important;
+}
+
+.info-window-title {
+  display: flex;
+  font-size: 15px;
+  margin: 0 15px 0 0;
+  color: #222;
+  white-space: nowrap;
+}
+
+.info-window-rating,
+.info-window-walking-time {
+  display: flex;
+  font-size: 12px;
+  margin: 0 10px 0 0;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.info-window-rating {
+  display: flex;
+  color: #ff22e2;
+}
+
+.info-window-walking-time {
+  display: flex;
+  color: #333;
+}
+
+
+
+@media (max-width: 480px) {
+  .view-options {
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+}

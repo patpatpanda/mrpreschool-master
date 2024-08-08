@@ -12,7 +12,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App">
-          asdsad
+    
           <nav>
             {/* Lägg till din navigering här */}
           </nav>

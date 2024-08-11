@@ -121,7 +121,7 @@ body.fixed-position {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
   .initial-text {
     margin-top: 40px; /* Justera position för ännu mindre skärmar */
     max-width: 300px; /* Anpassa maximal bredd för små skärmar */

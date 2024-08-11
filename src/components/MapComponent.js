@@ -58,7 +58,7 @@ const MapComponent = () => {
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
   const [view, setView] = useState('list');
   const [walkingTimes, setWalkingTimes] = useState({});
-  const [ setShowText] = useState(true);
+  const [showText, setShowText] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showSplashScreen, setShowSplashScreen] = useState(true);
@@ -524,7 +524,7 @@ const MapComponent = () => {
   return (
     <div className="app-container">
       {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
-    
+      {showText && <div className="initial-text"> {/* Initial text content */} </div>}
 
       <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
         <Container maxWidth="sm">
@@ -563,12 +563,7 @@ const MapComponent = () => {
 </form>
 
 {!searchMade && (
-  <Button
-    onClick={handleBlogRedirect}
-    variant="contained"
-    color="primary"
-    sx={{ marginTop: '100px' }} // Flyttar ner knappen 100px
-  >
+  <Button onClick={handleBlogRedirect} variant="contained" color="primary">
     Vanliga frågor och svar - Klicka här!
   </Button>
 )}
@@ -625,7 +620,7 @@ const MapComponent = () => {
 
       {searchMade && (
         <button className={`toggle-button ${sidebarOpen ? 'open' : 'closed'}`} onClick={toggleSidebar}>
-          {sidebarOpen ? 'Dölj' : 'Visa alla'}
+          {sidebarOpen ? 'Dölj' : 'Visa'}
         </button>
       )}
       <Sidebar

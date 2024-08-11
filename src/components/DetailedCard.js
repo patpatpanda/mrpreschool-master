@@ -106,27 +106,27 @@ const DetailedCard = ({ schoolData, onClose }) => {
                         <Typography variant="body2">År: {question.year}</Typography>
                         {question.frageText.includes('HELHETSOMDÖME') && (
                           <Typography variant="body2">
-                            Denna fråga avser det övergripande omdömet för {namn} under året {question.year}. Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.
+                           Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.
                           </Typography>
                         )}
                         {question.frageText.includes('UTVECKLING OCH LÄRANDE') && (
                           <Typography variant="body2">
-                            Denna fråga handlar om utveckling och lärande på {namn} för året {question.year}. Resultatet visar att {question.andelInstammer}% av föräldrarna upplever att deras barn utvecklas och lär sig bra.
+                             Resultatet visar att {question.andelInstammer}% av föräldrarna upplever att deras barn utvecklas och lär sig bra.
                           </Typography>
                         )}
                         {question.frageText.includes('NORMER OCH VÄRDEN') && (
                           <Typography variant="body2">
-                            Frågan om normer och värden på {namn} för året {question.year} visar att {question.andelInstammer}% av de svarande instämmer i att förskolan arbetar väl med dessa aspekter.
+                            Frågan om normer och värden för året  visar att {question.andelInstammer}% av de svarande instämmer i att förskolan arbetar väl med dessa aspekter.
                           </Typography>
                         )}
                         {question.frageText.includes('SAMVERKAN MED HEMMET') && (
                           <Typography variant="body2">
-                            Denna fråga belyser samverkan med hemmet för {namn} under året {question.year}. Här ser vi att {question.andelInstammer}% av föräldrarna tycker att samarbetet med förskolan fungerar bra.
+                            Denna fråga belyser samverkan med hemmet. Här ser vi att {question.andelInstammer}% av föräldrarna tycker att samarbetet med förskolan fungerar bra.
                           </Typography>
                         )}
                         {question.frageText.includes('KOST, RÖRELSE OCH HÄLSA') && (
                           <Typography variant="body2">
-                            Frågan om kost, rörelse och hälsa för {namn} under året {question.year} visar att {question.andelInstammer}% är nöjda med förskolans arbete inom dessa områden.
+                             {question.andelInstammer}% är nöjda med förskolans arbete inom dessa områden.
                           </Typography>
                         )}
                       </Box>

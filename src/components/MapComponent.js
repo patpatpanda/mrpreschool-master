@@ -339,9 +339,9 @@ const MapComponent = () => {
     let iconUrl;
 
     if (place.organisationsform === 'Kommunal') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png';
-    } else if (place.organisationsform === 'Fristående') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';
+    } else if (place.organisationsform === 'Fristående') {
+      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
     } else if (place.organisationsform === 'Föräldrakooperativ') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
     } else {

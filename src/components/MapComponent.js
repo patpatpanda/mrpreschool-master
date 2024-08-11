@@ -58,7 +58,7 @@ const MapComponent = () => {
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
   const [view, setView] = useState('list');
   const [walkingTimes, setWalkingTimes] = useState({});
-  const [showText, setShowText] = useState(true);
+  const [ setShowText] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showSplashScreen, setShowSplashScreen] = useState(true);

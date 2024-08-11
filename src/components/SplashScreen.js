@@ -45,7 +45,7 @@ const SplashScreen = ({ onProceed }) => {
           </Typography>
           <Typography variant="body1" paragraph>
             Här kan du hitta närliggande förskolor och se detaljerad information om dem.
-            För närvarande stödjer vi bara förskolor inom stockholmsområdet
+            För närvarande stödjer vi bara förskolor inom stockholmsområdet.
           </Typography>
           <Typography variant="body1" paragraph>
             Ange din adress i sökrutan för att börja.

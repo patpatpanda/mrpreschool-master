@@ -524,7 +524,7 @@ const MapComponent = () => {
   return (
     <div className="app-container">
       {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
-      {showText && <div className="initial-text"> {/* Initial text content */} </div>}
+      {showText }
 
       <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
         <Container maxWidth="sm">

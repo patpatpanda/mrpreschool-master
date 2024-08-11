@@ -8,7 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@googlemaps/markerclusterer": "^2.5.3",
-    "@mui/icons-material": "^5.16.6",
+    "@mui/icons-material": "^5.16.7",
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.6",
     "@popperjs/core": "^2.11.8",
@@ -52,14 +52,13 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
-  "start": "react-scripts start",
-  "build": "cross-env ESLINT_NO_DEV_ERRORS=true react-scripts build",
-  "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
-  "build-and-copy": "npm run build && npm run copy-build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject"
-},
-
+    "start": "react-scripts start",
+    "build": "cross-env ESLINT_NO_DEV_ERRORS=true react-scripts build",
+    "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
+    "build-and-copy": "npm run build && npm run copy-build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

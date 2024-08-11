@@ -20,26 +20,26 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Comic Sans MS, Comic Sans',
     h1: {
-      fontSize: '3rem',
+      fontSize: '4rem', // Större rubrikstorlek
       fontWeight: 'bold',
       color: pink[500],
       '@media (max-width:600px)': {
-        fontSize: '2rem',
+        fontSize: '3rem', // Justera för mindre skärmar
       },
     },
     h3: {
-      fontSize: '1.5rem',
+      fontSize: '2rem', // Ökad storlek
       color: pink[500],
     },
     body1: {
-      fontSize: '1rem',
+      fontSize: '1.25rem', // Större brödtext
       color: blueGrey[800], // Använd primary textfärg
       '@media (max-width:600px)': {
-        fontSize: '0.875rem',
+        fontSize: '1rem', // Justera för mindre skärmar
       },
     },
     body2: {
-      fontSize: '0.875rem',
+      fontSize: '1rem', // Ökad storlek
       color: blueGrey[700], // Använd secondary textfärg
     },
   },
@@ -49,13 +49,11 @@ const theme = createTheme({
         root: {
           borderRadius: '20px',
           textTransform: 'none',
-         
-          fontSize: '0.8rem', // Standardstorlek för desktop
-          padding: '6px 12px', // Standard padding för desktop
-       
+          fontSize: '1rem', // Större standardstorlek för desktop
+          padding: '8px 16px', // Ökad padding för desktop
           '@media (max-width:768px)': {
-            fontSize: '0.7rem',
-            padding:'5px 12px'
+            fontSize: '0.9rem', // Justera för mindre skärmar
+            padding: '7px 14px',
           },
         },
       },
@@ -75,6 +73,7 @@ const theme = createTheme({
           backgroundColor: '#FFEB3B',
           color: deepOrange[900], // Mörkare färg för bättre kontrast
           textAlign: 'center',
+          fontSize: '1.75rem', // Större dialogtitel
         },
       },
     },
@@ -83,6 +82,7 @@ const theme = createTheme({
         root: {
           backgroundColor: '#FFFDE7',
           color: blueGrey[800], // Använd primary textfärg
+          fontSize: '1.25rem', // Större dialogtext
         },
       },
     },
@@ -90,6 +90,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: '#fff',
+          fontSize: '1.5rem', // Större ikonknappar
         },
       },
     },

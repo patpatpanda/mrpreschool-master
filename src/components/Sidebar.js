@@ -28,7 +28,7 @@ const Sidebar = ({ places, selectedPlace, onSelect, sidebarOpen, toggleSidebar, 
         )}
       </div>
       <button className={`toggle-button ${sidebarOpen ? 'open' : 'closed'}`} onClick={toggleSidebar}>
-        {sidebarOpen ? 'Dölj' : 'Visa'}
+        {sidebarOpen ? 'Dölj' : 'Visa alla'}
       </button>
     </>
   );

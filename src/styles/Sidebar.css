@@ -39,11 +39,12 @@
   border: none;
   border-radius: 4px;
   transition: left 0.3s ease, transform 0.3s ease; /* För smidig övergång mellan positioner */
+  font-family: 'Comic Sans MS', 'Comic Sans'
 }
 
 /* Ny position för toggle-button när Sidebar är öppen */
 .toggle-button.open {
-  left: 500px; /* Ny position när sidopanelen är öppen */
+  left: 600px; /* Ny position när sidopanelen är öppen */
 }
 
 /* Sidebar Card */

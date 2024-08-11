@@ -524,7 +524,7 @@ const MapComponent = () => {
   return (
     <div className="app-container">
       {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
-      {showText && <div className="initial-text"> {/* Initial text content */} </div>}
+    
 
       <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
         <Container maxWidth="sm">
@@ -540,31 +540,39 @@ const MapComponent = () => {
               </Box>
             )}
 
-            <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
-              <TextField
-                id="address"
-                variant="outlined"
-                placeholder="Skriv din adress för att hitta förskola"
-                fullWidth
-                sx={{ backgroundColor: 'white', color: 'black' }}
-                inputRef={addressRef}
-                onKeyDown={handleKeyDown}
-                InputProps={{
-                  style: { color: 'black' },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={geocodeAddressHandler} edge="end">
-                        <SearchIcon style={{ color: 'black' }} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </form>
+          <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
+  <TextField
+    id="address"
+    variant="outlined"
+    placeholder="Skriv din adress för att hitta förskola"
+    fullWidth
+    sx={{ backgroundColor: 'white', color: 'black' }}
+    inputRef={addressRef}
+    onKeyDown={handleKeyDown}
+    InputProps={{
+      style: { color: 'black' },
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton onClick={geocodeAddressHandler} edge="end">
+            <SearchIcon style={{ color: 'black' }} />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+  />
+</form>
 
-            <Button onClick={handleBlogRedirect} variant="contained" color="primary" >
-              Gå till Bloggen
-            </Button>
+{!searchMade && (
+  <Button
+    onClick={handleBlogRedirect}
+    variant="contained"
+    color="primary"
+    sx={{ marginTop: '100px' }} // Flyttar ner knappen 100px
+  >
+    Vanliga frågor och svar - Klicka här!
+  </Button>
+)}
+
 
             {searchMade && (
               <>
@@ -617,7 +625,7 @@ const MapComponent = () => {
 
       {searchMade && (
         <button className={`toggle-button ${sidebarOpen ? 'open' : 'closed'}`} onClick={toggleSidebar}>
-          {sidebarOpen ? 'Dölj' : 'Visa'}
+          {sidebarOpen ? 'Dölj' : 'Visa alla'}
         </button>
       )}
       <Sidebar

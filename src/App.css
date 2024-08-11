@@ -11,6 +11,10 @@ body.fixed-position {
   width: 100%;
   overflow: hidden;
 }
+.blog-btn{
+  justify-content: center;
+  margin-top:200px
+}
 
 .custom-snackbar {
   display: flex;
@@ -90,7 +94,7 @@ body.fixed-position {
 }
 .initial-text {
   position: absolute;
-  top: 80px; /* Justera efter behov */
+  margin-top: 100px; /* Justera efter behov */
   left: 50%;
   transform: translateX(-50%);
   z-index: 1333;
@@ -119,7 +123,7 @@ body.fixed-position {
 
 @media (max-width: 480px) {
   .initial-text {
-    top: 40px; /* Justera position för ännu mindre skärmar */
+    margin-top: 40px; /* Justera position för ännu mindre skärmar */
     max-width: 300px; /* Anpassa maximal bredd för små skärmar */
     height: 60px; /* Justera höjden för små skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
@@ -369,7 +373,7 @@ body.fixed-position {
   }
 
   .search-container.center {
-    margin-top: 200px;
+    margin-top: 100px;
     font-size: 16px;
     position: absolute; /* Changed from fixed to absolute */
   }

@@ -14,34 +14,38 @@ const SplashScreen = ({ onProceed }) => {
       alignItems="center"
       justifyContent="center"
       bgcolor="rgba(0, 0, 0, 0.5)"
-      zIndex={1000}
+      zIndex={100000000}
       p={2}
     >
       <Container 
-        maxWidth="xs" 
+        maxWidth="md" // Större bredd för större skärmar
         sx={{ 
-          mt: { xs: '50vh', sm: '30vh' }, // Adjust top margin for mobile and larger screens
-          mx: 'auto', // Center horizontally
-          p: 0, // Remove default padding
+          height: { xs: '70%', sm: '80%' }, // Större höjd för både mobil och större skärmar
+          display: 'flex', 
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Paper 
           elevation={3} 
           sx={{ 
-            padding: { xs: 2, sm: 6 }, // Adjust padding for mobile and larger screens
+            width: '100%', // Täcker större delen av skärmens bredd inom container
+            height: '100%', // Täcker större delen av skärmens höjd inom container
+            padding: { xs: 4, sm: 6 }, // Justerat padding för större storlek
             textAlign: 'center', 
             display: 'flex', 
             flexDirection: 'column', 
             alignItems: 'center', 
             justifyContent: 'center',
-            marginRight: { xs: '25px', sm: '0' }, // Add margin-right for mobile
           }}
         >
-          <Typography variant="h5" gutterBottom>
+          <div className="initial-text"> {/* Initial text content */} </div>
+          <Typography variant="h4" gutterBottom>
             Välkommen till Förskolekollen.se
           </Typography>
           <Typography variant="body1" paragraph>
             Här kan du hitta närliggande förskolor och se detaljerad information om dem.
+            För närvarande stödjer vi bara förskolor inom stockholmsområdet
           </Typography>
           <Typography variant="body1" paragraph>
             Ange din adress i sökrutan för att börja.

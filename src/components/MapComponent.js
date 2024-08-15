@@ -10,7 +10,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -72,6 +71,9 @@ const MapComponent = () => {
   const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
   const handleBlogRedirect = () => {
     window.location.href = 'https://blog.förskolekollen.se';
+  };
+  const handleSurveyChartRedirect = () => {
+    navigate('/Survey');
   };
   useEffect(() => {
     const initMap = () => {
@@ -563,9 +565,26 @@ const MapComponent = () => {
 </form>
 
 {!searchMade && (
-  <Button onClick={handleBlogRedirect} variant="contained" color="primary">
-    Vanliga frågor och svar - Klicka här!
-  </Button>
+  <Box sx={{ marginTop: '100px' }}>  {/* Flytta ner 100px */}
+    <Button
+      onClick={handleBlogRedirect}
+      variant="contained"
+      color="primary"
+    >
+      Läs mer om förskolor och regler - Klicka här!
+    </Button>
+  </Box>
+)}
+{!searchMade && (
+  <Box sx={{ marginTop: '100px' }}>  {/* Flytta ner 100px */}
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={handleSurveyChartRedirect}
+    >
+      Visa enkätsvar och statistik
+    </Button>
+  </Box>
 )}
 
 

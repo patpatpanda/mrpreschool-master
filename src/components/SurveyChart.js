@@ -9,7 +9,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const SurveyChart = () => {
   const [forskoleverksamhet, setForskoleverksamhet] = useState('');
   const [fragetext, setFragetext] = useState('');
-  const [frageNr, setFrageNr] = useState('');
+ 
   const [forskoleverksamhetOptions, setForskoleverksamhetOptions] = useState([]);
   const [fragetextOptions, setFragetextOptions] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -76,7 +76,7 @@ const SurveyChart = () => {
               year,
               forskoleverksamhet,
               fragetext: fragetext || undefined,
-              frageNr: frageNr || undefined
+            
             }
           });
 

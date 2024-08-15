@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env ESLINT_NO_DEV_ERRORS=true react-scripts build",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
     "build-and-copy": "npm run build && npm run copy-build",
     "test": "react-scripts test",

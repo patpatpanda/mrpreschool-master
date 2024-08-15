@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { TextField, MenuItem, Button, Box, CircularProgress } from '@mui/material';
+import { TextField, MenuItem, Button, Box, CircularProgress, Typography } from '@mui/material';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const SurveyChart = () => {
   const [forskoleverksamhet, setForskoleverksamhet] = useState('');
   const [fragetext, setFragetext] = useState('');
- 
   const [forskoleverksamhetOptions, setForskoleverksamhetOptions] = useState([]);
   const [fragetextOptions, setFragetextOptions] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -76,7 +75,6 @@ const SurveyChart = () => {
               year,
               forskoleverksamhet,
               fragetext: fragetext || undefined,
-            
             }
           });
 
@@ -138,6 +136,7 @@ const SurveyChart = () => {
     setChartData([]); // Återställ chartData när användaren gör ett nytt val
     setDataFetched(false); // Återställ dataFetched när användaren gör ett nytt val
   };
+
 
   return (
     <Box sx={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>

@@ -4,6 +4,7 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow: hidden; /* Förhindra skrollning */
   
 }
 body.fixed-position {
@@ -14,6 +15,11 @@ body.fixed-position {
 .blog-btn{
   justify-content: center;
   margin-top:200px
+}
+.survey-chart-container {
+  max-height: 100vh; /* Begränsa tillgänglig höjd */
+  overflow-y: auto;  /* Aktivera vertikal scrollning */
+  overflow-x: hidden; /* Inaktivera horisontell scrollning om det behövs */
 }
 
 .custom-snackbar {
@@ -38,6 +44,7 @@ body.fixed-position {
   height: 100vh;
  
   margin: 0;
+  overflow: hidden; /* Förhindra skrollning */
   padding: 0;
 }
 

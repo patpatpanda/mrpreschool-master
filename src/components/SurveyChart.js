@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { TextField, MenuItem, Button, Box, CircularProgress, Typography } from '@mui/material';
+import { TextField, MenuItem, Button, Box, CircularProgress } from '@mui/material';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -137,86 +137,87 @@ const SurveyChart = () => {
     setDataFetched(false); // Återställ dataFetched när användaren gör ett nytt val
   };
 
-
   return (
-    <Box sx={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      <p>För närvarande finns data för 455 förskolor i stockholmsområdet</p>
-      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <TextField
-          select
-          label="Förskoleverksamhet"
-          value={forskoleverksamhet}
-          onChange={handleInputChange(setForskoleverksamhet)}
+    <div className="survey-chart-container">
+      <Box sx={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+        <p>För närvarande finns data för 455 förskolor i stockholmsområdet</p>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <TextField
+            select
+            label="Förskoleverksamhet"
+            value={forskoleverksamhet}
+            onChange={handleInputChange(setForskoleverksamhet)}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            disabled={dropdownLoading.forskoleverksamhet}
+          >
+            {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
+              <MenuItem key={index} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <TextField
+            select
+            label="Frågetext"
+            value={fragetext}
+            onChange={handleInputChange(setFragetext)}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            disabled={dropdownLoading.fragetext}
+          >
+            {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
+              <MenuItem key={index} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+        </Box>
+        
+        <Button
+          onClick={handleSearch}
+          variant="contained"
+          color="primary"
           fullWidth
-          variant="outlined"
-          margin="normal"
-          disabled={dropdownLoading.forskoleverksamhet}
+          sx={{ marginTop: '20px' }}
+          disabled={loading}
         >
-          {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
-            <MenuItem key={index} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <TextField
-          select
-          label="Frågetext"
-          value={fragetext}
-          onChange={handleInputChange(setFragetext)}
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          disabled={dropdownLoading.fragetext}
-        >
-          {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-            <MenuItem key={index} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
-      </Box>
-      
-      <Button
-        onClick={handleSearch}
-        variant="contained"
-        color="primary"
-        fullWidth
-        sx={{ marginTop: '20px' }}
-        disabled={loading}
-      >
-        {loading ? 'Laddar...' : 'Visa stapeldiagram'}
-      </Button>
+          {loading ? 'Laddar...' : 'Visa stapeldiagram'}
+        </Button>
 
-      {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
+        {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
 
-      {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
-        <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px' }}>
-          <h3>Stapeldiagram över svar - {chart.year}</h3>
-          <Bar
-            data={chart.data}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: 'top',
+        {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
+          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px' }}>
+            <h3>Stapeldiagram över svar - {chart.year}</h3>
+            <Bar
+              data={chart.data}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: `Resultat för ${chart.year}`,
+                  },
                 },
-                title: {
-                  display: true,
-                  text: `Resultat för ${chart.year}`,
-                },
-              },
-            }}
-          />
-        </div>
-      ))}
+              }}
+            />
+          </div>
+        ))}
 
-      {dataFetched && chartData.length === 0 && !loading && <p>Ingen data att visa</p>}
-    </Box>
+        {dataFetched && chartData.length === 0 && !loading && <p>Ingen data att visa</p>}
+      </Box>
+    </div>
   );
 };
 

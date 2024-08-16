@@ -37,7 +37,15 @@ export const fetchPdfDataByName = async (name) => {
     return null;
   }
 };
-
+export const fetchSatisfactionSummary = async () => {
+  try {
+    const response = await axios.get('https://https://masterkinder20240523125154.azurewebsites.net//api/Survey/satisfaction-summary');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching satisfaction summary:', error);
+    return null;
+  }
+};
 export const fetchMalibuByName = async (name) => {
   try {
     const encodedName = encodeURIComponent(name.trim());

@@ -88,7 +88,7 @@ body.fixed-position {
 }
 
 .search-container.top {
-  top: 10px;
+  top: 100px;
   
   font-size: 16px;
 }
@@ -101,7 +101,7 @@ body.fixed-position {
 }
 .initial-text {
   position: absolute;
-  margin-top: 100px; /* Justera efter behov */
+  margin-top: 0; /* Justera efter behov */
   left: 50%;
   transform: translateX(-50%);
   z-index: 1333;
@@ -118,10 +118,14 @@ body.fixed-position {
   
   text-align: center; /* Centrera texten */
 }
-
+.header-container {
+  position: relative;
+  
+  width: 100%;
+}
 @media (max-width: 4000px) {
   .initial-text {
-    top: 60px; /* Justera position för mindre skärmar */
+    top: 0; /* Justera position för mindre skärmar */
     max-width: 600px; /* Anpassa maximal bredd för mindre skärmar */
     height: 90px; /* Justera höjden för mindre skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
@@ -130,7 +134,7 @@ body.fixed-position {
 
 @media (max-width: 900px) {
   .initial-text {
-    margin-top: 40px; /* Justera position för ännu mindre skärmar */
+    top:0; /* Justera position för ännu mindre skärmar */
     max-width: 300px; /* Anpassa maximal bredd för små skärmar */
     height: 60px; /* Justera höjden för små skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
@@ -146,7 +150,7 @@ body.fixed-position {
   overflow-y: auto;
   overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
   padding: 15px;
-  background: url('/public/yeye.webp') no-repeat center center;
+ background-color: rgb(245, 245, 243);
   background-size: cover; /* Ensure the image covers the entire container */
   position: relative;
   z-index: 100;
@@ -298,7 +302,7 @@ body.fixed-position {
     padding-top: 450px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background: url('/public/stalin.png') no-repeat center center;
+    background-color: rgb(245, 245, 243);
     background-size: cover; /* Adjust the background size */
 }
 
@@ -362,7 +366,7 @@ body.fixed-position {
     padding-top: 450px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background: url('/public/stalin.png') no-repeat center center;
+    background-color: rgb(245, 245, 243);
     background-size: cover; /* Adjust the background size */
 }
 
@@ -386,7 +390,7 @@ body.fixed-position {
   }
 
   .search-container.top {
-    top: 1px;
+    top: 70px;
     
     font-size: 16px;
     margin-right: 15px;

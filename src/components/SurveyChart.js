@@ -139,8 +139,8 @@ const SurveyChart = () => {
 
   return (
     <div className="survey-chart-container">
-      <Box sx={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-        <p>För närvarande finns data för 455 förskolor i stockholmsområdet</p>
+      <Box sx={{ maxWidth: '800px', margin: '150px auto 0 auto', padding: '20px' }}>
+      
         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
           <TextField
             select
@@ -160,7 +160,7 @@ const SurveyChart = () => {
           </TextField>
           {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <Box sx={{ maxWidth: '800px', padding: '20px' }}>
           <TextField
             select
             label="Frågetext"

@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
-import SplashScreen from './SplashScreen';
-import Sidebar from './Sidebar';
 import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
 import { TextField, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
@@ -10,6 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import SplashScreen from './SplashScreen';
+
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -48,7 +48,7 @@ const MapComponent = () => {
   const addressRef = useRef(null);
   const [map, setMap] = useState(null);
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
-  const [allPlaces, setAllPlaces] = useState([]);  // State to store all places fetched from search
+  const [allPlaces, setAllPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showPlaces, setShowPlaces] = useState(false);
   const [currentMarkers, setCurrentMarkers] = useState([]);
@@ -60,21 +60,16 @@ const MapComponent = () => {
   const [showText, setShowText] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showSplashScreen, setShowSplashScreen] = useState(true);
   const [searchMade, setSearchMade] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterVisible, setFilterVisible] = useState(true);
-  const currentLines = useRef([]);
+  const directionsService = useRef(null);
+  const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  const [showSplashScreen, setShowSplashScreen] = useState(true);
 
   const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
-  const handleBlogRedirect = () => {
-    window.location.href = 'https://blog.förskolekollen.se';
-  };
-  const handleSurveyChartRedirect = () => {
-    navigate('/Survey');
-  };
+
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
@@ -85,6 +80,13 @@ const MapComponent = () => {
         disableDefaultUI: true,
       });
       setMap(map);
+
+      // Initialize DirectionsService and DirectionsRenderer
+      directionsService.current = new google.maps.DirectionsService();
+      directionsRenderer.current = new google.maps.DirectionsRenderer({
+        suppressMarkers: true, // Behåll om du vill dölja markörer, annars ta bort denna rad
+      });
+      directionsRenderer.current.setMap(map);
 
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
@@ -112,7 +114,6 @@ const MapComponent = () => {
       script.onload = () => initMap();
       document.head.appendChild(script);
     };
-    
 
     if (!window.google) {
       loadScript();
@@ -183,7 +184,7 @@ const MapComponent = () => {
         );
 
         setNearbyPlaces(detailedResults);
-        setAllPlaces(detailedResults);  // Store all fetched places
+        setAllPlaces(detailedResults);
         clearMarkers();
         detailedResults.forEach((result) => {
           createMarker(result, location);
@@ -316,25 +317,19 @@ const MapComponent = () => {
       return;
     }
 
-    if (currentLines.current.length > 0) {
-      currentLines.current.forEach(line => {
-        line.setMap(null);
-      });
-      currentLines.current = [];
-    }
+    const request = {
+      origin: originPosition,
+      destination: destination,
+      travelMode: google.maps.TravelMode.WALKING,
+    };
 
-    const line = new google.maps.Polyline({
-      path: [originPosition, destination],
-      geodesic: true,
-      strokeColor: '#FF0000',
-      strokeOpacity: 1.0,
-      strokeWeight: 2,
+    directionsService.current.route(request, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        directionsRenderer.current.setDirections(result);
+      } else {
+        console.error('Directions request failed due to ' + status);
+      }
     });
-
-    line.setMap(map);
-
-    currentLines.current.push(line);
-    console.log('New route created', currentLines.current);
   };
 
   const createMarker = async (place, originLocation) => {
@@ -343,11 +338,11 @@ const MapComponent = () => {
     if (place.organisationsform === 'Kommunal') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';
     } else if (place.organisationsform === 'Fristående') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png';
     } else if (place.organisationsform === 'Föräldrakooperativ') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
     } else {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
     }
 
     const marker = new google.maps.Marker({
@@ -423,38 +418,25 @@ const MapComponent = () => {
     setCurrentMarkers([]);
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const filterAndSortPreschools = (places, origin) => {
-    const filteredPlaces = places.filter((place) => {
-      const distance = calculateDistance(
-        origin,
-        new google.maps.LatLng(place.latitude, place.longitude)
-      );
-      return distance <= 2 && place.pdfData && place.pdfData.antalSvar >= 12;
-    });
-
-    const sortedPlaces = filteredPlaces.sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome);
-
-    return sortedPlaces.slice(0, 5);
-  };
-
   const handleTopRanked = () => {
-    if (!originMarker) {
-      alert('Ange en adress först.');
-      return;
-    }
+  if (!originMarker) {
+    alert('Ange en adress först.');
+    return;
+  }
 
-    const topPlaces = filterAndSortPreschools(allPlaces, originMarker.getPosition());
+  // Här ser vi till att `topPlaces` är korrekt definierad och inte orsakar felet
+  const topPlaces = allPlaces
+    .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined) // Filtrera bort platser utan omdöme
+    .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome) // Sortera efter helhetsomdome
+    .slice(0, 5); // Välj de fem bästa
 
-    setNearbyPlaces(topPlaces);
-    clearMarkers();
-    topPlaces.forEach((result) => {
-      createMarker(result, originMarker.getPosition());
-    });
-  };
+  setNearbyPlaces(topPlaces);
+  clearMarkers();
+  topPlaces.forEach((result) => {
+    createMarker(result, originMarker.getPosition());
+  });
+};
+
 
   const filterClosestPreschools = () => {
     if (!originMarker) {
@@ -525,9 +507,8 @@ const MapComponent = () => {
 
   return (
     <div className="app-container">
-      {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
-      {showText }
-
+         {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
+         {showText }
       <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
         <Container maxWidth="sm">
           <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
@@ -542,58 +523,58 @@ const MapComponent = () => {
               </Box>
             )}
 
-          <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
-  <TextField
-    id="address"
-    variant="outlined"
-    placeholder="Skriv din adress för att hitta förskola"
-    fullWidth
-    sx={{ backgroundColor: 'white', color: 'black' }}
-    inputRef={addressRef}
-    onKeyDown={handleKeyDown}
-    InputProps={{
-      style: { color: 'black' },
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton onClick={geocodeAddressHandler} edge="end">
-            <SearchIcon style={{ color: 'black' }} />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-  />
-</form>
+            <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
+              <TextField
+                id="address"
+                variant="outlined"
+                placeholder="Skriv din adress för att hitta förskola"
+                fullWidth
+                sx={{ backgroundColor: 'white', color: 'black' }}
+                inputRef={addressRef}
+                onKeyDown={handleKeyDown}
+                InputProps={{
+                  style: { color: 'black' },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={geocodeAddressHandler} edge="end">
+                        <SearchIcon style={{ color: 'black' }} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </form>
 
-{!searchMade && (
-  <Box sx={{ marginTop: '100px' }}>  {/* Flytta ner 100px */}
-    <Button
-      onClick={handleBlogRedirect}
-      variant="contained"
-      color="primary"
-    >
-      Läs mer om förskolor och regler - Klicka här!
-    </Button>
-  </Box>
-)}
-{!searchMade && (
-  <Box sx={{ marginTop: '100px' }}>  {/* Flytta ner 100px */}
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={handleSurveyChartRedirect}
-    >
-      Visa enkätsvar och statistik
-    </Button>
-  </Box>
-)}
+            {!searchMade && (
+              <Box sx={{ marginTop: '100px' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
+                >
+                  Läs mer om förskolor och regler - Klicka här!
+                </Button>
+              </Box>
+            )}
 
+            {!searchMade && (
+              <Box sx={{ marginTop: '100px' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate('/Survey')}
+                >
+                  Visa enkätsvar och statistik
+                </Button>
+              </Box>
+            )}
 
             {searchMade && (
               <>
                 <Button onClick={() => setFilterVisible(!filterVisible)} variant="contained" color="primary">
-                  {filterVisible ? 'Dölj filter' : 'Visa filter'}
+                  {filterVisible ? 'Visa filter' : 'Dölj filter'}
                 </Button>
-                {filterVisible && (
+                {!filterVisible && (
                   <OrganisationFilter
                     organisationTypes={organisationTypes}
                     filter={filter}
@@ -636,20 +617,6 @@ const MapComponent = () => {
           onClose={() => setSelectedPlace(null)}
         />
       )}
-
-      {searchMade && (
-        <button className={`toggle-button ${sidebarOpen ? 'open' : 'closed'}`} onClick={toggleSidebar}>
-          {sidebarOpen ? 'Dölj' : 'Visa'}
-        </button>
-      )}
-      <Sidebar
-        places={nearbyPlaces}
-        selectedPlace={selectedPlace}
-        onSelect={handleCardSelect}
-        sidebarOpen={sidebarOpen}
-        toggleSidebar={toggleSidebar}
-        walkingTimes={walkingTimes}
-      />
 
       <Snackbar
         open={Boolean(errorMessage)}

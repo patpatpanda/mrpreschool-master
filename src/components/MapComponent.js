@@ -575,11 +575,26 @@ const MapComponent = () => {
     InputProps={{
       style: { color: '#333', padding: '10px 20px' },
       endAdornment: (
-        <InputAdornment position="end" sx={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}>
-          <IconButton onClick={geocodeAddressHandler} edge="end" sx={{ backgroundColor: '#4caf50', color: 'white', borderRadius: '50%', padding: '10px', '&:hover': { backgroundColor: '#45a045' } }}>
-            <SearchIcon />
-          </IconButton>
-        </InputAdornment>
+        <InputAdornment position="end">
+        <IconButton
+          onClick={geocodeAddressHandler}
+          edge="end"
+          sx={{
+            backgroundColor: '#4caf50',
+            color: 'white',
+            borderRadius: '50%',
+            padding: '10px',
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#45a045',
+            },
+            marginRight: '-10px', // For a cleaner integration with the text field
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </InputAdornment>
+      
       ),
     }}
   />
@@ -629,35 +644,7 @@ const MapComponent = () => {
   </Box>
 )}
 
-{searchMade && (
-  <>
-    <Button
-      onClick={() => setFilterVisible(!filterVisible)}
-      variant="contained"
-      color="primary"
-      sx={{
-        marginTop: '20px',
-        padding: '10px 20px',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        width: '100%',
-        maxWidth: '300px',
-        alignSelf: 'center',
-      }}
-    >
-      {filterVisible ? 'Dölj filter' : 'Visa filter'}
-    </Button>
-    {!filterVisible && (
-      <OrganisationFilter
-        organisationTypes={organisationTypes}
-        filter={filter}
-        handleFilterChange={handleFilterChange}
-        visible={showPlaces}
-        sx={{ marginTop: '20px' }}
-      />
-    )}
-  </>
-)}
+
 
 {searchMade && (
   <>
@@ -672,7 +659,7 @@ const MapComponent = () => {
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
       }}
     >
-      {filterVisible ? 'Dölj filter' : 'Visa filter'}
+      {filterVisible ? 'Visa filter' : 'Dölj filter'}
     </Button>
     {!filterVisible && (
       <OrganisationFilter

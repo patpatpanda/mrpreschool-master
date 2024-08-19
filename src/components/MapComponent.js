@@ -9,7 +9,7 @@ import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByN
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import SplashScreen from './SplashScreen';
-
+import { ButtonGroup} from '@mui/material';
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -129,7 +129,7 @@ const MapComponent = () => {
           const location = new google.maps.LatLng(school.latitude, school.longitude);
           selectPlace(school);
           map.setCenter(location);
-          map.setZoom(16);
+          map.setZoom(18);
 
           const marker = new google.maps.Marker({
             map: map,
@@ -250,7 +250,7 @@ const MapComponent = () => {
 
     if (map) {
       map.setCenter(location);
-      map.setZoom(15);
+      map.setZoom(14);
 
       if (originMarker) {
         originMarker.setMap(null);
@@ -522,6 +522,20 @@ const MapComponent = () => {
                 </Button>
               </Box>
             )}
+            <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
+  <Button
+    onClick={() => setView('list')}
+    variant={view === 'list' ? 'contained' : 'outlined'}
+  >
+    List View
+  </Button>
+  <Button
+    onClick={() => setView('map')}
+    variant={view === 'map' ? 'contained' : 'outlined'}
+  >
+    Map View
+  </Button>
+</ButtonGroup>
 
             <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
               <TextField

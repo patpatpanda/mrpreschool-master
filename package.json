@@ -54,14 +54,15 @@
     "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
-    "build-and-copy": "npm run build && npm run copy-build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+ "scripts": {
+  "start": "HOST=0.0.0.0 react-scripts start",
+  "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
+  "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
+  "build-and-copy": "npm run build && npm run copy-build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
+
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -79,6 +80,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:7270"
+  }
+ 
 }

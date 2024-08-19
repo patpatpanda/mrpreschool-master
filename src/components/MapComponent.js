@@ -578,7 +578,7 @@ const MapComponent = () => {
                   color="primary"
                   onClick={() => navigate('/Survey')}
                 >
-                  Visa enkätsvar och statistik 
+                  Visa enkätsvar och statistik asd
                 </Button>
               </Box>
             )}

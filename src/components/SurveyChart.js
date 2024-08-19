@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { TextField, MenuItem, Button, Box, CircularProgress } from '@mui/material';
+import { TextField, MenuItem, Button, Box, CircularProgress, Typography } from '@mui/material';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -151,6 +151,14 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.forskoleverksamhet}
+            sx={{
+              fontSize: {
+                xs: '12px',
+                sm: '14px',
+                md: '16px',
+                lg: '18px',
+              }
+            }}
           >
             {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
               <MenuItem key={index} value={option}>
@@ -170,6 +178,14 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.fragetext}
+            sx={{
+              fontSize: {
+                xs: '12px',
+                sm: '14px',
+                md: '16px',
+                lg: '18px',
+              }
+            }}
           >
             {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
               <MenuItem key={index} value={option}>
@@ -195,7 +211,21 @@ const SurveyChart = () => {
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
           <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px' }}>
-            <h3>Stapeldiagram över svar - {chart.year}</h3>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: {
+                  xs: '16px',
+                  sm: '18px',
+                  md: '20px',
+                  lg: '22px',
+                },
+                textAlign: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              Stapeldiagram över svar - {chart.year}
+            </Typography>
             <Bar
               data={chart.data}
               options={{

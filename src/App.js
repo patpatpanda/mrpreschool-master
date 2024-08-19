@@ -29,15 +29,18 @@ function App() {
           <Header /> {/* Lägg till Header-komponenten här */}
           <Analytics /> {/* Lägg till Analytics-komponenten för att spåra sidvisningar */}
           <main>
+         
             <Routes>
               <Route path="/" element={<MapComponent />} />
               <Route path="/forskolan/:id" element={<MapComponent />} />
               <Route path="/survey" element={<SurveyChart />} />
             </Routes>
           </main>
+          
         </div>
       </Router>
     </ThemeProvider>
+    
   );
 }
 

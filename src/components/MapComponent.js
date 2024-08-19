@@ -164,7 +164,7 @@ const MapComponent = () => {
         );
 
         if (distanceToNearestPlace > 3) {
-          setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
+          setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen!');
           setLoading(false);
           return;
         }

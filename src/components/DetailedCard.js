@@ -114,7 +114,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
                     {malibuData.questions.$values.map((question, index) => (
                       <Box key={index} mb={2}>
                         <Typography variant="body2">Fråga: {question.frageText}</Typography>
-                        <Typography variant="body2">Andel Instämmer: {question.andelInstammer}%</Typography>
+                     
                        
                         {question.frageText.includes('HELHETSOMDÖME') && (
                           <Typography variant="body2">

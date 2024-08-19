@@ -10,6 +10,9 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import SplashScreen from './SplashScreen';
 import { ButtonGroup} from '@mui/material';
+import ListIcon from '@mui/icons-material/List';
+import MapIcon from '@mui/icons-material/Map';
+
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -522,82 +525,167 @@ const MapComponent = () => {
                 </Button>
               </Box>
             )}
-            <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
+           <ButtonGroup variant="contained" aria-label="view toggle button group" style={{ backgroundColor: '#e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
   <Button
     onClick={() => setView('list')}
-    variant={view === 'list' ? 'contained' : 'outlined'}
+    style={{
+      backgroundColor: view === 'list' ? '#4caf50' : '#ffffff',
+      color: view === 'list' ? '#ffffff' : '#4caf50',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '10px 20px',
+      borderRight: '1px solid #e0e0e0',
+      fontWeight: view === 'list' ? 'bold' : 'normal',
+    }}
   >
+    <ListIcon style={{ marginRight: '8px' }} />
     List View
   </Button>
   <Button
     onClick={() => setView('map')}
-    variant={view === 'map' ? 'contained' : 'outlined'}
+    style={{
+      backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
+      color: view === 'map' ? '#ffffff' : '#2196f3',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '10px 20px',
+      fontWeight: view === 'map' ? 'bold' : 'normal',
+    }}
   >
+    <MapIcon style={{ marginRight: '8px' }} />
     Map View
   </Button>
 </ButtonGroup>
 
-            <form onSubmit={geocodeAddressHandler} style={{ width: '100%' }}>
-              <TextField
-                id="address"
-                variant="outlined"
-                placeholder="Skriv din adress för att hitta förskola"
-                fullWidth
-                sx={{ backgroundColor: 'white', color: 'black' }}
-                inputRef={addressRef}
-                onKeyDown={handleKeyDown}
-                InputProps={{
-                  style: { color: 'black' },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={geocodeAddressHandler} edge="end">
-                        <SearchIcon style={{ color: 'black' }} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </form>
+<form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
+  <TextField
+    id="address"
+    variant="outlined"
+    placeholder="Skriv din adress för att hitta förskola"
+    fullWidth
+    sx={{
+      backgroundColor: '#f0f0f0',
+      color: '#333',
+      borderRadius: '50px',
+      paddingRight: '50px',
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+    }}
+    inputRef={addressRef}
+    onKeyDown={handleKeyDown}
+    InputProps={{
+      style: { color: '#333', padding: '10px 20px' },
+      endAdornment: (
+        <InputAdornment position="end" sx={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+          <IconButton onClick={geocodeAddressHandler} edge="end" sx={{ backgroundColor: '#4caf50', color: 'white', borderRadius: '50%', padding: '10px', '&:hover': { backgroundColor: '#45a045' } }}>
+            <SearchIcon />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+  />
+</form>
 
-            {!searchMade && (
-              <Box sx={{ marginTop: '100px' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
-                >
-                  Läs mer om förskolor och regler - Klicka här!
-                </Button>
-              </Box>
-            )}
+{!searchMade && (
+  <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
+      sx={{
+        padding: '15px 30px',
+        fontSize: '16px',
+        backgroundColor: '#f57c00',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        '&:hover': {
+          backgroundColor: '#ef6c00',
+        },
+        width: '100%',
+        maxWidth: '300px',
+      }}
+    >
+      Läs mer om förskolor och regler - Klicka här!
+    </Button>
 
-            {!searchMade && (
-              <Box sx={{ marginTop: '100px' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => navigate('/Survey')}
-                >
-                  Visa enkätsvar och statistik asd
-                </Button>
-              </Box>
-            )}
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => navigate('/Survey')}
+      sx={{
+        padding: '15px 30px',
+        fontSize: '16px',
+        backgroundColor: '#f57c00',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        '&:hover': {
+          backgroundColor: '#ef6c00',
+        },
+        width: '100%',
+        maxWidth: '300px',
+      }}
+    >
+      Visa enkätsvar och statistik
+    </Button>
+  </Box>
+)}
 
-            {searchMade && (
-              <>
-                <Button onClick={() => setFilterVisible(!filterVisible)} variant="contained" color="primary">
-                  {filterVisible ? 'Visa filter' : 'Dölj filter'}
-                </Button>
-                {!filterVisible && (
-                  <OrganisationFilter
-                    organisationTypes={organisationTypes}
-                    filter={filter}
-                    handleFilterChange={handleFilterChange}
-                    visible={showPlaces}
-                  />
-                )}
-              </>
-            )}
+{searchMade && (
+  <>
+    <Button
+      onClick={() => setFilterVisible(!filterVisible)}
+      variant="contained"
+      color="primary"
+      sx={{
+        marginTop: '20px',
+        padding: '10px 20px',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        width: '100%',
+        maxWidth: '300px',
+        alignSelf: 'center',
+      }}
+    >
+      {filterVisible ? 'Dölj filter' : 'Visa filter'}
+    </Button>
+    {!filterVisible && (
+      <OrganisationFilter
+        organisationTypes={organisationTypes}
+        filter={filter}
+        handleFilterChange={handleFilterChange}
+        visible={showPlaces}
+        sx={{ marginTop: '20px' }}
+      />
+    )}
+  </>
+)}
+
+{searchMade && (
+  <>
+    <Button
+      onClick={() => setFilterVisible(!filterVisible)}
+      variant="contained"
+      color="primary"
+      sx={{
+        marginTop: '20px',
+        padding: '10px 20px',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+      }}
+    >
+      {filterVisible ? 'Dölj filter' : 'Visa filter'}
+    </Button>
+    {!filterVisible && (
+      <OrganisationFilter
+        organisationTypes={organisationTypes}
+        filter={filter}
+        handleFilterChange={handleFilterChange}
+        visible={showPlaces}
+        sx={{ marginTop: '20px' }}
+      />
+    )}
+  </>
+)}
+
           </Box>
         </Container>
       </div>

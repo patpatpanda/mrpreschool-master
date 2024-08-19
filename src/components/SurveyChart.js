@@ -169,31 +169,41 @@ const SurveyChart = () => {
           {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
         </Box>
         <Box sx={{ maxWidth: '800px', padding: '20px' }}>
-          <TextField
-            select
-            label="Frågetext"
-            value={fragetext}
-            onChange={handleInputChange(setFragetext)}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            disabled={dropdownLoading.fragetext}
-            sx={{
-              fontSize: {
-                xs: '12px',
-                sm: '14px',
-                md: '16px',
-                lg: '18px',
-              }
-            }}
-          >
-            {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
-          {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+        <TextField
+  select
+  label="Frågetext"
+  value={fragetext}
+  onChange={handleInputChange(setFragetext)}
+  fullWidth
+  variant="outlined"
+  margin="normal"
+  disabled={dropdownLoading.fragetext}
+  SelectProps={{
+    renderValue: (value) => (
+      <span style={{ whiteSpace: 'pre-wrap', lineHeight: '1.2' }}>{value}</span>
+    ),
+  }}
+  sx={{
+    '@media (max-width: 600px)': {
+      '& .MuiMenuItem-root': {
+        whiteSpace: 'pre-wrap',
+        lineHeight: '1.2',
+      },
+      '& .MuiSelect-select': {
+        whiteSpace: 'pre-wrap',
+        lineHeight: '1.2',
+      },
+    },
+  }}
+>
+  {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
+    <MenuItem key={index} value={option}>
+      <span style={{ whiteSpace: 'pre-wrap', lineHeight: '1.2' }}>{option}</span>
+    </MenuItem>
+  ))}
+</TextField>
+{dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+
         </Box>
         
         <Button

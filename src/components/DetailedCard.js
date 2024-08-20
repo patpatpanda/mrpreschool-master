@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
 import { styled } from '@mui/material/styles';
 import myImage from '../images/seri.webp'; // Importera din standardbild
+import { right } from '@popperjs/core';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -18,7 +19,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  backgroundColor: '#4CAF50',
+  background: 'linear-gradient(135deg, #e0f7e9 0%, #a5d6a7 100%)',
   color: '#ffffff',
   textAlign: 'center',
   padding: '16px',
@@ -43,12 +44,10 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   width: '100%',
   maxWidth: '100%',
-  margin: '0 auto 20px auto',
-  borderRadius: '20px', // Öka radien för en mjukare kant
   overflow: 'hidden',
   position: 'relative',
-  boxShadow: theme.shadows[5], // Ökad skugga för mer djup
-  background: 'linear-gradient(135deg, #e0f7e9 0%, #a5d6a7 100%)',
+  marginTop: '20px', // Lägg till övre marginal
+  marginBottom: '20px', // Lägg till nedre marginal
 
   img: {
     width: '100%',
@@ -57,7 +56,6 @@ const ImageContainer = styled(Box)(({ theme }) => ({
     objectFit: 'cover',
     transition: 'transform 0.5s ease', // Smooth hover effect
     maxHeight: '400px',
-
     [theme.breakpoints.up('md')]: {
       maxHeight: '500px',
       maxWidth: '80%',
@@ -66,13 +64,8 @@ const ImageContainer = styled(Box)(({ theme }) => ({
       maxHeight: '600px',
       maxWidth: '70%',
     },
-
-    '&:hover': {
-      transform: 'scale(1.05)', // Subtil zoom-effekt vid hover
-    },
   },
 
-  // Adding a cool overlay effect
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -85,11 +78,8 @@ const ImageContainer = styled(Box)(({ theme }) => ({
     transition: 'opacity 0.5s ease',
     opacity: 0, // Hidden by default
   },
-
-  '&:hover::before': {
-    opacity: 0.5, // Overlay appears on hover
-  },
 }));
+
 
 const InfoBox = styled(Box)(({ theme }) => ({
   

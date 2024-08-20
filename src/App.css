@@ -150,7 +150,7 @@ body.fixed-position {
   overflow-y: auto;
   overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
   padding: 15px;
-  background: linear-gradient(135deg, #fdfdfd 0%, #f2d0ee 99%, #f5cae3 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 99%, #ffffff 100%);
 
   background-size: cover; /* Ensure the image covers the entire container */
   position: relative;
@@ -366,7 +366,7 @@ body.fixed-position {
     padding-top: 500px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background-color: rgb(245, 245, 243);
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 99%, #ffffff 100%);
     background-size: cover; /* Adjust the background size */
 }
 

@@ -518,7 +518,7 @@ const MapComponent = () => {
             {showPlaces && (
               <Box display="flex" justifyContent="center" width="100%" gap={2}>
                 <Button onClick={filterClosestPreschools} variant="contained" color="secondary">
-                  Närmsta 5
+                De 5 närmaste
                 </Button>
                 <Button onClick={handleTopRanked} variant="contained" color="secondary">
                   Högst rank

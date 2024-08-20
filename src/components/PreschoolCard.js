@@ -21,76 +21,157 @@ const PreschoolCard = ({ preschool, onSelect, walkingTime }) => (
       sx={{
         backgroundColor: '#ffffff',
         borderRadius: '12px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Mjukare skuggor för en modern känsla
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.3s, box-shadow 0.3s',
+        width: '100%',
+        maxWidth: '600px',
+        height: 'auto',
         '&:hover': {
-          transform: 'translateY(-4px)', // Lyft kortet vid hover
-          boxShadow: '0 12px 16px rgba(0, 0, 0, 0.2)', // Förstärkt skugga vid hover
+          transform: 'translateY(-4px)',
+          boxShadow: '0 12px 16px rgba(0, 0, 0, 0.2)',
+        },
+        '@media (max-width: 400px)': {
+          maxWidth: '100%',
+          borderRadius: '8px',
+          padding: '8px', // Lägg till padding för att undvika att innehållet kläms
         },
       }}
     >
       <CardHeader
         title={
-          <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold' }}>
+          <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold', fontSize: '0.9rem' }}>
             {preschool.namn}
           </Typography>
         }
-        sx={{ paddingBottom: 0 }}
+        sx={{
+          paddingBottom: '4px',
+          paddingTop: '4px',
+          '@media (max-width: 400px)': {
+            fontSize: '0.8rem', // Mindre fontstorlek för små skärmar
+            padding: '4px 0',
+          },
+        }}
       />
       <Divider />
       <CardContent
         className="card-body"
         sx={{
-          padding: '16px',
+          padding: '8px',
           overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          '@media (max-width: 400px)': {
+            padding: '4px', // Mindre padding på små skärmar
+          },
         }}
       >
-        <Box display="flex" alignItems="center" mb={1}>
-          <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#4CAF50', marginRight: '8px' }} />
-          <Typography variant="body1" sx={{ color: '#666' }}>
-            {preschool.adress}
-          </Typography>
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{
+            marginBottom: '4px',
+            flexDirection: 'column',
+            '@media (max-width: 400px)': {
+              alignItems: 'flex-start',
+            },
+          }}
+        >
+          <Box display="flex" alignItems="center" sx={{ width: '100%' }}>
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              style={{ color: '#4CAF50', marginRight: '8px', fontSize: '1rem' }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#666',
+                fontSize: '0.8rem',
+                width: '100%',
+                wordWrap: 'break-word',
+              }}
+            >
+              {preschool.adress}
+            </Typography>
+          </Box>
         </Box>
         {preschool.description && (
-          <Box display="flex" alignItems="center" mb={2}>
-            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#FF9800', marginRight: '8px' }} />
-            <Typography variant="body1" sx={{ color: '#666', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {preschool.description}
-            </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            sx={{
+              marginBottom: '8px',
+              flexDirection: 'column',
+              '@media (max-width: 400px)': {
+                alignItems: 'flex-start',
+              },
+            }}
+          >
+            <Box display="flex" alignItems="center" sx={{ width: '100%' }}>
+              <FontAwesomeIcon
+                icon={faInfoCircle}
+                style={{ color: '#FF9800', marginRight: '8px', fontSize: '1rem' }}
+              />
+              <Typography
+                variant="body1"
+                sx={{
+                  color: '#666',
+                  fontSize: '0.8rem',
+                  width: '100%',
+                  wordWrap: 'break-word',
+                }}
+              >
+                {preschool.description}
+              </Typography>
+            </Box>
           </Box>
         )}
-        {preschool.pdfData ? (
-          <Box mt={2} sx={{ color: '#333' }}>
-            <Typography variant="body2" sx={{ marginBottom: '8px' }}>
-              <strong>Antal Svar:</strong> {preschool.pdfData.antalSvar} st
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{
+            flexDirection: 'column',
+            '@media (max-width: 400px)': {
+              alignItems: 'flex-start',
+            },
+          }}
+        >
+          {preschool.pdfData ? (
+            <Box display="flex" flexDirection="column" sx={{ color: '#333', marginBottom: '4px' }}>
+              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
+                <strong>Omdöme:</strong> {preschool.pdfData.helhetsomdome}%
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
+                <strong>Svar:</strong> {preschool.pdfData.antalSvar} st
+              </Typography>
+            </Box>
+          ) : (
+            <Box display="flex" flexDirection="column" sx={{ color: '#333', marginBottom: '4px' }}>
+              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
+                <strong>Omdöme:</strong> N/A
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
+                <strong>Svar:</strong> N/A
+              </Typography>
+            </Box>
+          )}
+          {walkingTime && (
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#333',
+                fontSize: '0.7rem',
+                marginLeft: '16px',
+                '@media (max-width: 400px)': {
+                  marginLeft: '0',
+                  marginTop: '4px',
+                },
+              }}
+            >
+              <strong>Avstånd:</strong> {walkingTime} min
             </Typography>
-            <Typography variant="body2" sx={{ marginBottom: '8px' }}>
-              <strong>Helhetsomdöme:</strong> {preschool.pdfData.helhetsomdome}%
-            </Typography>
-            <Typography variant="body2">
-              <strong>Svarsfrekvens:</strong> {preschool.pdfData.svarsfrekvens}%
-            </Typography>
-          </Box>
-        ) : (
-          <Box mt={2} sx={{ color: '#333' }}>
-            <Typography variant="body2" sx={{ marginBottom: '8px' }}>
-              <strong>Antal Svar:</strong> N/A
-            </Typography>
-            <Typography variant="body2" sx={{ marginBottom: '8px' }}>
-              <strong>Helhetsomdöme:</strong> N/A
-            </Typography>
-            <Typography variant="body2">
-              <strong>Svarsfrekvens:</strong> N/A
-            </Typography>
-          </Box>
-        )}
-        {walkingTime && (
-          <Box mt={2} sx={{ color: '#333' }}>
-            <Typography variant="body2">
-              <strong>Gångavstånd:</strong> {walkingTime} minuter
-            </Typography>
-          </Box>
-        )}
+          )}
+        </Box>
       </CardContent>
     </Card>
   </ButtonBase>

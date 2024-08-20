@@ -1,13 +1,13 @@
 import { createTheme } from '@mui/material/styles';
-import { pink, yellow, blueGrey, deepOrange } from '@mui/material/colors';
+import { yellow, blueGrey, deepOrange } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: pink[400],
+      main: '#1a73e8', // Mörkblå som primärfärg
     },
     secondary: {
-      main: pink[400],
+      main: '#1a73e8', // Mörkblå som sekundärfärg
     },
     background: {
       default: yellow[50],
@@ -22,14 +22,14 @@ const theme = createTheme({
     h1: {
       fontSize: '4rem', // Större rubrikstorlek
       fontWeight: 'bold',
-      color: pink[500],
+      color: '#1a73e8', // Mörkblå färg för rubriker
       '@media (max-width:600px)': {
         fontSize: '3rem', // Justera för mindre skärmar
       },
     },
     h3: {
       fontSize: '2rem', // Ökad storlek
-      color: pink[500],
+      color: '#1a73e8', // Mörkblå färg för rubriker
     },
     body1: {
       fontSize: '1.25rem', // Större brödtext

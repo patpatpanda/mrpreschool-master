@@ -11,10 +11,9 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     borderRadius: '15px',
     overflow: 'hidden',
     backgroundColor: '#fafafa',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '900px',
-      margin: '0 auto',
-    },
+    width: '100%',
+    height: '100%',
+    margin: 0,
   },
 }));
 
@@ -25,31 +24,74 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   padding: '16px',
   fontFamily: '"Roboto", sans-serif',
   fontWeight: 'bold',
+  position: 'relative',
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   backgroundColor: '#ffffff',
   padding: '20px',
+  height: 'calc(100% - 64px)', // Justera höjden så att den tar hänsyn till DialogTitle's höjd
+  overflowY: 'auto',
   [theme.breakpoints.down('sm')]: {
     padding: '10px',
   },
 }));
 
 const ImageContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   width: '100%',
   maxWidth: '100%',
   margin: '0 auto 20px auto',
-  borderRadius: '10px',
+  borderRadius: '20px', // Öka radien för en mjukare kant
   overflow: 'hidden',
-  boxShadow: theme.shadows[3],
+  position: 'relative',
+  boxShadow: theme.shadows[5], // Ökad skugga för mer djup
+  background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', // Cool gradient
   img: {
     width: '100%',
     height: 'auto',
     display: 'block',
     objectFit: 'cover',
+    transition: 'transform 0.5s ease', // Smooth hover effect
     maxHeight: '400px',
+
+    [theme.breakpoints.up('md')]: {
+      maxHeight: '500px',
+      maxWidth: '80%',
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: '600px',
+      maxWidth: '70%',
+    },
+
+    '&:hover': {
+      transform: 'scale(1.05)', // Subtil zoom-effekt vid hover
+    },
+  },
+
+  // Adding a cool overlay effect
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.4)', // Dark overlay
+    zIndex: 1,
+    transition: 'opacity 0.5s ease',
+    opacity: 0, // Hidden by default
+  },
+
+  '&:hover::before': {
+    opacity: 0.5, // Overlay appears on hover
   },
 }));
+
+
+
 
 const InfoBox = styled(Box)(({ theme }) => ({
   backgroundColor: '#f9f9f9',
@@ -78,6 +120,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       open
       onClose={onClose}
       fullWidth
+      fullScreen // Detta gör att dialogen tar upp hela skärmen på en mobil
       maxWidth="md"
     >
       <StyledDialogTitle>
@@ -114,8 +157,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
                     {malibuData.questions.$values.map((question, index) => (
                       <Box key={index} mb={2}>
                         <Typography variant="body2">Fråga: {question.frageText}</Typography>
-                     
-                       
                         {question.frageText.includes('HELHETSOMDÖME') && (
                           <Typography variant="body2">
                             Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.

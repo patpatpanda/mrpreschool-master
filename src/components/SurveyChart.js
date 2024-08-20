@@ -161,22 +161,23 @@ const SurveyChart = () => {
           {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
         </Box>
         <Box sx={{ maxWidth: '800px', padding: '20px' }}>
-          <TextField
-            select
-            label="Frågetext"
-            value={fragetext}
-            onChange={handleInputChange(setFragetext)}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            disabled={dropdownLoading.fragetext}
-          >
-            {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
+        <TextField
+  select
+  label="Frågetext"
+  value={fragetext}
+  onChange={handleInputChange(setFragetext)}
+  fullWidth
+  variant="outlined"
+  margin="normal"
+  disabled={dropdownLoading.fragetext}
+>
+  {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
+    <MenuItem key={index} value={option} sx={{ whiteSpace: 'normal' }}>
+      {option}
+    </MenuItem>
+  ))}
+</TextField>
+
           {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
         </Box>
         

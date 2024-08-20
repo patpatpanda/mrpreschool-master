@@ -141,7 +141,7 @@ const SurveyChart = () => {
     <div className="survey-chart-container">
       <Box sx={{ maxWidth: '800px', margin: '150px auto 0 auto', padding: '20px' }}>
       
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', gap: '20px' }}>
           <TextField
             select
             label="Förskoleverksamhet"
@@ -151,6 +151,7 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.forskoleverksamhet}
+            sx={{ flex: 1 }}
           >
             {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
               <MenuItem key={index} value={option}>
@@ -159,25 +160,24 @@ const SurveyChart = () => {
             ))}
           </TextField>
           {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
-        </Box>
-        <Box sx={{ maxWidth: '800px', padding: '20px' }}>
-        <TextField
-  select
-  label="Frågetext"
-  value={fragetext}
-  onChange={handleInputChange(setFragetext)}
-  fullWidth
-  variant="outlined"
-  margin="normal"
-  disabled={dropdownLoading.fragetext}
->
-  {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-    <MenuItem key={index} value={option} sx={{ whiteSpace: 'normal' }}>
-      {option}
-    </MenuItem>
-  ))}
-</TextField>
-
+        
+          <TextField
+            select
+            label="Frågetext"
+            value={fragetext}
+            onChange={handleInputChange(setFragetext)}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            disabled={dropdownLoading.fragetext}
+            sx={{ flex: 1 }}
+          >
+            {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
+              <MenuItem key={index} value={option} sx={{ whiteSpace: 'normal' }}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
           {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
         </Box>
         

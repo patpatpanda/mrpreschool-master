@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
 import { styled } from '@mui/material/styles';
 import myImage from '../images/seri.webp'; // Importera din standardbild
-import { right } from '@popperjs/core';
+
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {

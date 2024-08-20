@@ -564,11 +564,19 @@ const MapComponent = () => {
     placeholder="Skriv din adress för att hitta förskola"
     fullWidth
     sx={{
-      backgroundColor: '#f0f0f0',
       color: '#333',
       borderRadius: '50px',
-      paddingRight: '50px',
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+     
+      backgroundColor: '#f0f0f0', // Lägg till bakgrundsfärg för hela input-fältet
+      'input::placeholder': {
+        color: '#666', // Placeholder-färg
+        opacity: 1, // Gör färgen synlig
+      },
+      'input': {
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Simulera bakgrundsfärg för placeholder
+        padding: '10px 20px',
+        borderRadius: '50px',
+      },
     }}
     inputRef={addressRef}
     onKeyDown={handleKeyDown}
@@ -576,29 +584,29 @@ const MapComponent = () => {
       style: { color: '#333', padding: '10px 20px' },
       endAdornment: (
         <InputAdornment position="end">
-        <IconButton
-          onClick={geocodeAddressHandler}
-          edge="end"
-          sx={{
-            backgroundColor: '#4caf50',
-            color: 'white',
-            borderRadius: '50%',
-            padding: '10px',
-            transition: 'background-color 0.3s ease',
-            '&:hover': {
-              backgroundColor: '#45a045',
-            },
-            marginRight: '-10px', // For a cleaner integration with the text field
-          }}
-        >
-          <SearchIcon />
-        </IconButton>
-      </InputAdornment>
-      
+          <IconButton
+            onClick={geocodeAddressHandler}
+            edge="end"
+            sx={{
+              backgroundColor: '#4caf50',
+              color: 'white',
+              borderRadius: '50%',
+              padding: '10px',
+              transition: 'background-color 0.3s ease',
+              '&:hover': {
+                backgroundColor: '#45a045',
+              },
+              marginRight: '-10px',
+            }}
+          >
+            <SearchIcon />
+          </IconButton>
+        </InputAdornment>
       ),
     }}
   />
 </form>
+
 
 {!searchMade && (
   <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
@@ -609,11 +617,11 @@ const MapComponent = () => {
       sx={{
         padding: '15px 30px',
         fontSize: '16px',
-        backgroundColor: '#f57c00',
+        backgroundColor: '#1a73e8',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#ef6c00',
+          backgroundColor: '#1669c1',
         },
         width: '100%',
         maxWidth: '300px',
@@ -629,17 +637,17 @@ const MapComponent = () => {
       sx={{
         padding: '15px 30px',
         fontSize: '16px',
-        backgroundColor: '#f57c00',
+        backgroundColor: '#1a73e8',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#ef6c00',
+          backgroundColor: '#1a73e9',
         },
         width: '100%',
         maxWidth: '300px',
       }}
     >
-      Visa enkätsvar och statistik
+      Visa enkätsvar och statistik - Klicka här!
     </Button>
   </Box>
 )}

@@ -48,7 +48,8 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   overflow: 'hidden',
   position: 'relative',
   boxShadow: theme.shadows[5], // Ökad skugga för mer djup
-  background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', // Cool gradient
+  background: 'linear-gradient(135deg, #e0f7e9 0%, #a5d6a7 100%)',
+
   img: {
     width: '100%',
     height: 'auto',
@@ -90,14 +91,11 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-
-
-
 const InfoBox = styled(Box)(({ theme }) => ({
-  backgroundColor: '#f9f9f9',
+  
   padding: '20px',
   borderRadius: '10px',
-  boxShadow: theme.shadows[1],
+  
   marginBottom: '20px',
   [theme.breakpoints.down('sm')]: {
     padding: '10px',

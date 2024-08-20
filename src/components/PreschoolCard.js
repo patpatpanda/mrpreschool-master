@@ -139,7 +139,7 @@ const PreschoolCard = ({ preschool, onSelect, walkingTime }) => (
           {preschool.pdfData ? (
             <Box display="flex" flexDirection="column" sx={{ color: '#333', marginBottom: '4px' }}>
               <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
-                <strong>Omdöme:</strong> {preschool.pdfData.helhetsomdome}%
+                <strong>Nöjd:</strong> {preschool.pdfData.helhetsomdome}%
               </Typography>
               <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
                 <strong>Svar:</strong> {preschool.pdfData.antalSvar} st

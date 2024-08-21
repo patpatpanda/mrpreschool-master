@@ -604,26 +604,43 @@ const MapComponent = () => {
 </ButtonGroup>
 
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
-  <TextField
-    id="address"
-    variant="outlined"
-    placeholder="Skriv din adress för att hitta förskola"
-    fullWidth
-    sx={{
+<TextField
+  id="address"
+  variant="outlined"
+  placeholder="Skriv din adress för att hitta förskola"
+  fullWidth
+  sx={{
+    color: '#333',
+    borderRadius: '30px',
+    backgroundColor: '#fafafa',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lägger till en subtil skugga för djup
+    overflow: 'hidden', // Förhindra att innehållet flyter över
+    transition: 'all 0.3s ease-in-out', // Smidig övergång för interaktioner
+    '&:hover': {
+      backgroundColor: '#f5f5f5', // Ljusar upp bakgrunden vid hover
+      boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
+    },
+    '&:focus-within': {
+      backgroundColor: '#ffffff', // Ljusa upp fältet vid fokus
+      boxShadow: '0 0 0 3px rgba(100, 181, 246, 0.4)', // Lägg till en fokusring med blå nyans
+    },
+    'input::placeholder': {
+      color: '#999', // En ljusare grå för placeholder-text
+      opacity: 1,
+    },
+    'input': {
+      backgroundColor: 'transparent',
+      padding: '12px 24px', // Lite mer padding för ett luftigare intryck
+      borderRadius: '30px',
       color: '#333',
-      borderRadius: '50px',
-     
-      backgroundColor: '#f0f0f0', // Lägg till bakgrundsfärg för hela input-fältet
-      'input::placeholder': {
-        color: '#666', // Placeholder-färg
-        opacity: 1, // Gör färgen synlig
+      fontSize: '16px', // Större textstorlek för bättre läsbarhet
+      '&:focus': {
+        outline: 'none', // Tar bort den inbyggda outline vid fokus
       },
-      'input': {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Simulera bakgrundsfärg för placeholder
-        padding: '10px 20px',
-        borderRadius: '50px',
-      },
-    }}
+    },
+  }}
+
+
     inputRef={addressRef}
     onKeyDown={handleKeyDown}
     InputProps={{

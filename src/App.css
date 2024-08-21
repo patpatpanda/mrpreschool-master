@@ -102,7 +102,7 @@ body.fixed-position {
 }
 .initial-text {
   position: absolute;
-  margin-top: 0; /* Justera efter behov */
+  margin-top: 10px; /* Justera efter behov */
   left: 50%;
   transform: translateX(-50%);
   z-index: 133;
@@ -151,7 +151,7 @@ body.fixed-position {
   overflow-y: auto;
   overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
   padding: 15px;
-  background: linear-gradient(135deg, #2c3e50, #4c5f70);
+  background: linear-gradient(135deg, #f5cde6, #e49e42);
 
 
   background-size: cover; /* Ensure the image covers the entire container */
@@ -368,7 +368,7 @@ body.fixed-position {
     padding-top: 550px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background: linear-gradient(135deg, #2c3e50, #4c5f70);
+    background: linear-gradient(135deg, #f5cde6, #e49e42);
 
     background-size: cover; /* Adjust the background size */
 }

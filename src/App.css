@@ -365,7 +365,7 @@ body.fixed-position {
     background-color: #FFF;
     position: relative;
     z-index: 10;
-    padding-top: 800px;
+    padding-top: 550px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
     background: linear-gradient(135deg, #2c3e50, #4c5f70);
@@ -388,7 +388,7 @@ body.fixed-position {
 }
 
   .search-container.center {
-    margin-top: 300px;
+    margin-top: 00px;
     font-size: 16px;
     position: absolute; /* Changed from fixed to absolute */
   }

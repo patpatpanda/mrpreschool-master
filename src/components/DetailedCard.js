@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid, Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
 import { styled } from '@mui/material/styles';
-import myImage from '../images/seri.webp'; // Importera din standardbild
-
+import myImage from '../images/seri.webp';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -31,7 +30,7 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   backgroundColor: '#ffffff',
   padding: '20px',
-  height: 'calc(100% - 64px)', // Justera höjden så att den tar hänsyn till DialogTitle's höjd
+  height: 'calc(100% - 64px)',
   overflowY: 'auto',
   [theme.breakpoints.down('sm')]: {
     padding: '10px',
@@ -46,23 +45,23 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   maxWidth: '100%',
   overflow: 'hidden',
   position: 'relative',
-  marginTop: '20px', // Lägg till övre marginal
-  marginBottom: '20px', // Lägg till nedre marginal
+  marginTop: '20px',
+  marginBottom: '20px',
 
   img: {
     width: '100%',
     height: 'auto',
     display: 'block',
     objectFit: 'cover',
-    transition: 'transform 0.5s ease', // Smooth hover effect
+    transition: 'transform 0.5s ease',
     maxHeight: '400px',
     [theme.breakpoints.up('md')]: {
       maxHeight: '500px',
-      maxWidth: '80%',
+      maxWidth: '50%',
     },
     [theme.breakpoints.up('lg')]: {
       maxHeight: '600px',
-      maxWidth: '70%',
+      maxWidth: '50%',
     },
   },
 
@@ -73,28 +72,15 @@ const ImageContainer = styled(Box)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    background: 'rgba(0, 0, 0, 0.4)', // Dark overlay
+    background: 'rgba(0, 0, 0, 0.4)',
     zIndex: 1,
     transition: 'opacity 0.5s ease',
-    opacity: 0, // Hidden by default
-  },
-}));
-
-
-const InfoBox = styled(Box)(({ theme }) => ({
-  
-  padding: '20px',
-  borderRadius: '10px',
-  
-  marginBottom: '20px',
-  [theme.breakpoints.down('sm')]: {
-    padding: '10px',
+    opacity: 0,
   },
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
-  const { namn, adress, malibuData, schoolDetails, description, walkingTime } = schoolData;
-  const bildUrl = schoolData.bildUrl;
+  const { namn, adress, malibuData, schoolDetails, walkingTime, bildUrl } = schoolData;
 
   useEffect(() => {
     console.log('DetailedCard mounted with schoolData:', schoolData);
@@ -108,7 +94,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       open
       onClose={onClose}
       fullWidth
-      fullScreen // Detta gör att dialogen tar upp hela skärmen på en mobil
+      fullScreen
       maxWidth="md"
     >
       <StyledDialogTitle>
@@ -121,30 +107,45 @@ const DetailedCard = ({ schoolData, onClose }) => {
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
+
+        {schoolDetails.beskrivning && (
+          <Box mb={4}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}></Typography>
+            <Typography variant="body1" sx={{ color: '#555' }}>
+              {schoolDetails.beskrivning}
+            </Typography>
+          </Box>
+        )}
+
+        <Divider sx={{ marginBottom: '20px' }} />
+
         {walkingTime && (
           <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555' }}>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} /> Beräknad gångtid: {walkingTime} minuter
           </Typography>
         )}
+
         {adress && (
-          <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333' }}>
+          <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333', marginBottom: '20px' }}>
             <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} /> {adress}
           </Typography>
         )}
-        <Grid container spacing={2}>
+
+        <Grid container spacing={4}>
           {malibuData && (
             <Grid item xs={12} md={6}>
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Föräldraomdömen</Typography>
-                <Typography variant="body2">Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
-                <Typography variant="body2">Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
-                <Typography variant="body2">Antal Svar: {malibuData.antalSvar}</Typography>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Föräldraomdömen</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '16px' }}>Antal Svar: {malibuData.antalSvar}</Typography>
+
                 {malibuData.questions && malibuData.questions.$values && (
-                  <Box mt={2}>
+                  <Box>
                     <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Frågor</Typography>
                     {malibuData.questions.$values.map((question, index) => (
                       <Box key={index} mb={2}>
-                        <Typography variant="body2">Fråga: {question.frageText}</Typography>
+                        <Typography variant="body2" sx={{ marginBottom: '4px' }}>Fråga: {question.frageText}</Typography>
                         {question.frageText.includes('HELHETSOMDÖME') && (
                           <Typography variant="body2">
                             Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.
@@ -174,61 +175,53 @@ const DetailedCard = ({ schoolData, onClose }) => {
                     ))}
                   </Box>
                 )}
-              </InfoBox>
+              </Box>
             </Grid>
           )}
+
           {schoolDetails && (
             <Grid item xs={12} md={6}>
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Skoldetaljer</Typography>
-                <Typography variant="body2">Typ av Service: {schoolDetails.typAvService}</Typography>
-                <Typography variant="body2">Verksam i: {schoolDetails.verksamI}</Typography>
-                <Typography variant="body2">Organisationsform: {schoolDetails.organisationsform}</Typography>
-                <Typography variant="body2">Antal Barn: {schoolDetails.antalBarn}</Typography>
-                <Typography variant="body2">Antal Barn per Årsarbetare: {schoolDetails.antalBarnPerArsarbetare}</Typography>
-                <Typography variant="body2">Andel Legitimerade Förskollärare: {schoolDetails.andelLegitimeradeForskollarare}%</Typography>
-                <Typography variant="body2">Inriktning och Profil: {schoolDetails.inriktningOchProfil}</Typography>
-                <Typography variant="body2">Mer om Oss: {schoolDetails.merOmOss}</Typography>
-                <Typography variant="body2">Webbplats: <a href={schoolDetails.webbplats} target="_blank" rel="noopener noreferrer">{schoolDetails.webbplats}</a></Typography>
-              </InfoBox>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Skoldetaljer</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Typ av Service: {schoolDetails.typAvService}</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Verksam i: {schoolDetails.verksamI}</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Organisationsform: {schoolDetails.organisationsform}</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Antal Barn: {schoolDetails.antalBarn}</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Antal Barn per Årsarbetare: {schoolDetails.antalBarnPerArsarbetare}</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Andel Legitimerade Förskollärare: {schoolDetails.andelLegitimeradeForskollarare}%</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Inriktning och Profil: {schoolDetails.inriktningOchProfil}</Typography>
+                {schoolDetails.merOmOss && (
+                  <Typography variant="body2" sx={{ marginBottom: '8px' }}>
+                    Mer om oss: {schoolDetails.merOmOss}
+                  </Typography>
+                )}
+              </Box>
             </Grid>
           )}
+
           {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
             <Grid item xs={12}>
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Kontaktinformation</Typography>
+              <Box mt={4}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Kontaktinformation</Typography>
                 {schoolDetails.kontakter.$values.map((kontakt, index) => (
                   <Box key={index} mb={2}>
-                    <Typography variant="body2">Namn: {kontakt.namn}</Typography>
-                    <Typography variant="body2">Roll: {kontakt.roll}</Typography>
-                    <Typography variant="body2">E-post: {kontakt.epost}</Typography>
+                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>Namn: {kontakt.namn}</Typography>
+                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>Roll: {kontakt.roll}</Typography>
+                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>E-post: {kontakt.epost}</Typography>
                     <Typography variant="body2">Telefon: {kontakt.telefon}</Typography>
                   </Box>
                 ))}
-              </InfoBox>
+              </Box>
             </Grid>
           )}
         </Grid>
-        {description && (
-          <InfoBox sx={{ marginTop: '20px' }}>
-            <Typography variant="body2" sx={{ color: '#333' }}>{description}</Typography>
-          </InfoBox>
-        )}
       </StyledDialogContent>
     </StyledDialog>
   );
 };
 
 DetailedCard.propTypes = {
-  schoolData: PropTypes.shape({
-    namn: PropTypes.string.isRequired,
-    adress: PropTypes.string,
-    malibuData: PropTypes.object,
-    schoolDetails: PropTypes.object,
-    description: PropTypes.string,
-    walkingTime: PropTypes.string,
-    bildUrl: PropTypes.string,
-  }).isRequired,
+  schoolData: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

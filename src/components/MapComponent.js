@@ -512,15 +512,43 @@ const MapComponent = () => {
     <div className="app-container">
          {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
          {showText }
-       <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
-      <Container maxWidth="sm">
-        <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
-          {showPlaces && (
-            <Box display="flex" justifyContent="center" width="100%" gap={2}>
+   <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
+  <Container maxWidth="sm">
+    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
+      {showPlaces && (
+        <Box display="flex" justifyContent="center" width="100%" gap={2}>
+          <Button
+            onClick={filterClosestPreschools}
+            variant="contained"
+            color="secondary"
+            sx={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              borderRadius: '50px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            De 5 närmaste
+          </Button>
+          <Button
+            onClick={handleTopRanked}
+            variant="contained"
+            color="secondary"
+            sx={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              borderRadius: '50px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            Högst rank
+          </Button>
+          {searchMade && (
+            <>
               <Button
-                onClick={filterClosestPreschools}
+                onClick={() => setFilterVisible(!filterVisible)}
                 variant="contained"
-                color="secondary"
+                color="primary"
                 sx={{
                   marginTop: '20px',
                   padding: '10px 20px',
@@ -528,43 +556,15 @@ const MapComponent = () => {
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
                 }}
               >
-                De 5 närmaste
+                {filterVisible ? 'Visa filter' : 'Dölj filter'}
               </Button>
-              <Button
-                onClick={handleTopRanked}
-                variant="contained"
-                color="secondary"
-                sx={{
-                  marginTop: '20px',
-                  padding: '10px 20px',
-                  borderRadius: '50px',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                }}
-              >
-                Högst rank
-              </Button>
-              {searchMade && (
-                <>
-                  <Button
-                    onClick={() => setFilterVisible(!filterVisible)}
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      marginTop: '20px',
-                      padding: '10px 20px',
-                      borderRadius: '50px',
-                      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                    }}
-                  >
-                    {filterVisible ? 'Visa filter' : 'Dölj filter'}
-                  </Button>
-                  {!filterVisible && (
-                    <OrganisationFilter
-                      organisationTypes={organisationTypes}
-                      filter={filter}
-                      handleFilterChange={handleFilterChange}
-                      visible={showPlaces}
-                      sx={{ marginTop: '20px' }}
+              {!filterVisible && (
+                <OrganisationFilter
+                  organisationTypes={organisationTypes}
+                  filter={filter}
+                  handleFilterChange={handleFilterChange}
+                  visible={showPlaces}
+                  sx={{ marginTop: '20px' }}
                     />
                   )}
                 </>

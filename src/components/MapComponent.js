@@ -31,13 +31,7 @@ const geocodeAddress = async (address) => {
   console.log('Geocoding address:', address);
   try {
     const fullAddress = `${address}, Stockholm, Sweden`;
-    const encodedAddress = encodeURIComponent(fullAddress);
-    const url = `https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/geocode/${encodedAddress}`;
-    
-    console.log('Encoded Address:', encodedAddress);  // Log the encoded address
-    console.log('Geocoding URL:', url);  // Log the full URL being sent
-
-    const response = await axios.get(url);
+    const response = await axios.get(`https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/geocode/${encodeURIComponent(fullAddress)}`);
     const data = response.data;
 
     if (data && data.latitude && data.longitude) {
@@ -51,7 +45,6 @@ const geocodeAddress = async (address) => {
     return null;
   }
 };
-
 
 const MapComponent = () => {
   const mapRef = useRef(null);
@@ -609,6 +602,7 @@ const MapComponent = () => {
     Map View
   </Button>
 </ButtonGroup>
+
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
   <TextField
     id="address"

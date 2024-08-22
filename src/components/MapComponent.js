@@ -31,7 +31,13 @@ const geocodeAddress = async (address) => {
   console.log('Geocoding address:', address);
   try {
     const fullAddress = `${address}, Stockholm, Sweden`;
-    const response = await axios.get(`https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/geocode/${encodeURIComponent(fullAddress)}`);
+    const encodedAddress = encodeURIComponent(fullAddress);
+    const url = `https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/geocode/${encodedAddress}`;
+    
+    console.log('Encoded Address:', encodedAddress);  // Log the encoded address
+    console.log('Geocoding URL:', url);  // Log the full URL being sent
+
+    const response = await axios.get(url);
     const data = response.data;
 
     if (data && data.latitude && data.longitude) {
@@ -45,6 +51,7 @@ const geocodeAddress = async (address) => {
     return null;
   }
 };
+
 
 const MapComponent = () => {
   const mapRef = useRef(null);
@@ -602,62 +609,62 @@ const MapComponent = () => {
     Map View
   </Button>
 </ButtonGroup>
-
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
-<TextField
-  id="address"
-  variant="outlined"
-  placeholder="Skriv din adress för att hitta förskola"
-  fullWidth
-  sx={{
-    color: '#333',
-    borderRadius: '30px',
-    backgroundColor: '#fafafa',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lägger till en subtil skugga för djup
-    overflow: 'hidden', // Förhindra att innehållet flyter över
-    transition: 'all 0.3s ease-in-out', // Smidig övergång för interaktioner
-    '&:hover': {
-      backgroundColor: '#f5f5f5', // Ljusar upp bakgrunden vid hover
-      boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
-    },
-    '&:focus-within': {
-      backgroundColor: '#ffffff', // Ljusa upp fältet vid fokus
-      boxShadow: '0 0 0 3px rgba(100, 181, 246, 0.4)', // Lägg till en fokusring med blå nyans
-    },
-    'input::placeholder': {
-      color: '#999', // En ljusare grå för placeholder-text
-      opacity: 1,
-    },
-    'input': {
-      backgroundColor: 'transparent',
-      padding: '12px 24px', // Lite mer padding för ett luftigare intryck
-      borderRadius: '30px',
-      color: '#333',
-      fontSize: '16px', // Större textstorlek för bättre läsbarhet
-      '&:focus': {
-        outline: 'none', // Tar bort den inbyggda outline vid fokus
+  <TextField
+    id="address"
+    variant="outlined"
+    placeholder="Skriv din adress här..."
+    fullWidth
+    sx={{
+      backgroundColor: '#e3f2fd', // Ljusblå bakgrund
+      borderRadius: '50px', // Rundare hörn
+      border: '2px solid #2196f3', // Blå kant
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Skugga för djup
+      overflow: 'hidden', 
+      transition: 'all 0.3s ease', // Smidig övergång för interaktioner
+      '&:hover': {
+        backgroundColor: '#bbdefb', // Ljusar upp bakgrunden vid hover
+        boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
       },
-    },
-  }}
-
-
-    inputRef={addressRef}
-    onKeyDown={handleKeyDown}
+      '&:focus-within': {
+        backgroundColor: '#ffffff', // Ljusare fält vid fokus
+        borderColor: '#1e88e5', // Fokuserad kantfärg
+        boxShadow: '0 0 0 4px rgba(33, 150, 243, 0.3)', // Ljusblå fokusring
+      },
+      'input::placeholder': {
+        color: '#757575', // Mörkare grå för placeholder-text
+        fontStyle: 'italic', // Kursiv stil för en touch av stil
+        opacity: 1,
+      },
+      'input': {
+        padding: '14px 20px', // Luftigare intryck
+        fontSize: '18px', // Större textstorlek
+        color: '#1e88e5', // Blå textfärg
+        '&:focus': {
+          outline: 'none', // Tar bort den inbyggda outline vid fokus
+        },
+      },
+      '.MuiOutlinedInput-root': {
+        '& fieldset': {
+          border: 'none', // Tar bort den standardiserade ramen
+        },
+      },
+    }}
     InputProps={{
-      style: { color: '#333', padding: '10px 20px' },
+      style: { padding: '0 20px' },
       endAdornment: (
         <InputAdornment position="end">
           <IconButton
             onClick={geocodeAddressHandler}
             edge="end"
             sx={{
-              backgroundColor: '#4caf50',
-              color: 'white',
-              borderRadius: '50%',
+              backgroundColor: '#1e88e5', // Blå bakgrund på knappen
+              color: 'white', // Vit färg på ikonen
+              borderRadius: '50%', // Rund knapp
               padding: '10px',
               transition: 'background-color 0.3s ease',
               '&:hover': {
-                backgroundColor: '#45a045',
+                backgroundColor: '#1565c0', // Mörkare blå vid hover
               },
               marginRight: '-10px',
             }}

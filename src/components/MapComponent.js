@@ -604,61 +604,60 @@ const MapComponent = () => {
 </ButtonGroup>
 
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
-  <TextField
-    id="address"
-    variant="outlined"
-    placeholder="Skriv din adress här..."
-    fullWidth
-    sx={{
-      backgroundColor: '#e3f2fd', // Ljusblå bakgrund
-      borderRadius: '50px', // Rundare hörn
-      border: '2px solid #2196f3', // Blå kant
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Skugga för djup
-      overflow: 'hidden', 
-      transition: 'all 0.3s ease', // Smidig övergång för interaktioner
-      '&:hover': {
-        backgroundColor: '#bbdefb', // Ljusar upp bakgrunden vid hover
-        boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
+<TextField
+  id="address"
+  variant="outlined"
+  placeholder="Skriv din adress för att hitta förskola"
+  fullWidth
+  sx={{
+    backgroundColor: '#e3f2fd', // Ljusblå bakgrund
+    borderRadius: '50px', // Rundare hörn
+    border: '2px solid #2196f3', // Blå kant
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Skugga för djup
+    overflow: 'hidden', 
+    transition: 'all 0.3s ease', // Smidig övergång för interaktioner
+    '&:hover': {
+      backgroundColor: '#bbdefb', // Ljusar upp bakgrunden vid hover
+      boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
+    },
+    '&:focus-within': {
+      backgroundColor: '#ffffff', // Ljusare fält vid fokus
+      borderColor: '#1e88e5', // Fokuserad kantfärg
+      boxShadow: '0 0 0 4px rgba(33, 150, 243, 0.3)', // Ljusblå fokusring
+    },
+    'input::placeholder': {
+      color: '#757575', // Mörkare grå för placeholder-text
+      fontStyle: 'italic', // Kursiv stil för en touch av stil
+      opacity: 1,
+    },
+    'input': {
+      padding: '14px 20px', // Luftigare intryck
+      fontSize: '18px', // Större textstorlek
+      color: '#1e88e5', // Blå textfärg
+      '&:focus': {
+        outline: 'none', // Tar bort den inbyggda outline vid fokus
       },
-      '&:focus-within': {
-        backgroundColor: '#ffffff', // Ljusare fält vid fokus
-        borderColor: '#1e88e5', // Fokuserad kantfärg
-        boxShadow: '0 0 0 4px rgba(33, 150, 243, 0.3)', // Ljusblå fokusring
-      },
-      'input::placeholder': {
-        color: '#757575', // Mörkare grå för placeholder-text
-        fontStyle: 'italic', // Kursiv stil för en touch av stil
-        opacity: 1,
-      },
-      'input': {
-        padding: '14px 20px', // Luftigare intryck
-        fontSize: '18px', // Större textstorlek
-        color: '#1e88e5', // Blå textfärg
-        '&:focus': {
-          outline: 'none', // Tar bort den inbyggda outline vid fokus
-        },
-      },
-      '.MuiOutlinedInput-root': {
-        '& fieldset': {
-          border: 'none', // Tar bort den standardiserade ramen
-        },
-      },
-    }}
+    },
+  }}
+
+
+    inputRef={addressRef}
+    onKeyDown={handleKeyDown}
     InputProps={{
-      style: { padding: '0 20px' },
+      style: { color: '#333', padding: '10px 20px' },
       endAdornment: (
         <InputAdornment position="end">
           <IconButton
             onClick={geocodeAddressHandler}
             edge="end"
             sx={{
-              backgroundColor: '#1e88e5', // Blå bakgrund på knappen
-              color: 'white', // Vit färg på ikonen
-              borderRadius: '50%', // Rund knapp
+              backgroundColor: '#4caf50',
+              color: 'white',
+              borderRadius: '50%',
               padding: '10px',
               transition: 'background-color 0.3s ease',
               '&:hover': {
-                backgroundColor: '#1565c0', // Mörkare blå vid hover
+                backgroundColor: '#45a045',
               },
               marginRight: '-10px',
             }}

@@ -575,8 +575,8 @@ const MapComponent = () => {
   <Button
     onClick={() => setView('list')}
     style={{
-      backgroundColor: view === 'list' ? '#4caf50' : '#ffffff',
-      color: view === 'list' ? '#ffffff' : '#4caf50',
+      backgroundColor: view === 'list' ? 'pink' : '#ffffff',
+      color: view === 'list' ? '#ffffff' : 'pink',
       display: 'flex',
       alignItems: 'center',
       padding: '10px 20px',
@@ -610,35 +610,39 @@ const MapComponent = () => {
   placeholder="Skriv din adress för att hitta förskola"
   fullWidth
   sx={{
-    backgroundColor: '#e3f2fd', // Ljusblå bakgrund
-    borderRadius: '50px', // Rundare hörn
-    border: '2px solid #2196f3', // Blå kant
-    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Skugga för djup
-    overflow: 'hidden', 
-    transition: 'all 0.3s ease', // Smidig övergång för interaktioner
+    backgroundColor: '#ffffff', // Helt vit bakgrund för ren och minimalistisk design
+    borderRadius: '8px', // Lätt rundade hörn för en modern känsla
+    border: '1px solid #e0e0e0', // Tunn grå kant för subtil definition
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)', // Lätt skugga för subtilt djup
+    overflow: 'hidden',
+    transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
+    fontFamily: "'Helvetica Neue', sans-serif", // Modern och stilren font
     '&:hover': {
-      backgroundColor: '#bbdefb', // Ljusar upp bakgrunden vid hover
-      boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)', // Förstärker skuggan vid hover
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Ökad skugga vid hover för lite mer djup
     },
     '&:focus-within': {
-      backgroundColor: '#ffffff', // Ljusare fält vid fokus
-      borderColor: '#1e88e5', // Fokuserad kantfärg
-      boxShadow: '0 0 0 4px rgba(33, 150, 243, 0.3)', // Ljusblå fokusring
+        borderColor: '#bdbdbd', // Mörkare grå kant vid fokus för tydlig feedback
+        boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.1)', // Subtil fokusring för bättre synlighet
     },
     'input::placeholder': {
-      color: '#757575', // Mörkare grå för placeholder-text
-      fontStyle: 'italic', // Kursiv stil för en touch av stil
-      opacity: 1,
+        color: '#9e9e9e', // Grå färg för placeholder-text för diskret synlighet
+        fontStyle: 'italic', // Kursiv stil för att lägga till subtil elegans
+        opacity: 1,
+        fontFamily: "'Helvetica Neue', sans-serif", // Håller samma font som input
     },
     'input': {
-      padding: '14px 20px', // Luftigare intryck
-      fontSize: '18px', // Större textstorlek
-      color: '#1e88e5', // Blå textfärg
-      '&:focus': {
-        outline: 'none', // Tar bort den inbyggda outline vid fokus
-      },
+        padding: '12px 16px', // Bekväm padding för användarvänlighet
+        fontSize: '16px', // Standard textstorlek för god läsbarhet
+        color: '#333333', // Mörkgrå textfärg för hög kontrast
+        fontFamily: "'Helvetica Neue', sans-serif", // Samma stilrena font för input text
+        transition: 'color 0.3s ease', // Smidig övergång för textfärg vid interaktion
+        '&:focus': {
+            outline: 'none', // Ingen inbyggd outline vid fokus
+            color: '#000000', // Svart färg vid fokus för att maximera läsbarheten
+        },
     },
-  }}
+}}
+
 
 
     inputRef={addressRef}
@@ -651,7 +655,7 @@ const MapComponent = () => {
             onClick={geocodeAddressHandler}
             edge="end"
             sx={{
-              backgroundColor: '#4caf50',
+              backgroundColor: '#333',
               color: 'white',
               borderRadius: '50%',
               padding: '10px',

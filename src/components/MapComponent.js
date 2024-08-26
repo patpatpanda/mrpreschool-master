@@ -610,7 +610,7 @@ const MapComponent = () => {
   </Button>
 </ButtonGroup>
 
-<form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '20px', position: 'relative' }}>
+<form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
 <TextField
   id="address"
   variant="outlined"
@@ -681,17 +681,33 @@ const MapComponent = () => {
   />
 </form>
 {!searchMade && view === 'list' && (
-  <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+  <Box
+    sx={{
+      marginTop: '20px', // Minskar avståndet för att flytta upp innehållet lite
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '15px',
+      '@media (max-width: 600px)': {
+        marginTop: '10px', // Minskar toppmarginalen ytterligare för små skärmar
+        gap: '10px', // Minskar gap mellan elementen för små skärmar
+      },
+    }}
+  >
     {/* Information text */}
     <Typography
       variant="body1"
       sx={{
-        maxWidth: '300px', 
-        textAlign: 'center', 
-        color: '#333', 
-        padding: '20px', 
-        borderRadius: '12px', 
-        marginBottom: '20px', 
+        maxWidth: '300px',
+        textAlign: 'center',
+        color: '#333',
+        padding: '20px',
+        borderRadius: '12px',
+        marginBottom: '20px',
+        '@media (max-width: 600px)': {
+          fontSize: '14px', // Minskar textstorleken för små skärmar
+          padding: '15px', // Minskar padding för små skärmar
+        },
       }}
     >
       Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
@@ -701,19 +717,23 @@ const MapComponent = () => {
     <Button
       variant="contained"
       color="secondary"
-      onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
+      onClick={() => (window.location.href = 'https://blog.förskolekollen.se')}
       sx={{
         padding: '15px 30px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        color:'#fff',
+        color: '#fff',
         '&:hover': {
           backgroundColor: '#3f1d3ba1',
         },
         width: '100%',
         maxWidth: '300px',
+        '@media (max-width: 600px)': {
+          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
+          padding: '10px 20px', // Minskar padding för små skärmar
+        },
       }}
     >
       Läs mer om förskolor och regler - Klicka här!
@@ -728,7 +748,7 @@ const MapComponent = () => {
         padding: '15px 30px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
-        color:'#fff',
+        color: '#fff',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
@@ -736,6 +756,10 @@ const MapComponent = () => {
         },
         width: '100%',
         maxWidth: '300px',
+        '@media (max-width: 600px)': {
+          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
+          padding: '10px 20px', // Minskar padding för små skärmar
+        },
       }}
     >
       Visa enkätsvar och statistik - Klicka här!
@@ -750,7 +774,7 @@ const MapComponent = () => {
         padding: '15px 30px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
-        color:'#fff',
+        color: '#fff',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
@@ -758,12 +782,17 @@ const MapComponent = () => {
         },
         width: '100%',
         maxWidth: '300px',
+        '@media (max-width: 600px)': {
+          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
+          padding: '10px 20px', // Minskar padding för små skärmar
+        },
       }}
     >
       Läs om hur du ansöker till förskola - Klicka här!
     </Button>
   </Box>
 )}
+
 
 
 

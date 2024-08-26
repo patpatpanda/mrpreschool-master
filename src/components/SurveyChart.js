@@ -73,8 +73,8 @@ const SurveyChart = () => {
           const response = await axios.get('https://masterkinder20240523125154.azurewebsites.net/api/Survey/svarsalternativ', {
             params: {
               year,
-              forskoleverksamhet: forskoleverksamhet || '', // Använd tom sträng om forskoleverksamhet är null eller undefined
-              fragetext: fragetext || '',  // Använd tom sträng om fragetext är null eller undefined
+              forskoleverksamhet: forskoleverksamhet || '',
+              fragetext: fragetext || '',
             }
           });
           const responseData = response.data;
@@ -132,8 +132,8 @@ const SurveyChart = () => {
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
-    setChartData([]); // Återställ chartData när användaren gör ett nytt val
-    setDataFetched(false); // Återställ dataFetched när användaren gör ett nytt val
+    setChartData([]);
+    setDataFetched(false);
   };
 
   return (
@@ -150,10 +150,10 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.forskoleverksamhet}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, '& .MuiOutlinedInput-root': { fontSize: '1rem' }, '& .MuiInputLabel-root': { fontSize: '1rem' } }}
           >
             {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
-              <MenuItem key={index} value={option}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem' }}>
                 {option}
               </MenuItem>
             ))}
@@ -169,10 +169,10 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.fragetext}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, '& .MuiOutlinedInput-root': { fontSize: '1rem' }, '& .MuiInputLabel-root': { fontSize: '1rem' } }}
           >
             {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-              <MenuItem key={index} value={option} sx={{ whiteSpace: 'normal' }}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', whiteSpace: 'normal' }}>
                 {option}
               </MenuItem>
             ))}
@@ -183,9 +183,8 @@ const SurveyChart = () => {
         <Button
           onClick={handleSearch}
           variant="contained"
-          color="primary"
           fullWidth
-          sx={{ marginTop: '20px' }}
+          sx={{ marginTop: '20px', fontSize: '1rem', padding: '10px 20px', backgroundColor: '#3f51b5', color: '#fff', '&:hover': { backgroundColor: '#303f9f' } }}
           disabled={loading}
         >
           {loading ? 'Laddar...' : 'Visa stapeldiagram'}
@@ -195,7 +194,7 @@ const SurveyChart = () => {
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
           <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px' }}>
-            <h3>Stapeldiagram över svar - {chart.year}</h3>
+            <h3 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Stapeldiagram över svar - {chart.year}</h3>
             <Bar
               data={chart.data}
               options={{

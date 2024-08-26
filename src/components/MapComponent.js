@@ -3,7 +3,7 @@ import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
 import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
-import { TextField, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
+import { TextField,Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
@@ -673,52 +673,66 @@ const MapComponent = () => {
     }}
   />
 </form>
+{!searchMade && view === 'list' && (
+        <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          {/* Information text */}
+          <Typography
+            variant="body1"
+            sx={{
+              maxWidth: '300px', // Ensures text block doesn't stretch too wide
+              textAlign: 'center', // Centers the text
+              color: '#333', // Dark gray text color for readability
+             
+              padding: '20px', // Adds space inside the box
+              borderRadius: '12px', // Rounded corners for the background box
+            
+              marginBottom: '20px', // Adds space between the text and buttons
+            }}
+          >
+            Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
+          </Typography>
 
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
+            sx={{
+              padding: '15px 30px',
+              fontSize: '16px',
+              backgroundColor: '#1a73e8',
+              borderRadius: '50px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              '&:hover': {
+                backgroundColor: '#1669c1',
+              },
+              width: '100%',
+              maxWidth: '300px',
+            }}
+          >
+            Läs mer om förskolor och regler - Klicka här!
+          </Button>
 
-{!searchMade && (
-  <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
-      sx={{
-        padding: '15px 30px',
-        fontSize: '16px',
-        backgroundColor: '#1a73e8',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        '&:hover': {
-          backgroundColor: '#1669c1',
-        },
-        width: '100%',
-        maxWidth: '300px',
-      }}
-    >
-      Läs mer om förskolor och regler - Klicka här!
-    </Button>
-
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => navigate('/Survey')}
-      sx={{
-        padding: '15px 30px',
-        fontSize: '16px',
-        backgroundColor: '#1a73e8',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        '&:hover': {
-          backgroundColor: '#1669c1',
-        },
-        width: '100%',
-        maxWidth: '300px',
-      }}
-    >
-      Visa enkätsvar och statistik - Klicka här!
-    </Button>
-  </Box>
-)}
-
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/Survey')}
+            sx={{
+              padding: '15px 30px',
+              fontSize: '16px',
+              backgroundColor: '#1a73e8',
+              borderRadius: '50px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              '&:hover': {
+                backgroundColor: '#1669c1',
+              },
+              width: '100%',
+              maxWidth: '300px',
+            }}
+          >
+            Visa enkätsvar och statistik - Klicka här!
+          </Button>
+        </Box>
+      )}
 
 
 

@@ -4,10 +4,10 @@ import { yellow, blueGrey, deepOrange } from '@mui/material/colors';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1a73e8', // Mörkblå som primärfärg
+      main: '#867c7cd5', // Mörkblå som primärfärg
     },
     secondary: {
-      main: '#1a73e8', // Mörkblå som sekundärfärg
+      main: '#867c7cd5', // Mörkblå som sekundärfärg
     },
     background: {
       default: yellow[50],

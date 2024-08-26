@@ -236,95 +236,6 @@ body, html {
 
 /* Media Queries for Responsiveness */
 
-/* For tablets and below */
-@media (max-width: 1400px) {
-  .styled-input {
-    width: calc(100% - 80px);
-    font-size: 16px;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-  }
-  
-
-  .search-container {
-    display: flex;
-    user-select: none;
-
-    touch-action: none;
-    position: absolute;
-    width: 80%;
-    font-size: 16px;
-    background-color: none;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-  }
-
-  .search-container.center {
-    margin-top: 300px;
-    font-size: 16px;
-    position: absolute; /* Changed from fixed to absolute */
-  }
-
-  .search-container.top {
-    top:1px;
-    font-size: 16px;
-    
-    position: absolute; /* Changed from fixed to absolute */
-  }
-
-  .styled-button {
-    padding: 10px 20px;
-    font-size: 16px; /* Öka fontstorleken till minst 16px */
-    margin-right: 10px;
-    margin-top: 5px;
-  }
-  
-  .cards-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 15px;
-    background-color: #FFF;
-    position: relative;
-    z-index: 10;
-    padding-top: 450px;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background-color: #fff;
-    background-size: cover; /* Adjust the background size */
-}
-
-
-  .card {
-    padding: 15px;
-    width: 356px; /* Full width for smaller screens */
-    height: 600px; /* Set a fixed height */
-    font-family: Comic Sans MS, Comic Sans;
-    margin-left: 10px; /* Move cards slightly to the left */
-  }
-
-  .card h3 {
-    font-size: 18px;
-    font-family: Comic Sans MS, Comic Sans;
-  }
-
-  .card p {
-    font-size: 16px;
-    font-family: Comic Sans MS, Comic Sans;
-  }
-  .custom-snackbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 500px; /* Maxbredd för att förhindra att den blir för stor på större skärmar */
-    z-index: 1400; /* Se till att den är över andra element */
-    margin-left:220px;
-  }
-}
 
 /* For mobile devices */
 @media (max-width: 768px) {
@@ -353,7 +264,7 @@ body, html {
     padding-top: 550px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background: linear-gradient(135deg, #ffffff, #f7f4f1);
+    background: linear-gradient(135deg, #ffffffd5, #f7f4f1);
 
     background-size: cover; /* Adjust the background size */
 }

@@ -76,21 +76,26 @@ const MapComponent = () => {
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
-
+    
       const map = new google.maps.Map(mapRef.current, {
         center: stockholm,
         zoom: 12,
         disableDefaultUI: true,
       });
       setMap(map);
-
+    
       // Initialize DirectionsService and DirectionsRenderer
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
         suppressMarkers: true, // Behåll om du vill dölja markörer, annars ta bort denna rad
+        polylineOptions: {
+          strokeColor: '#FF0000', // Ändra färg till röd
+          strokeOpacity: 0.7,    // Justera opaciteten om du vill ha en halvgenomskinlig linje
+          strokeWeight: 5        // Öka bredden på linjen
+        }
       });
       directionsRenderer.current.setMap(map);
-
+    
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
           bounds: {
@@ -104,10 +109,12 @@ const MapComponent = () => {
           strictBounds: false,
           types: ['address'],
         });
-
+    
         autocomplete.addListener('place_changed', () => {});
       }
     };
+    
+    
 
     const loadScript = () => {
       const script = document.createElement('script');
@@ -132,7 +139,7 @@ const MapComponent = () => {
           const location = new google.maps.LatLng(school.latitude, school.longitude);
           selectPlace(school);
           map.setCenter(location);
-          map.setZoom(18);
+          map.setZoom(20);
 
           const marker = new google.maps.Marker({
             map: map,
@@ -219,69 +226,69 @@ const MapComponent = () => {
     return addressParts[0].trim();
   };
 
-  const geocodeAddressHandler = useCallback(async (event) => {
-    event.preventDefault();
-    const address = document.getElementById('address').value.trim();
-    if (!address) {
-      setErrorMessage('Ange en giltig adress.');
-      return;
+ const geocodeAddressHandler = useCallback(async (event) => {
+  event.preventDefault();
+  const address = document.getElementById('address').value.trim();
+  if (!address) {
+    setErrorMessage('Ange en giltig adress.');
+    return;
+  }
+
+  setLoading(true);
+  clearMarkers();
+  setNearbyPlaces([]);
+
+  const relevantAddress = extractRelevantAddress(address);
+  console.log('Relevant address extracted:', relevantAddress);
+  const coordinates = await geocodeAddress(relevantAddress);
+  console.log('Coordinates:', coordinates);
+
+  if (
+    !coordinates ||
+    (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
+      coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
+  ) {
+    console.log('Geocoding failed or out of bounds.');
+    setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
+    setLoading(false);
+    return;
+  }
+
+  const { latitude, longitude } = coordinates;
+  const location = new google.maps.LatLng(latitude, longitude);
+
+  if (map) {
+    map.setCenter(location);
+    map.setZoom(14);
+
+    if (originMarker) {
+      originMarker.setMap(null);
     }
-  
-    setLoading(true);
-    clearMarkers();
-    setNearbyPlaces([]);
-  
-    const relevantAddress = extractRelevantAddress(address);
-    console.log('Relevant address extracted:', relevantAddress);
-    const coordinates = await geocodeAddress(relevantAddress);
-    console.log('Coordinates:', coordinates);
-  
-    if (
-      !coordinates ||
-      (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
-        coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
-    ) {
-      console.log('Geocoding failed or out of bounds.');
-      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
-      setLoading(false);
-      return;
-    }
-  
-    const { latitude, longitude } = coordinates;
-    const location = new google.maps.LatLng(latitude, longitude);
-  
-    if (map) {
-      map.setCenter(location);
-      map.setZoom(14);
-  
-      if (originMarker) {
-        originMarker.setMap(null);
-      }
-  
-      const marker = new google.maps.Marker({
-        map: map,
-        position: location,
-        icon: {
-          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-          scaledSize: new google.maps.Size(30, 30),
-        },
-      });
-  
-      setOriginMarker(marker);
-      setOriginPosition(location);
-  
-      await findNearbyPlaces(location);
-      setShowPlaces(true);
-      setShowText(false);
-      setSearchMade(true); // Keep track of search being made
-      // Remove or comment out the following line
-      // setView('map'); // Don't switch to map view automatically
-    } else {
-      setErrorMessage('Map is not initialized.');
-      setLoading(false);
-    }
-  }, [map, originMarker, findNearbyPlaces]);
-  
+
+    const marker = new google.maps.Marker({
+      map: map,
+      position: location,
+      icon: {
+        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        scaledSize: new google.maps.Size(30, 30),
+      },
+    });
+
+    setOriginMarker(marker);
+    setOriginPosition(location);
+
+    await findNearbyPlaces(location);
+    setShowPlaces(true);
+    setShowText(false);
+    setSearchMade(true); // Keep track of search being made
+    // Remove or comment out the following line
+    // setView('map'); // Don't switch to map view automatically
+  } else {
+    setErrorMessage('Map is not initialized.');
+    setLoading(false);
+  }
+}, [map, originMarker, findNearbyPlaces]);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);
@@ -701,8 +708,9 @@ const MapComponent = () => {
         backgroundColor: '#3f1d3ba3',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        color:'#fff',
         '&:hover': {
-          backgroundColor: '#1669c1',
+          backgroundColor: '#3f1d3ba1',
         },
         width: '100%',
         maxWidth: '300px',
@@ -720,10 +728,11 @@ const MapComponent = () => {
         padding: '15px 30px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
+        color:'#fff',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#1669c1',
+          backgroundColor: '#3f1d3ba3',
         },
         width: '100%',
         maxWidth: '300px',
@@ -741,10 +750,11 @@ const MapComponent = () => {
         padding: '15px 30px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
+        color:'#fff',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#1669c1',
+          backgroundColor: '#3f1d3ba3',
         },
         width: '100%',
         maxWidth: '300px',

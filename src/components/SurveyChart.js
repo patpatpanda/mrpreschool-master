@@ -158,7 +158,7 @@ const SurveyChart = () => {
             }}
           >
             {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
-              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#fff' }}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#000' }}>
                 {option}
               </MenuItem>
             ))}
@@ -182,7 +182,7 @@ const SurveyChart = () => {
             }}
           >
             {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#fff', whiteSpace: 'normal' }}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#000', whiteSpace: 'normal' }}>
                 {option}
               </MenuItem>
             ))}

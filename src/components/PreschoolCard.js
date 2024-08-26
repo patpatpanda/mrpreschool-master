@@ -1,177 +1,111 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardHeader, Typography, Box, Divider, ButtonBase } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography, Box, ButtonBase, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const PreschoolCard = ({ preschool, onSelect, walkingTime }) => (
+const PreschoolCard = ({ preschool, onSelect }) => (
   <ButtonBase
     onClick={() => onSelect(preschool)}
     style={{
       display: 'block',
       textAlign: 'left',
       width: '100%',
-      borderRadius: '10px',
-      marginBottom: '20px',
+      borderRadius: '8px',
+      marginBottom: '12px', // Reduced margin-bottom to make cards closer
       textDecoration: 'none',
     }}
   >
     <Card
-      className="card"
       sx={{
         backgroundColor: '#ffffff',
-        borderRadius: '12px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Reduced box-shadow for a flatter appearance
         transition: 'transform 0.3s, box-shadow 0.3s',
         width: '100%',
-        maxWidth: '600px',
-        height: 'auto',
+        maxWidth: '500px', // Reduced max-width to ensure compactness
         '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: '0 12px 16px rgba(0, 0, 0, 0.2)',
+          transform: 'translateY(-2px)',
+          boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
         },
         '@media (max-width: 400px)': {
           maxWidth: '100%',
-          borderRadius: '8px',
-          padding: '8px', // Lägg till padding för att undvika att innehållet kläms
+          borderRadius: '6px',
+          padding: '6px', // Reduced padding for smaller screens
         },
       }}
     >
       <CardHeader
         title={
-          <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold', fontSize: '0.9rem' }}>
+          <Typography variant="subtitle1" sx={{ color: '#333', fontWeight: 'bold', fontSize: '0.85rem' }}>
             {preschool.namn}
           </Typography>
         }
         sx={{
           paddingBottom: '4px',
           paddingTop: '4px',
-          '@media (max-width: 400px)': {
-            fontSize: '0.8rem', // Mindre fontstorlek för små skärmar
-            padding: '4px 0',
-          },
+          paddingLeft: '8px',
+          paddingRight: '8px', // Reduced padding
         }}
       />
-      <Divider />
       <CardContent
-        className="card-body"
         sx={{
-          padding: '8px',
-          overflow: 'hidden',
+          padding: '8px', // Reduced padding
+          '&:last-child': {
+            paddingBottom: '8px', // Ensures no extra padding at the bottom
+          },
           display: 'flex',
           flexDirection: 'column',
-          '@media (max-width: 400px)': {
-            padding: '4px', // Mindre padding på små skärmar
-          },
         }}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          sx={{
-            marginBottom: '4px',
-            flexDirection: 'column',
-            '@media (max-width: 400px)': {
-              alignItems: 'flex-start',
-            },
-          }}
-        >
-          <Box display="flex" alignItems="center" sx={{ width: '100%' }}>
-            <FontAwesomeIcon
-              icon={faMapMarkerAlt}
-              style={{ color: '#4CAF50', marginRight: '8px', fontSize: '1rem' }}
-            />
-            <Typography
-              variant="body1"
-              sx={{
-                color: '#666',
-                fontSize: '0.8rem',
-                width: '100%',
-                wordWrap: 'break-word',
-              }}
-            >
-              {preschool.adress}
-            </Typography>
-          </Box>
-        </Box>
-        {preschool.description && (
-          <Box
-            display="flex"
-            alignItems="center"
+        <Box display="flex" alignItems="center" sx={{ marginBottom: '4px' }}>
+          <FontAwesomeIcon
+            icon={faMapMarkerAlt}
+            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }} // Slightly smaller icon
+          />
+          <Typography
+            variant="body2"
             sx={{
-              marginBottom: '8px',
-              flexDirection: 'column',
-              '@media (max-width: 400px)': {
-                alignItems: 'flex-start',
-              },
+              color: '#666',
+              fontSize: '0.75rem', // Reduced font size
+              wordWrap: 'break-word',
             }}
           >
-            <Box display="flex" alignItems="center" sx={{ width: '100%' }}>
-              <FontAwesomeIcon
-                icon={faInfoCircle}
-                style={{ color: '#FF9800', marginRight: '8px', fontSize: '1rem' }}
-              />
-              <Typography
-                variant="body1"
-                sx={{
-                  color: '#666',
-                  fontSize: '0.8rem',
-                  width: '100%',
-                  wordWrap: 'break-word',
-                }}
-              >
-                {preschool.description}
-              </Typography>
-            </Box>
-          </Box>
-        )}
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{
-            flexDirection: 'column',
-            '@media (max-width: 400px)': {
-              alignItems: 'flex-start',
-            },
-          }}
-        >
-          {preschool.pdfData ? (
-            <Box display="flex" flexDirection="column" sx={{ color: '#333', marginBottom: '4px' }}>
-              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
-                <strong>Nöjd:</strong> {preschool.pdfData.helhetsomdome}%
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
-                <strong>Svar:</strong> {preschool.pdfData.antalSvar} st
-              </Typography>
-            </Box>
-          ) : (
-            <Box display="flex" flexDirection="column" sx={{ color: '#333', marginBottom: '4px' }}>
-              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
-                <strong>Omdöme:</strong> N/A
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '0.7rem' }}>
-                <strong>Svar:</strong> N/A
-              </Typography>
-            </Box>
-          )}
-          {walkingTime && (
+            {preschool.adress}
+          </Typography>
+        </Box>
+        {preschool.description && (
+          <Box display="flex" alignItems="center" sx={{ marginBottom: '6px' }}>
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }} // Slightly smaller icon
+            />
             <Typography
               variant="body2"
               sx={{
-                color: '#333',
-                fontSize: '0.7rem',
-                marginLeft: '16px',
-                '@media (max-width: 400px)': {
-                  marginLeft: '0',
-                  marginTop: '4px',
-                },
+                color: '#666',
+                fontSize: '0.75rem', // Reduced font size
+                wordWrap: 'break-word',
               }}
             >
-              <strong>Avstånd:</strong> {walkingTime} min
+              {preschool.description}
             </Typography>
-          )}
-        </Box>
+          </Box>
+        )}
+        <Button
+          variant="text"
+          color="primary"
+          onClick={() => onSelect(preschool)}
+          sx={{
+            alignSelf: 'flex-start',
+            padding: '4px 8px', // Reduced padding for the button
+            fontSize: '0.75rem', // Reduced font size
+            marginTop: '4px', // Reduced margin-top
+            textTransform: 'none',
+          }}
+        >
+          Läs mer
+        </Button>
       </CardContent>
     </Card>
   </ButtonBase>
@@ -182,10 +116,8 @@ PreschoolCard.propTypes = {
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string.isRequired,
     description: PropTypes.string,
-    pdfData: PropTypes.object,
   }).isRequired,
   onSelect: PropTypes.func.isRequired,
-  walkingTime: PropTypes.string,
 };
 
 export default PreschoolCard;

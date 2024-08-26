@@ -6,7 +6,7 @@ import SurveyChart from './components/SurveyChart';
 import Header from './components/Header'; // Importera Header-komponenten
 import theme from './components/theme';
 import './App.css';
-
+import PreschoolApplicationInfo from './components/PreschoolApplicationInfo';
 // Google Analytics integration
 import ReactGA from 'react-ga';
 
@@ -33,6 +33,7 @@ function App() {
               <Route path="/" element={<MapComponent />} />
               <Route path="/forskolan/:id" element={<MapComponent />} />
               <Route path="/survey" element={<SurveyChart />} />
+              <Route path="/PreschoolApplicationInfo" element={<PreschoolApplicationInfo />} />
             </Routes>
           </main>
         </div>

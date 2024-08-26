@@ -8,11 +8,7 @@ body, html {
   
   
 }
-body.fixed-position {
-  position: fixed;
-  width: 100%;
-  overflow: hidden;
-}
+
 .blog-btn{
   justify-content: center;
   margin-top:200px
@@ -23,18 +19,6 @@ body.fixed-position {
   overflow-x: hidden; /* Inaktivera horisontell scrollning om det behövs */
 }
 
-.custom-snackbar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  margin-bottom: 400px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 500px; /* Maxbredd för att förhindra att den blir för stor på större skärmar */
-  z-index: 1400; /* Se till att den är över andra element */
-}
 
 
 
@@ -47,6 +31,7 @@ body.fixed-position {
   margin: 0;
   overflow: hidden; /* Förhindra skrollning */
   padding: 0;
+  padding-bottom: 200px
 }
 
 
@@ -124,7 +109,7 @@ body.fixed-position {
   
   width: 100%;
 }
-@media (max-width: 4000px) {
+@media (max-width: 42000px) {
   .initial-text {
     top: 0; /* Justera position för mindre skärmar */
     max-width: 600px; /* Anpassa maximal bredd för mindre skärmar */

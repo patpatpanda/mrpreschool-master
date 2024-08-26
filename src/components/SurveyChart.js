@@ -66,18 +66,17 @@ const SurveyChart = () => {
     setLoading(true);
     setError('');
     setDataFetched(false);
-
+  
     try {
       const allChartData = await Promise.all(
         years.map(async (year) => {
           const response = await axios.get('https://masterkinder20240523125154.azurewebsites.net/api/Survey/svarsalternativ', {
             params: {
               year,
-              forskoleverksamhet,
-              fragetext: fragetext || undefined,
+              forskoleverksamhet: forskoleverksamhet || '', // Använd tom sträng om forskoleverksamhet är null eller undefined
+              fragetext: fragetext || '',  // Använd tom sträng om fragetext är null eller undefined
             }
           });
-
           const responseData = response.data;
           const dataArray = responseData.$values || [];
 

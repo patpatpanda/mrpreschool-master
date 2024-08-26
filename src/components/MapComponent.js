@@ -8,7 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import SplashScreen from './SplashScreen';
+
 import { ButtonGroup} from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
@@ -69,7 +69,7 @@ const MapComponent = () => {
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [showSplashScreen, setShowSplashScreen] = useState(true);
+
 
   const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
 
@@ -226,17 +226,16 @@ const MapComponent = () => {
       setErrorMessage('Ange en giltig adress.');
       return;
     }
-
+  
     setLoading(true);
-
     clearMarkers();
     setNearbyPlaces([]);
-
+  
     const relevantAddress = extractRelevantAddress(address);
     console.log('Relevant address extracted:', relevantAddress);
     const coordinates = await geocodeAddress(relevantAddress);
     console.log('Coordinates:', coordinates);
-
+  
     if (
       !coordinates ||
       (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
@@ -247,18 +246,18 @@ const MapComponent = () => {
       setLoading(false);
       return;
     }
-
+  
     const { latitude, longitude } = coordinates;
     const location = new google.maps.LatLng(latitude, longitude);
-
+  
     if (map) {
       map.setCenter(location);
       map.setZoom(14);
-
+  
       if (originMarker) {
         originMarker.setMap(null);
       }
-
+  
       const marker = new google.maps.Marker({
         map: map,
         position: location,
@@ -267,21 +266,22 @@ const MapComponent = () => {
           scaledSize: new google.maps.Size(30, 30),
         },
       });
-
+  
       setOriginMarker(marker);
       setOriginPosition(location);
-
+  
       await findNearbyPlaces(location);
       setShowPlaces(true);
       setShowText(false);
-      setView('map');
-      setSearchMade(true);
+      setSearchMade(true); // Keep track of search being made
+      // Remove or comment out the following line
+      // setView('map'); // Don't switch to map view automatically
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
   }, [map, originMarker, findNearbyPlaces]);
-
+  
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);
@@ -510,7 +510,7 @@ const MapComponent = () => {
 
   return (
     <div className="app-container">
-         {showSplashScreen && <SplashScreen onProceed={() => setShowSplashScreen(false)} />}
+        
          {showText }
    <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
   <Container maxWidth="sm">
@@ -575,8 +575,8 @@ const MapComponent = () => {
   <Button
     onClick={() => setView('list')}
     style={{
-      backgroundColor: view === 'list' ? 'pink' : '#ffffff',
-      color: view === 'list' ? '#ffffff' : 'pink',
+      backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
+      color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
       display: 'flex',
       alignItems: 'center',
       padding: '10px 20px',
@@ -674,65 +674,87 @@ const MapComponent = () => {
   />
 </form>
 {!searchMade && view === 'list' && (
-        <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-          {/* Information text */}
-          <Typography
-            variant="body1"
-            sx={{
-              maxWidth: '300px', // Ensures text block doesn't stretch too wide
-              textAlign: 'center', // Centers the text
-              color: '#333', // Dark gray text color for readability
-             
-              padding: '20px', // Adds space inside the box
-              borderRadius: '12px', // Rounded corners for the background box
-            
-              marginBottom: '20px', // Adds space between the text and buttons
-            }}
-          >
-            Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
-          </Typography>
+  <Box sx={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+    {/* Information text */}
+    <Typography
+      variant="body1"
+      sx={{
+        maxWidth: '300px', 
+        textAlign: 'center', 
+        color: '#333', 
+        padding: '20px', 
+        borderRadius: '12px', 
+        marginBottom: '20px', 
+      }}
+    >
+      Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
+    </Typography>
 
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
-            sx={{
-              padding: '15px 30px',
-              fontSize: '16px',
-              backgroundColor: '#1a73e8',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-              '&:hover': {
-                backgroundColor: '#1669c1',
-              },
-              width: '100%',
-              maxWidth: '300px',
-            }}
-          >
-            Läs mer om förskolor och regler - Klicka här!
-          </Button>
+    {/* Button to external website */}
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => window.location.href = 'https://blog.förskolekollen.se'}
+      sx={{
+        padding: '15px 30px',
+        fontSize: '16px',
+        backgroundColor: '#3f1d3ba3',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        '&:hover': {
+          backgroundColor: '#1669c1',
+        },
+        width: '100%',
+        maxWidth: '300px',
+      }}
+    >
+      Läs mer om förskolor och regler - Klicka här!
+    </Button>
 
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate('/Survey')}
-            sx={{
-              padding: '15px 30px',
-              fontSize: '16px',
-              backgroundColor: '#1a73e8',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-              '&:hover': {
-                backgroundColor: '#1669c1',
-              },
-              width: '100%',
-              maxWidth: '300px',
-            }}
-          >
-            Visa enkätsvar och statistik - Klicka här!
-          </Button>
-        </Box>
-      )}
+    {/* Button to survey page */}
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => navigate('/Survey')}
+      sx={{
+        padding: '15px 30px',
+        fontSize: '16px',
+        backgroundColor: '#3f1d3ba3',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        '&:hover': {
+          backgroundColor: '#1669c1',
+        },
+        width: '100%',
+        maxWidth: '300px',
+      }}
+    >
+      Visa enkätsvar och statistik - Klicka här!
+    </Button>
+
+    {/* New button to navigate to preschool application information */}
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => navigate('/PreschoolApplicationInfo')}
+      sx={{
+        padding: '15px 30px',
+        fontSize: '16px',
+        backgroundColor: '#3f1d3ba3',
+        borderRadius: '50px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        '&:hover': {
+          backgroundColor: '#1669c1',
+        },
+        width: '100%',
+        maxWidth: '300px',
+      }}
+    >
+      Läs om hur du ansöker till förskola - Klicka här!
+    </Button>
+  </Box>
+)}
+
 
 
 

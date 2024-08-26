@@ -12,7 +12,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       textAlign: 'left',
       width: '100%',
       borderRadius: '8px',
-      marginBottom: '12px', // Reduced margin-bottom to make cards closer
+      marginBottom: '12px', // Marginal mellan korten
       textDecoration: 'none',
     }}
   >
@@ -20,10 +20,10 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       sx={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Reduced box-shadow for a flatter appearance
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Mindre skugga för en plattare utseende
         transition: 'transform 0.3s, box-shadow 0.3s',
         width: '100%',
-        maxWidth: '500px', // Reduced max-width to ensure compactness
+        maxWidth: '500px', // Justera maximal bredd för att säkerställa kompakthet
         '&:hover': {
           transform: 'translateY(-2px)',
           boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
@@ -31,7 +31,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         '@media (max-width: 400px)': {
           maxWidth: '100%',
           borderRadius: '6px',
-          padding: '6px', // Reduced padding for smaller screens
+          padding: '6px', // Justerad padding för mindre skärmar
         },
       }}
     >
@@ -45,14 +45,14 @@ const PreschoolCard = ({ preschool, onSelect }) => (
           paddingBottom: '4px',
           paddingTop: '4px',
           paddingLeft: '8px',
-          paddingRight: '8px', // Reduced padding
+          paddingRight: '8px', // Justerad padding för att minska utrymme
         }}
       />
       <CardContent
         sx={{
-          padding: '8px', // Reduced padding
+          padding: '8px', // Justerad padding
           '&:last-child': {
-            paddingBottom: '8px', // Ensures no extra padding at the bottom
+            paddingBottom: '8px', // Ingen extra padding längst ner
           },
           display: 'flex',
           flexDirection: 'column',
@@ -61,13 +61,13 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         <Box display="flex" alignItems="center" sx={{ marginBottom: '4px' }}>
           <FontAwesomeIcon
             icon={faMapMarkerAlt}
-            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }} // Slightly smaller icon
+            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }} // Mindre ikon
           />
           <Typography
             variant="body2"
             sx={{
               color: '#666',
-              fontSize: '0.75rem', // Reduced font size
+              fontSize: '0.75rem', // Mindre fontstorlek
               wordWrap: 'break-word',
             }}
           >
@@ -75,16 +75,16 @@ const PreschoolCard = ({ preschool, onSelect }) => (
           </Typography>
         </Box>
         {preschool.description && (
-          <Box display="flex" alignItems="center" sx={{ marginBottom: '6px' }}>
+          <Box display="flex" alignItems="center" sx={{ marginBottom: '10px' }}>
             <FontAwesomeIcon
               icon={faInfoCircle}
-              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }} // Slightly smaller icon
+              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }} // Mindre ikon
             />
             <Typography
               variant="body2"
               sx={{
                 color: '#666',
-                fontSize: '0.75rem', // Reduced font size
+                fontSize: '0.75rem', // Mindre fontstorlek
                 wordWrap: 'break-word',
               }}
             >
@@ -95,12 +95,15 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         <Button
           variant="text"
           color="primary"
-          onClick={() => onSelect(preschool)}
+          onClick={(event) => {
+            event.stopPropagation(); // Förhindrar att hela kortet triggar påSelect vid klick
+            onSelect(preschool);
+          }}
           sx={{
             alignSelf: 'flex-start',
-            padding: '4px 8px', // Reduced padding for the button
-            fontSize: '0.75rem', // Reduced font size
-            marginTop: '4px', // Reduced margin-top
+            padding: '4px 8px', // Justerad padding för knappen
+            fontSize: '0.75rem', // Mindre fontstorlek
+            marginTop: '4px', // Justerad marginal-topp
             textTransform: 'none',
           }}
         >

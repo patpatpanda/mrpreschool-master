@@ -136,7 +136,7 @@ body, html {
   overflow-y: auto;
   overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
   padding: 15px;
-  background: linear-gradient(135deg, #ffffff, #f7f4f1);
+  background: #8594ac1e;
 
 
   background-size: cover; /* Ensure the image covers the entire container */
@@ -258,13 +258,13 @@ body, html {
     display: grid;
     grid-template-columns: 1fr;
     padding: 15px;
-    background-color: #FFF;
+    
     position: relative;
     z-index: 10;
     padding-top: 550px;
     overflow-y: auto;
     overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
-    background: linear-gradient(135deg, #ffffffd5, #f7f4f1);
+    
 
     background-size: cover; /* Adjust the background size */
 }

@@ -137,8 +137,8 @@ const SurveyChart = () => {
   };
 
   return (
-    <div className="survey-chart-container">
-      <Box sx={{ maxWidth: '800px', margin: '150px auto 0 auto', padding: '20px' }}>
+    <div className="survey-chart-container" style={{ backgroundColor: '#333', color: '#fff', minHeight: '100vh', padding: '20px' }}>
+      <Box sx={{ maxWidth: '800px', margin: '150px auto 0 auto', padding: '20px', backgroundColor: '#444', borderRadius: '8px' }}>
       
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', gap: '20px' }}>
           <TextField
@@ -150,15 +150,20 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.forskoleverksamhet}
-            sx={{ flex: 1, '& .MuiOutlinedInput-root': { fontSize: '1rem' }, '& .MuiInputLabel-root': { fontSize: '1rem' } }}
+            sx={{
+              flex: 1,
+              '& .MuiOutlinedInput-root': { fontSize: '1rem', backgroundColor: '#555', color: '#fff' },
+              '& .MuiInputLabel-root': { fontSize: '1rem', color: '#fff' },
+              '& .MuiSelect-icon': { color: '#fff' }
+            }}
           >
             {forskoleverksamhetOptions.length > 0 && forskoleverksamhetOptions.map((option, index) => (
-              <MenuItem key={index} value={option} sx={{ fontSize: '1rem' }}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#fff' }}>
                 {option}
               </MenuItem>
             ))}
           </TextField>
-          {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+          {dropdownLoading.forskoleverksamhet && <CircularProgress size={24} sx={{ color: '#fff', marginLeft: '10px' }} />}
         
           <TextField
             select
@@ -169,15 +174,20 @@ const SurveyChart = () => {
             variant="outlined"
             margin="normal"
             disabled={dropdownLoading.fragetext}
-            sx={{ flex: 1, '& .MuiOutlinedInput-root': { fontSize: '1rem' }, '& .MuiInputLabel-root': { fontSize: '1rem' } }}
+            sx={{
+              flex: 1,
+              '& .MuiOutlinedInput-root': { fontSize: '1rem', backgroundColor: '#555', color: '#fff' },
+              '& .MuiInputLabel-root': { fontSize: '1rem', color: '#fff' },
+              '& .MuiSelect-icon': { color: '#fff' }
+            }}
           >
             {fragetextOptions.length > 0 && fragetextOptions.map((option, index) => (
-              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', whiteSpace: 'normal' }}>
+              <MenuItem key={index} value={option} sx={{ fontSize: '1rem', color: '#fff', whiteSpace: 'normal' }}>
                 {option}
               </MenuItem>
             ))}
           </TextField>
-          {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ marginLeft: '10px' }} />}
+          {dropdownLoading.fragetext && <CircularProgress size={24} sx={{ color: '#fff', marginLeft: '10px' }} />}
         </Box>
         
         <Button
@@ -193,7 +203,7 @@ const SurveyChart = () => {
         {error && <p style={{ color: 'red', marginTop: '20px' }}>{error}</p>}
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
-          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px' }}>
+          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '60px', color: '#fff' }}>
             <h3 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Stapeldiagram över svar - {chart.year}</h3>
             <Bar
               data={chart.data}
@@ -202,19 +212,40 @@ const SurveyChart = () => {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    position: 'top',
+                    labels: {
+                      color: '#fff', // Gör legenden vit
+                      font: {
+                        size: 14 // Gör texten större
+                      }
+                    }
                   },
                   title: {
                     display: true,
                     text: `Resultat för ${chart.year}`,
+                    color: '#fff', // Gör titeltexten vit
+                    font: {
+                      size: 18 // Gör titeln större
+                    }
                   },
                 },
+                scales: {
+                  x: {
+                    ticks: {
+                      color: '#fff' // Gör X-axelns text vit
+                    }
+                  },
+                  y: {
+                    ticks: {
+                      color: '#fff' // Gör Y-axelns text vit
+                    }
+                  }
+                }
               }}
             />
           </div>
         ))}
 
-        {dataFetched && chartData.length === 0 && !loading && <p>Ingen data att visa</p>}
+        {dataFetched && chartData.length === 0 && !loading && <p style={{ color: '#fff' }}>Ingen data att visa</p>}
       </Box>
     </div>
   );

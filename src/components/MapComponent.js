@@ -719,7 +719,7 @@ const MapComponent = () => {
       color="secondary"
       onClick={() => (window.location.href = 'https://blog.förskolekollen.se')}
       sx={{
-        padding: '15px 30px',
+        padding: '5px 10px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
         borderRadius: '50px',
@@ -732,7 +732,7 @@ const MapComponent = () => {
         maxWidth: '300px',
         '@media (max-width: 600px)': {
           fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '10px 20px', // Minskar padding för små skärmar
+          padding: '5px 10px', // Minskar padding för små skärmar
         },
       }}
     >
@@ -745,7 +745,7 @@ const MapComponent = () => {
       color="secondary"
       onClick={() => navigate('/Survey')}
       sx={{
-        padding: '15px 30px',
+        padding: '5px 10px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
         color: '#fff',
@@ -758,7 +758,7 @@ const MapComponent = () => {
         maxWidth: '300px',
         '@media (max-width: 600px)': {
           fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '10px 20px', // Minskar padding för små skärmar
+          padding: '5px 10px', // Minskar padding för små skärmar
         },
       }}
     >
@@ -771,7 +771,7 @@ const MapComponent = () => {
       color="secondary"
       onClick={() => navigate('/PreschoolApplicationInfo')}
       sx={{
-        padding: '15px 30px',
+        padding: '5px 10px',
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
         color: '#fff',
@@ -784,7 +784,7 @@ const MapComponent = () => {
         maxWidth: '300px',
         '@media (max-width: 600px)': {
           fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '10px 20px', // Minskar padding för små skärmar
+          padding: '5px 10px', // Minskar padding för små skärmar
         },
       }}
     >

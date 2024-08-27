@@ -20,6 +20,18 @@ const normalizeName = (name) => {
   return normalizedName;
 };
 
+export const fetchSurveyResponsesByName = async (name) => {
+  try {
+    const encodedName = encodeURIComponent(name.trim());
+    const url = `${backendUrl}/api/Survey/name/${encodedName}`;
+    const response = await axios.get(url);
+    const data = response.data || [];
+    return data;
+  } catch (error) {
+    console.error(`Error fetching survey responses by name (${name}):`, error);
+    return [];
+  }
+};
 export const fetchPdfDataByName = async (name) => {
   try {
     const normalizedName = normalizeName(name.trim());

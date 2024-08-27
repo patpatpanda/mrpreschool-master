@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid, Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
 import { styled } from '@mui/material/styles';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import myImage from '../images/seri.webp';
+import axios from 'axios';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '15px',
     overflow: 'hidden',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#333',
     width: '100%',
     height: '100%',
     margin: 0,
@@ -81,10 +86,116 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 
 const DetailedCard = ({ schoolData, onClose }) => {
   const { namn, adress, malibuData, schoolDetails, walkingTime, bildUrl } = schoolData;
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [error, setError] = useState('');
+
+  const years = [2023, 2022, 2021, 2020]; // År för att hämta statistik
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError('');
+    setDataFetched(false);
+
+    try {
+      const allChartData = await Promise.all(
+        years.map(async (year) => {
+          const response = await axios.get('https://masterkinder20240523125154.azurewebsites.net/api/Survey/svarsalternativ', {
+            params: {
+              year,
+              forskoleverksamhet: namn, // Använd förskolans namn för att filtrera
+              fragetext: "Jag är som helhet nöjd med mitt barns förskola", // Förutsätter att detta är den fråga du vill hämta
+            }
+          });
+          const responseData = response.data;
+          const dataArray = responseData.$values || [];
+
+          if (dataArray.length > 0) {
+            const labels = dataArray.map(item => translateSvarsalternativ(item.svarsalternativText));
+            const dataValues = dataArray.map(item => parseInt(item.utfall, 10) || 0);
+            const totalSvar = dataValues.reduce((acc, value) => acc + value, 0);
+
+            return {
+              year,
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: `Totalt antal svar: ${totalSvar}`,
+                    data: dataValues,
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.6)',
+                      'rgba(255, 159, 64, 0.6)',
+                      'rgba(255, 205, 86, 0.6)',
+                      'rgba(75, 192, 192, 0.6)',
+                      'rgba(54, 162, 235, 0.6)',
+                      'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 205, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                  }
+                ]
+              }
+            };
+          } else {
+            return null;
+          }
+        })
+      );
+
+      setChartData(allChartData.filter(data => data !== null));
+      setDataFetched(true);
+    } catch (err) {
+      console.error("API Error:", err);
+      if (err.response) {
+        switch (err.response.status) {
+          case 404:
+            setError('Data kunde inte hittas.');
+            break;
+          case 500:
+            setError('Serverfel. Försök igen senare.');
+            break;
+          default:
+            setError('Ett oväntat fel inträffade.');
+        }
+      } else {
+        setError('Nätverksfel eller API är inte tillgängligt.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    console.log('DetailedCard mounted with schoolData:', schoolData);
-  }, [schoolData]);
+    fetchData(); // Hämta data när komponenten mountas eller när namn ändras
+  }, [namn]);
+
+  const translateSvarsalternativ = useMemo(() => (svarsalternativ) => {
+    const mapping = {
+      "1": "Instämmer inte alls",
+      "2": "Instämmer i liten utsträckning",
+      "3": "Instämmer till viss del",
+      "4": "Instämmer i stor utsträckning",
+      "5": "Instämmer helt",
+      "Instämmer inte alls": "Instämmer inte alls",
+      "Instämmer i liten utsträckning": "Instämmer i liten utsträckning",
+      "Instämmer till viss del": "Instämmer till viss del",
+      "Instämmer i stor utsträckning": "Instämmer i stor utsträckning",
+      "Instämmer helt": "Instämmer helt",
+      "Vet ej": "Vet ej",
+      "Övrig": "Övrig"
+    };
+
+    return mapping[svarsalternativ] || svarsalternativ;
+  }, []);
 
   const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/\//i.test(url);
   const imageUrl = bildUrl && isAbsoluteUrl(bildUrl) ? bildUrl : myImage;
@@ -135,46 +246,10 @@ const DetailedCard = ({ schoolData, onClose }) => {
           {malibuData && (
             <Grid item xs={12} md={6}>
               <Box>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Föräldraomdömen</Typography>
-                <Typography variant="body2" sx={{ marginBottom: '8px' }}>Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Föräldraomdömen år 2024</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>{malibuData.helhetsomdome}% är som helhet nöjd med mitt barns förskola</Typography>
                 <Typography variant="body2" sx={{ marginBottom: '8px' }}>Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
                 <Typography variant="body2" sx={{ marginBottom: '16px' }}>Antal Svar: {malibuData.antalSvar}</Typography>
-
-                {malibuData.questions && malibuData.questions.$values && (
-                  <Box>
-                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Frågor</Typography>
-                    {malibuData.questions.$values.map((question, index) => (
-                      <Box key={index} mb={2}>
-                        <Typography variant="body2" sx={{ marginBottom: '4px' }}>Fråga: {question.frageText}</Typography>
-                        {question.frageText.includes('HELHETSOMDÖME') && (
-                          <Typography variant="body2">
-                            Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('UTVECKLING OCH LÄRANDE') && (
-                          <Typography variant="body2">
-                            Resultatet visar att {question.andelInstammer}% av föräldrarna upplever att deras barn utvecklas och lär sig bra.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('NORMER OCH VÄRDEN') && (
-                          <Typography variant="body2">
-                            Frågan om normer och värden visar att {question.andelInstammer}% av de svarande instämmer i att förskolan arbetar väl med dessa aspekter.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('SAMVERKAN MED HEMMET') && (
-                          <Typography variant="body2">
-                            Denna fråga belyser samverkan med hemmet. Här ser vi att {question.andelInstammer}% av föräldrarna tycker att samarbetet med förskolan fungerar bra.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('KOST, RÖRELSE OCH HÄLSA') && (
-                          <Typography variant="body2">
-                            {question.andelInstammer}% är nöjda med förskolans arbete inom dessa områden.
-                          </Typography>
-                        )}
-                      </Box>
-                    ))}
-                  </Box>
-                )}
               </Box>
             </Grid>
           )}
@@ -198,23 +273,55 @@ const DetailedCard = ({ schoolData, onClose }) => {
               </Box>
             </Grid>
           )}
-
-          {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
-            <Grid item xs={12}>
-              <Box mt={4}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Kontaktinformation</Typography>
-                {schoolDetails.kontakter.$values.map((kontakt, index) => (
-                  <Box key={index} mb={2}>
-                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>Namn: {kontakt.namn}</Typography>
-                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>Roll: {kontakt.roll}</Typography>
-                    <Typography variant="body2" sx={{ marginBottom: '4px' }}>E-post: {kontakt.epost}</Typography>
-                    <Typography variant="body2">Telefon: {kontakt.telefon}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
-          )}
         </Grid>
+
+        {/* Visa stapeldiagrammen om datan har hämtats */}
+        {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px' }}>{error}</Typography>}
+
+        {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
+          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#fff' }}>
+            <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center' }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
+            <Bar
+              data={chart.data}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    labels: {
+                      color: '#333',
+                      font: {
+                        size: 14
+                      }
+                    }
+                  },
+                  title: {
+                    display: true,
+                    text: `Resultat för ${chart.year}`,
+                    color: '#333',
+                    font: {
+                      size: 18
+                    }
+                  },
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      color: '#333'
+                    }
+                  },
+                  y: {
+                    ticks: {
+                      color: '#333'
+                    }
+                  }
+                }
+              }}
+            />
+          </div>
+        ))}
+
+        {dataFetched && chartData.length === 0 && !loading && <Typography variant="body2" sx={{ color: '#fff' }}>Ingen data att visa</Typography>}
       </StyledDialogContent>
     </StyledDialog>
   );

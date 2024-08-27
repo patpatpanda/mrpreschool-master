@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -43,7 +43,7 @@ const SurveyChart = () => {
     loadOptions();
   }, []);
 
-  const translateSvarsalternativ = (svarsalternativ) => {
+  const translateSvarsalternativ = useMemo(() => (svarsalternativ) => {
     const mapping = {
       "1": "Instämmer inte alls",
       "2": "Instämmer i liten utsträckning",
@@ -60,13 +60,13 @@ const SurveyChart = () => {
     };
 
     return mapping[svarsalternativ] || svarsalternativ;
-  };
+  }, []);
 
   const handleSearch = async () => {
     setLoading(true);
     setError('');
     setDataFetched(false);
-  
+
     try {
       const allChartData = await Promise.all(
         years.map(async (year) => {
@@ -124,7 +124,20 @@ const SurveyChart = () => {
       setDataFetched(true);
     } catch (err) {
       console.error("API Error:", err);
-      setError('Något gick fel när data skulle hämtas.');
+      if (err.response) {
+        switch (err.response.status) {
+          case 404:
+            setError('Data kunde inte hittas.');
+            break;
+          case 500:
+            setError('Serverfel. Försök igen senare.');
+            break;
+          default:
+            setError('Ett oväntat fel inträffade.');
+        }
+      } else {
+        setError('Nätverksfel eller API är inte tillgängligt.');
+      }
     } finally {
       setLoading(false);
     }
@@ -213,30 +226,30 @@ const SurveyChart = () => {
                 plugins: {
                   legend: {
                     labels: {
-                      color: '#fff', // Gör legenden vit
+                      color: '#fff',
                       font: {
-                        size: 14 // Gör texten större
+                        size: 14
                       }
                     }
                   },
                   title: {
                     display: true,
                     text: `Resultat för ${chart.year}`,
-                    color: '#fff', // Gör titeltexten vit
+                    color: '#fff',
                     font: {
-                      size: 18 // Gör titeln större
+                      size: 18
                     }
                   },
                 },
                 scales: {
                   x: {
                     ticks: {
-                      color: '#fff' // Gör X-axelns text vit
+                      color: '#fff'
                     }
                   },
                   y: {
                     ticks: {
-                      color: '#fff' // Gör Y-axelns text vit
+                      color: '#fff'
                     }
                   }
                 }

@@ -726,7 +726,7 @@ const MapComponent = () => {
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         color: '#fff',
         '&:hover': {
-          backgroundColor: '#3f1d3ba1',
+          backgroundColor: '#d6b2e2',
         },
         width: '100%',
         maxWidth: '300px',
@@ -752,7 +752,7 @@ const MapComponent = () => {
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#3f1d3ba3',
+          backgroundColor: '#d6b2e2',
         },
         width: '100%',
         maxWidth: '300px',
@@ -778,7 +778,7 @@ const MapComponent = () => {
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {
-          backgroundColor: '#3f1d3ba3',
+          backgroundColor: '#d6b2e2',
         },
         width: '100%',
         maxWidth: '300px',

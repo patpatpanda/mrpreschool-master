@@ -4,10 +4,10 @@ import { yellow, blueGrey, deepOrange } from '@mui/material/colors';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#fff', // Mörkblå som primärfärg
+      main: '#fff',
     },
     secondary: {
-      main: '#fff', // Mörkblå som sekundärfärg
+      main: '#fff', 
     },
     background: {
       default: yellow[50],
@@ -20,27 +20,27 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Comic Sans MS, Comic Sans',
     h1: {
-      fontSize: '4rem', // Större rubrikstorlek
+      fontSize: '4rem',
       fontWeight: 'bold',
-      color: '#1a73e8', // Mörkblå färg för rubriker
+      color: '#1a73e8',
       '@media (max-width:600px)': {
-        fontSize: '3rem', // Justera för mindre skärmar
+        fontSize: '3rem',
       },
     },
     h3: {
-      fontSize: '2rem', // Ökad storlek
-      color: '#1a73e8', // Mörkblå färg för rubriker
+      fontSize: '2rem',
+      color: '#1a73e8',
     },
     body1: {
-      fontSize: '1.25rem', // Större brödtext
-      color: blueGrey[800], // Använd primary textfärg
+      fontSize: '1.25rem',
+      color: blueGrey[800],
       '@media (max-width:600px)': {
-        fontSize: '1rem', // Justera för mindre skärmar
+        fontSize: '1rem',
       },
     },
     body2: {
-      fontSize: '1rem', // Ökad storlek
-      color: blueGrey[700], // Använd secondary textfärg
+      fontSize: '1rem',
+      color: blueGrey[700],
     },
   },
   components: {
@@ -49,11 +49,19 @@ const theme = createTheme({
         root: {
           borderRadius: '20px',
           textTransform: 'none',
-          fontSize: '1rem', // Större standardstorlek för desktop
-          padding: '8px 16px', // Ökad padding för desktop
+          fontSize: '1rem',
+          padding: '8px 16px',
           '@media (max-width:768px)': {
-            fontSize: '0.9rem', // Justera för mindre skärmar
+            fontSize: '0.9rem',
             padding: '7px 14px',
+          },
+        },
+        dark: {
+          // Skapa en ny stil för den mörka knappen
+          backgroundColor: '#333',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#555',
           },
         },
       },
@@ -63,7 +71,7 @@ const theme = createTheme({
         root: {
           margin: 0,
           fontFamily: 'Comic Sans MS, Comic Sans',
-          color: blueGrey[900], // Använd primary textfärg som standard
+          color: blueGrey[900],
         },
       },
     },
@@ -71,9 +79,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#FFEB3B',
-          color: deepOrange[900], // Mörkare färg för bättre kontrast
+          color: deepOrange[900],
           textAlign: 'center',
-          fontSize: '1.75rem', // Större dialogtitel
+          fontSize: '1.75rem',
         },
       },
     },
@@ -81,8 +89,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#FFFDE7',
-          color: blueGrey[800], // Använd primary textfärg
-          fontSize: '1.25rem', // Större dialogtext
+          color: blueGrey[800],
+          fontSize: '1.25rem',
         },
       },
     },
@@ -90,7 +98,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: '#fff',
-          fontSize: '1.5rem', // Större ikonknappar
+          fontSize: '1.5rem',
         },
       },
     },

@@ -12,7 +12,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       textAlign: 'left',
       width: '100%',
       borderRadius: '8px',
-      marginBottom: '12px', // Marginal mellan korten
+      marginBottom: '12px',
       textDecoration: 'none',
     }}
   >
@@ -20,10 +20,10 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       sx={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Mindre skugga för en plattare utseende
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.3s, box-shadow 0.3s',
         width: '100%',
-        maxWidth: '500px', // Justera maximal bredd för att säkerställa kompakthet
+        maxWidth: '500px',
         '&:hover': {
           transform: 'translateY(-2px)',
           boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
@@ -31,7 +31,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         '@media (max-width: 400px)': {
           maxWidth: '100%',
           borderRadius: '6px',
-          padding: '6px', // Justerad padding för mindre skärmar
+          padding: '6px',
         },
       }}
     >
@@ -45,14 +45,14 @@ const PreschoolCard = ({ preschool, onSelect }) => (
           paddingBottom: '4px',
           paddingTop: '4px',
           paddingLeft: '8px',
-          paddingRight: '8px', // Justerad padding för att minska utrymme
+          paddingRight: '8px',
         }}
       />
       <CardContent
         sx={{
-          padding: '8px', // Justerad padding
+          padding: '8px',
           '&:last-child': {
-            paddingBottom: '8px', // Ingen extra padding längst ner
+            paddingBottom: '8px',
           },
           display: 'flex',
           flexDirection: 'column',
@@ -61,13 +61,13 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         <Box display="flex" alignItems="center" sx={{ marginBottom: '4px' }}>
           <FontAwesomeIcon
             icon={faMapMarkerAlt}
-            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }} // Mindre ikon
+            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }}
           />
           <Typography
             variant="body2"
             sx={{
               color: '#666',
-              fontSize: '0.75rem', // Mindre fontstorlek
+              fontSize: '0.75rem',
               wordWrap: 'break-word',
             }}
           >
@@ -78,13 +78,13 @@ const PreschoolCard = ({ preschool, onSelect }) => (
           <Box display="flex" alignItems="center" sx={{ marginBottom: '10px' }}>
             <FontAwesomeIcon
               icon={faInfoCircle}
-              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }} // Mindre ikon
+              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }}
             />
             <Typography
               variant="body2"
               sx={{
                 color: '#666',
-                fontSize: '0.75rem', // Mindre fontstorlek
+                fontSize: '0.75rem',
                 wordWrap: 'break-word',
               }}
             >
@@ -92,19 +92,24 @@ const PreschoolCard = ({ preschool, onSelect }) => (
             </Typography>
           </Box>
         )}
+        {/* Här är den mörka knappen */}
         <Button
-          variant="text"
-          color="primary"
+          variant="contained"
           onClick={(event) => {
-            event.stopPropagation(); // Förhindrar att hela kortet triggar påSelect vid klick
+            event.stopPropagation();
             onSelect(preschool);
           }}
           sx={{
             alignSelf: 'flex-start',
-            padding: '4px 8px', // Justerad padding för knappen
-            fontSize: '0.75rem', // Mindre fontstorlek
-            marginTop: '4px', // Justerad marginal-topp
+            padding: '4px 8px',
+            fontSize: '0.75rem',
+            marginTop: '4px',
             textTransform: 'none',
+            backgroundColor: '#3f1d3ba3', // Mörk färg
+            color: '#fff', // Vit textfärg
+            '&:hover': {
+              backgroundColor: '#555', // Mörkare grå vid hovring
+            },
           }}
         >
           Läs mer

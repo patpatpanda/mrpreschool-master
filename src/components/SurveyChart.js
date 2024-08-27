@@ -137,7 +137,7 @@ const SurveyChart = () => {
   };
 
   return (
-    <div className="survey-chart-container" style={{ backgroundColor: '#333', color: '#fff', minHeight: '100vh', padding: '20px' }}>
+    <div className="survey-chart-container" style={{ backgroundColor: '#fff', color: '#fff', minHeight: '100vh', padding: '20px' }}>
       <Box sx={{ maxWidth: '800px', margin: '150px auto 0 auto', padding: '20px', backgroundColor: '#444', borderRadius: '8px' }}>
       
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', gap: '20px' }}>

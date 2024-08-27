@@ -736,7 +736,7 @@ const MapComponent = () => {
         },
       }}
     >
-      Läs mer om förskolor och regler - Klicka här!
+      Läs mer om förskolor och regler
     </Button>
 
     {/* Button to survey page */}
@@ -762,7 +762,7 @@ const MapComponent = () => {
         },
       }}
     >
-      Visa enkätsvar och statistik - Klicka här!
+      Visa enkätsvar och statistik
     </Button>
 
     {/* New button to navigate to preschool application information */}
@@ -788,7 +788,7 @@ const MapComponent = () => {
         },
       }}
     >
-      Läs om hur du ansöker till förskola - Klicka här!
+      Läs om hur du ansöker till förskola
     </Button>
   </Box>
 )}

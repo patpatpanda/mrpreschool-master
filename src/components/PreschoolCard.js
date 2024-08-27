@@ -32,6 +32,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
           maxWidth: '100%',
           borderRadius: '6px',
           padding: '6px',
+          
         },
       }}
     >

@@ -134,21 +134,18 @@ body, html {
   justify-content: center;
   grid-template-columns: 1fr 1fr 1fr;
   overflow-y: auto;
-  overflow-x: hidden; /* Prevent cards-container from scrolling horizontally */
+  overflow-x: hidden; /* Förhindra att cards-container scrollar horisontellt */
   padding: 15px;
-  background: #8594ac1e;
-
-
-  background-size: cover; /* Ensure the image covers the entire container */
+  background: linear-gradient(
+    135deg, /* Vinkeln för gradienten */
+    rgba(255, 255, 255, 0.9), /* Mest vitt */
+    rgba(63, 29, 59, 0.1) /* Ljusare inslag av din färg */
+  );
+  background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 100;
   height: 100vh;
   padding-top: 500px;
-  
-
-  /* Additional styles to make the background more lively */
- 
-  
 }
 
 /* Keyframes for the background animation */

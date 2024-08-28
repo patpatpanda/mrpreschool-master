@@ -45,7 +45,7 @@ const PreschoolApplicationInfo = () => {
         6. <strong>Introduktion och start på förskolan:</strong> När du tackat ja till en plats kommer förskolan att kontakta dig för att planera introduktionen.
       </Typography>
 
-      <Typography variant="body1" sx={{ marginBottom: '40px', marginTop: '10px' }}>
+      <Typography variant="body1" sx={{ marginBottom: '300px', marginTop: '10px' }}>
         För mer information och för att påbörja ansökningsprocessen, besök Stockholms stads officiella webbplats för förskoleansökningar.
       </Typography>
     </Box>

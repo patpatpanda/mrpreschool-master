@@ -139,7 +139,7 @@ const MapComponent = () => {
           const location = new google.maps.LatLng(school.latitude, school.longitude);
           selectPlace(school);
           map.setCenter(location);
-          map.setZoom(20);
+          map.setZoom(12);
 
           const marker = new google.maps.Marker({
             map: map,
@@ -784,21 +784,22 @@ const MapComponent = () => {
       )}
 
       <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
-
       <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
-        {showPlaces && nearbyPlaces.length > 0 ? (
-          nearbyPlaces.map((place) => (
-            <PreschoolCard
-              key={place.id}
-              preschool={place}
-              walkingTime={walkingTimes[place.id]}
-              onSelect={handleCardSelect}
-            />
-          ))
-        ) : (
-          <p></p>
-        )}
-      </div>
+  {showPlaces && nearbyPlaces.length > 0 ? (
+    nearbyPlaces.map((place, index) => (
+      <PreschoolCard
+        key={place.id}
+        preschool={place}
+        walkingTime={walkingTimes[place.id]}
+        onSelect={handleCardSelect}
+        className={index === nearbyPlaces.length - 1 ? 'last-card' : ''} // Lägg till klass om det är sista kortet
+      />
+    ))
+  ) : (
+    <p></p>
+  )}
+</div>
+
 
       {selectedPlace && (
         <DetailedCard
@@ -818,6 +819,7 @@ const MapComponent = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
+
     </div>
   );
 };

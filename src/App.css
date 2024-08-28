@@ -64,9 +64,7 @@ body, html {
  
   
 }
-.detailed-card{
-  z-index: 10000;
-}
+
 
 .search-container.center {
   margin-top: 100px;
@@ -92,7 +90,7 @@ body, html {
   transform: translateX(-50%);
   z-index: 133;
   
-  color: #a15bb8;
+  color: #d6b2e2;
  
   padding: 5px 20px;
   width: 100%; /* Gör elementet fullbredd */
@@ -155,79 +153,6 @@ body, html {
   display: none;
 }
 
-.card {
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparent bakgrund */
-  backdrop-filter: blur(10px); /* Blur effekten för glaseffekt */
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Ljusare kant för glasutseende */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: #4CAF50;
-  cursor: pointer;
-  margin: 20px;
-  padding: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: flex;
-  overflow-x: hidden;
-  flex-direction: column;
-  justify-content: space-between; /* Ensure content is spaced out */
-  width: 450px; /* Full width for smaller screens */
-  height: 500px; /* Set a fixed height */
-  box-sizing: border-box;
-  position: relative; /* Ensure content is positioned relative to the card */
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h3 {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-.card-body {
-  margin-top: 10px;
-  flex-grow: 1; /* Allow body to grow */
-  overflow-y: auto; /* Enable scrolling within the card body */
-}
-
-.card-body p {
-  margin: 5px 0;
-}
-
-.details {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  margin-top: 10px;
-  padding: 10px;
-}
-
-.details p {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; /* Allow content to wrap if needed */
-}
-
-.details span {
-  font-weight: bold;
-  color: #FF5722;
-}
-
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-}
 
 /* Detailed Card */
 
@@ -338,7 +263,7 @@ body, html {
 
 .detailed-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgb(255, 16, 16);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .detailed-card-content {

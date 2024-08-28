@@ -12,7 +12,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       textAlign: 'left',
       width: '100%',
       borderRadius: '8px',
-      marginBottom: '12px',
+      marginBottom: '77px',
       textDecoration: 'none',
     }}
   >

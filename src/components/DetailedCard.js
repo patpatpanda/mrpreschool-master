@@ -3,14 +3,19 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid, Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // Ändrad ikon
 import { styled } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 import myImage from '../images/seri.webp';
 import axios from 'axios';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
+
+// Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// Styled components för styling av dialogen
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '15px',
@@ -85,13 +90,14 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
+  const navigate = useNavigate();
   const { namn, adress, malibuData, schoolDetails, walkingTime, bildUrl } = schoolData;
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [error, setError] = useState('');
 
-  const years = [2023, 2022, 2021, 2020]; // År för att hämta statistik
+  const years = [2023, 2022, 2021, 2020];
 
   const fetchData = async () => {
     setLoading(true);
@@ -104,8 +110,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
           const response = await axios.get('https://masterkinder20240523125154.azurewebsites.net/api/Survey/svarsalternativ', {
             params: {
               year,
-              forskoleverksamhet: namn, // Använd förskolans namn för att filtrera
-              fragetext: "Jag är som helhet nöjd med mitt barns förskola", // Förutsätter att detta är den fråga du vill hämta
+              forskoleverksamhet: namn,
+              fragetext: "Jag är som helhet nöjd med mitt barns förskola",
             }
           });
           const responseData = response.data;
@@ -175,7 +181,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
   };
 
   useEffect(() => {
-    fetchData(); // Hämta data när komponenten mountas eller när namn ändras
+    fetchData();
   }, [namn]);
 
   const translateSvarsalternativ = useMemo(() => (svarsalternativ) => {
@@ -201,16 +207,21 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const imageUrl = bildUrl && isAbsoluteUrl(bildUrl) ? bildUrl : myImage;
 
   return (
-    <StyledDialog
-      open
-      onClose={onClose}
-      fullWidth
-      fullScreen
-      maxWidth="md"
-    >
+    <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
+        {/* Tillbaka-knapp i det övre vänstra hörnet */}
+        <IconButton
+           onClick={onClose}
+          sx={{ position: 'absolute', left: 16, top: 16, color: '#fff', zIndex: 2 }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
         {namn}
-        <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 16, color: '#fff' }}>
+        {/* Stäng-knapp i det övre högra hörnet */}
+        <IconButton
+          onClick={onClose}
+          sx={{ position: 'absolute', right: 16, top: 16, color: '#fff', zIndex: 2 }}
+        >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
       </StyledDialogTitle>
@@ -221,7 +232,9 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
         {schoolDetails.beskrivning && (
           <Box mb={4}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}></Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+              Beskrivning
+            </Typography>
             <Typography variant="body1" sx={{ color: '#555' }}>
               {schoolDetails.beskrivning}
             </Typography>
@@ -312,7 +325,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
                   },
                   y: {
                     ticks: {
-                      color: '#'
+                      color: '#333'
                     }
                   }
                 }
@@ -321,7 +334,9 @@ const DetailedCard = ({ schoolData, onClose }) => {
           </div>
         ))}
 
-        {dataFetched && chartData.length === 0 && !loading && <Typography variant="body2" sx={{ color: '#fff' }}>Ingen data att visa</Typography>}
+        {dataFetched && chartData.length === 0 && !loading && (
+          <Typography variant="body2" sx={{ color: '#fff' }}>Ingen data att visa</Typography>
+        )}
       </StyledDialogContent>
     </StyledDialog>
   );

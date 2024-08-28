@@ -6,7 +6,7 @@ import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-ic
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // Ändrad ikon
 import { styled } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
-import { useNavigate } from 'react-router-dom';
+
 import myImage from '../images/seri.webp';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -90,7 +90,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
-  const navigate = useNavigate();
+ 
   const { namn, adress, malibuData, schoolDetails, walkingTime, bildUrl } = schoolData;
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);

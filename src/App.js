@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import MapComponent from './components/MapComponent';
-import SurveyChart from './components/SurveyChart';
 import Header from './components/Header'; // Importera Header-komponenten
 import theme from './components/theme';
 import './App.css';
@@ -32,7 +31,7 @@ function App() {
             <Routes>
               <Route path="/" element={<MapComponent />} />
               <Route path="/forskolan/:id" element={<MapComponent />} />
-              <Route path="/survey" element={<SurveyChart />} />
+              
               <Route path="/PreschoolApplicationInfo" element={<PreschoolApplicationInfo />} />
             </Routes>
           </main>

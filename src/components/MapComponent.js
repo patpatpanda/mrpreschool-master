@@ -740,31 +740,7 @@ const MapComponent = () => {
     </Button>
 
     {/* Button to survey page */}
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => navigate('/Survey')}
-      sx={{
-        padding: '5px 10px',
-        fontSize: '16px',
-        backgroundColor: '#3f1d3ba3',
-        color: '#fff',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        '&:hover': {
-          backgroundColor: '#d6b2e2',
-        },
-        width: '100%',
-        maxWidth: '300px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '5px 10px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Visa enkätsvar och statistik
-    </Button>
-
+    
     {/* New button to navigate to preschool application information */}
     <Button
       variant="contained"

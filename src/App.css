@@ -92,7 +92,7 @@ body, html {
   transform: translateX(-50%);
   z-index: 133;
   
-  color: #d6b2e2;
+  color: #a15bb8;
  
   padding: 5px 20px;
   width: 100%; /* Gör elementet fullbredd */
@@ -338,7 +338,7 @@ body, html {
 
 .detailed-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgb(255, 16, 16);
 }
 
 .detailed-card-content {

@@ -23,7 +23,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  background: '#3f1d3ba3',
+  background: '#a15bb8',
   color: '#ffffff',
   textAlign: 'center',
   padding: '16px',
@@ -210,7 +210,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
     >
       <StyledDialogTitle>
         {namn}
-        <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 16, color: '#ffffff' }}>
+        <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 16, color: '#fff' }}>
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
       </StyledDialogTitle>
@@ -312,7 +312,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
                   },
                   y: {
                     ticks: {
-                      color: '#333'
+                      color: '#'
                     }
                   }
                 }

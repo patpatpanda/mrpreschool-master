@@ -35,7 +35,12 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   fontFamily: '"Roboto", sans-serif',
   fontWeight: 'bold',
   position: 'relative',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',  // Minska textstorleken på små skärmar
+    padding: '8px',  // Minska padding för att ge mer plats för ikonerna
+  },
 }));
+
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   backgroundColor: '#ffffff',
@@ -211,19 +216,49 @@ const DetailedCard = ({ schoolData, onClose }) => {
       <StyledDialogTitle>
         {/* Tillbaka-knapp i det övre vänstra hörnet */}
         <IconButton
-           onClick={onClose}
-          sx={{ position: 'absolute', left: 16, top: 16, color: '#fff', zIndex: 2 }}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-        {namn}
-        {/* Stäng-knapp i det övre högra hörnet */}
-        <IconButton
-          onClick={onClose}
-          sx={{ position: 'absolute', right: 16, top: 16, color: '#fff', zIndex: 2 }}
-        >
-          <FontAwesomeIcon icon={faTimes} />
-        </IconButton>
+  onClick={onClose}
+  sx={{
+    position: 'absolute',
+    left: { xs: 10, sm: 16 },  // 10px för mobil, 16px för större skärmar
+    top: { xs: 4, sm: 16 },    // 8px för mobil, 16px för större skärmar
+    color: '#fff',
+    zIndex: 2,
+  }}
+>
+  <ChevronLeftIcon />
+</IconButton>
+
+{/* Rubrik som tidigare */}
+<Typography
+  variant="h6"
+  component="span"
+  sx={{
+    fontSize: { xs: '1.2rem', sm: '1.5rem' },  // Justera storleken på rubriken
+    lineHeight: 'normal',
+    display: 'block',
+    mx: 4,  // Marginaler för att ge utrymme åt ikonerna
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',  // Klippa texten om den är för lång
+    color: '#fff',  // Ställer in textfärgen till vit
+  }}
+>
+  {namn}
+</Typography>
+
+<IconButton
+  onClick={onClose}
+  sx={{
+    position: 'absolute',
+    right: { xs: 10, sm: 16 },  // 10px för mobil, 16px för större skärmar
+    top: { xs: 4, sm: 16 },     // 8px för mobil, 16px för större skärmar
+    color: '#fff',
+    zIndex: 2,
+  }}
+>
+  <FontAwesomeIcon icon={faTimes} />
+</IconButton>
+
       </StyledDialogTitle>
       <StyledDialogContent>
         <ImageContainer>

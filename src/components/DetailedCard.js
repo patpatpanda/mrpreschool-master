@@ -295,7 +295,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             <Grid item xs={12} md={6}>
               <Box>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '8px' }}>Föräldraomdömen år 2024</Typography>
-                <Typography variant="body2" sx={{ marginBottom: '8px' }}>{malibuData.helhetsomdome}% är som helhet nöjd med mitt barns förskola</Typography>
+                <Typography variant="body2" sx={{ marginBottom: '8px' }}>{malibuData.helhetsomdome}% är som helhet nöjd med sitt barns förskola</Typography>
                 <Typography variant="body2" sx={{ marginBottom: '8px' }}>Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
                 <Typography variant="body2" sx={{ marginBottom: '16px' }}>Antal Svar: {malibuData.antalSvar}</Typography>
               </Box>

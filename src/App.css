@@ -134,11 +134,7 @@ body, html {
   overflow-y: auto;
   overflow-x: hidden; /* Förhindra att cards-container scrollar horisontellt */
   padding: 15px;
-  background: linear-gradient(
-    135deg, /* Vinkeln för gradienten */
-    rgba(255, 255, 255, 0.9), /* Mest vitt */
-    rgba(63, 29, 59, 0.1) /* Ljusare inslag av din färg */
-  );
+  background: #fff;
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 100;

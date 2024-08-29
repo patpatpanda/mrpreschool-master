@@ -103,65 +103,86 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [error, setError] = useState('');
 
   const years = [2023, 2022, 2021, 2020];
-
   const fetchData = async () => {
     setLoading(true);
     setError('');
     setDataFetched(false);
-
+  
     try {
       const allChartData = await Promise.all(
         years.map(async (year) => {
-          const response = await axios.get('https://masterkinder20240523125154.azurewebsites.net/api/Survey/svarsalternativ', {
-            params: {
-              year,
-              forskoleverksamhet: namn,
-              fragetext: "Jag är som helhet nöjd med mitt barns förskola",
+          try {
+            const encodedName = encodeURIComponent(namn);
+            console.log(`Making request to: https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`);
+  
+            const response = await axios.get(`https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`);
+  
+            const responseData = response.data; // API-respons
+            console.log('API Response:', responseData);
+  
+            if (!responseData || !responseData.$values || responseData.$values.length === 0) {
+              console.warn('No data found for the given year and forskoleverksamhet:', { year, forskoleverksamhet: namn });
+              return null;
             }
-          });
-          const responseData = response.data;
-          const dataArray = responseData.$values || [];
-
-          if (dataArray.length > 0) {
-            const labels = dataArray.map(item => translateSvarsalternativ(item.svarsalternativText));
-            const dataValues = dataArray.map(item => parseInt(item.utfall, 10) || 0);
-            const totalSvar = dataValues.reduce((acc, value) => acc + value, 0);
-
-            return {
-              year,
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    label: `Totalt antal svar: ${totalSvar}`,
-                    data: dataValues,
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.6)',
-                      'rgba(255, 159, 64, 0.6)',
-                      'rgba(255, 205, 86, 0.6)',
-                      'rgba(75, 192, 192, 0.6)',
-                      'rgba(54, 162, 235, 0.6)',
-                      'rgba(153, 102, 255, 0.6)'
-                    ],
-                    borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(255, 159, 64, 1)',
-                      'rgba(255, 205, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                  }
-                ]
-              }
-            };
-          } else {
+  
+            const filteredData = responseData.$values.filter(item => item.forskoleverksamhet === namn);
+  
+            if (filteredData.length > 0) {
+              // Kontrollera om procentSvarAlternativ är ett objekt istället för en array
+              const procentSvarAlternativ = filteredData[0].procentSvarAlternativ;
+  
+              // Om det är ett objekt, omvandla dess värden till en array
+              const procentArray = Array.isArray(procentSvarAlternativ)
+                ? procentSvarAlternativ
+                : procentSvarAlternativ.$values || [];
+  
+              const labels = procentArray.map(item => translateSvarsalternativ(item.svarsalternativ));
+              const dataValues = procentArray.map(item => item.procent);
+  
+              // Förbättrad kontroll för totalSvar
+              const totalSvar = filteredData[0].totalSvar;
+              console.log(`TotalSvar för ${namn} år ${year}:`, totalSvar);
+  
+              return {
+                year,
+                data: {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: `Totalt antal svar: ${totalSvar}`,
+                      data: dataValues,
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 205, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                      ],
+                      borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 205, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)'
+                      ],
+                      borderWidth: 1
+                    }
+                  ]
+                }
+              };
+            } else {
+              console.error(`No data found for forskoleverksamhet: ${namn}`);
+              return null;
+            }
+          } catch (error) {
+            console.error('API request failed:', error);
             return null;
           }
         })
       );
-
+  
       setChartData(allChartData.filter(data => data !== null));
       setDataFetched(true);
     } catch (err) {
@@ -184,7 +205,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
       setLoading(false);
     }
   };
-
+  
+  
   useEffect(() => {
     fetchData();
   }, [namn]);

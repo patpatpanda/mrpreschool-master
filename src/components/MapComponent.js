@@ -519,46 +519,51 @@ const MapComponent = () => {
     <div className="app-container">
         
          {showText }
-   <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
+         <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
   <Container maxWidth="sm">
     <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
       {showPlaces && (
         <Box display="flex" justifyContent="center" width="100%" gap={2}>
-          <Button
+          {/* Commenting out the 5 nearest button */}
+          {/* <Button
             onClick={filterClosestPreschools}
             variant="contained"
             color="secondary"
             sx={{
-              marginTop: '20px',
-              padding: '10px 20px',
+              marginTop: '10px',
+              padding: '5px 10px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
             }}
           >
             De 5 närmaste
-          </Button>
-          <Button
+          </Button> */}
+
+          {/* Commenting out the highest ranked button */}
+          {/* <Button
             onClick={handleTopRanked}
             variant="contained"
             color="secondary"
             sx={{
-              marginTop: '20px',
-              padding: '10px 20px',
+              marginTop: '10px',
+              padding: '5px 10px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
             }}
           >
             Högst rank
-          </Button>
+          </Button> */}
+
           {searchMade && (
             <>
-              <Button
+              {/* Commenting out the filter by type button */}
+              {/* <Button
                 onClick={() => setFilterVisible(!filterVisible)}
                 variant="contained"
                 color="primary"
                 sx={{
                   marginTop: '20px',
-                  padding: '10px 20px',
+                  padding: '5px 10px',
                   borderRadius: '50px',
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
                 }}
@@ -572,22 +577,22 @@ const MapComponent = () => {
                   handleFilterChange={handleFilterChange}
                   visible={showPlaces}
                   sx={{ marginTop: '20px' }}
-                    />
-                  )}
+                />
+              )} */}
                 </>
               )}
             </Box>
             )}
          {searchMade && (
-  <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px', overflow: 'hidden' }}>
+  <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px',marginTop:'10px', overflow: 'hidden' }}>
     <Button
       onClick={() => setView('list')}
       style={{
-        backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
-        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
+        backgroundColor: view === 'list' ? '#2196f3' : '#ffffff',
+        color: view === 'list' ? '#ffffff' : '#2196f3',
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 20px',
+        padding: '5px 10px',
         borderRight: '1px solid #e0e0e0',
         fontWeight: view === 'list' ? 'bold' : 'normal',
       }}
@@ -602,7 +607,7 @@ const MapComponent = () => {
         color: view === 'map' ? '#ffffff' : '#2196f3',
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 20px',
+        padding: '5px 10px',
         fontWeight: view === 'map' ? 'bold' : 'normal',
       }}
     >
@@ -613,7 +618,7 @@ const MapComponent = () => {
 )}
 
 
-<form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
+<form onSubmit={geocodeAddressHandler} style={{ width: '100%', position: 'relative' }}>
 <TextField
   id="address"
   variant="outlined"

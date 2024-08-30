@@ -579,7 +579,7 @@ const MapComponent = () => {
             </Box>
             )}
          {searchMade && (
-  <ButtonGroup variant="contained" aria-label="view toggle button group" style={{ backgroundColor: '#e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
+  <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px', overflow: 'hidden' }}>
     <Button
       onClick={() => setView('list')}
       style={{
@@ -781,10 +781,11 @@ const MapComponent = () => {
       </div>
 
       {loading && (
-        <div className="loading-spinner">
-          <CircularProgress />
-        </div>
-      )}
+  <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+    <CircularProgress style={{ color: '#4CAF50' }} /> {/* Använd valfri färgkod */}
+  </div>
+)}
+
 
       <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
       <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>

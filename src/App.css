@@ -8,6 +8,11 @@ body, html {
  
   
 }
+.survey-chart-container {
+  max-height: 100vh; /* Begränsa tillgänglig höjd */
+  overflow-y: auto;  /* Aktivera vertikal scrollning */
+  overflow-x: hidden; /* Inaktivera horisontell scrollning om det behövs */
+}
 
 
 /* Container for Map and Cards */

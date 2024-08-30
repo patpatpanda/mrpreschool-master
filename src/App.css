@@ -120,8 +120,9 @@ body, html {
 @media (max-width: 768px) {
   .initial-text {
    
-    max-width: 200px; /* Anpassa maximal bredd för små skärmar */
+    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
     height: 40px; /* Justera höjden för små skärmar */
+    top:100px
    
   }
 }
@@ -210,7 +211,7 @@ body, html {
 }
 
   .search-container.center {
-    margin-top: 60px;
+    margin-top: 300px;
     font-size: 16px;
     position: absolute; /* Changed from fixed to absolute */
   }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material'; // Importera ChevronLeftIcon
 import { styled } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
@@ -31,6 +32,9 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   fontFamily: '"Roboto", sans-serif',
   fontWeight: 'bold',
   position: 'relative',
+  display: 'flex', // Använd flexbox för att organisera barnkomponenterna
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
@@ -98,7 +102,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const { namn, adress, malibuData, schoolDetails, description, walkingTime } = schoolData;
   const bildUrl = schoolData.bildUrl;
 
-  // State management för chartData
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
@@ -106,7 +109,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
   const years = [2023, 2022, 2021, 2020];
 
-  // Använd useCallback för att definiera fetchData
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -180,9 +182,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
     } finally {
       setLoading(false);
     }
-  }, [namn]); // Lägg till 'namn' som ett beroende eftersom den används i fetchData
+  }, [namn]);
 
-  // useEffect kallar på fetchData när 'namn' eller 'fetchData' ändras
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -210,19 +211,55 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const imageUrl = bildUrl && isAbsoluteUrl(bildUrl) ? bildUrl : myImage;
 
   return (
-    <StyledDialog
-      open
-      onClose={onClose}
-      fullWidth
-      fullScreen
-      maxWidth="md"
-    >
+    <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
-        {namn}
-        <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 16, color: '#ffffff' }}>
+        {/* Tillbaka ikon */}
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            left: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
+            top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
+            color: '#fff',
+            zIndex: 2,
+          }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+
+        {/* Rubrik som tidigare */}
+        <Typography
+          variant="h6"
+          component="span"
+          sx={{
+            fontSize: { xs: '1.2rem', sm: '1.5rem' },
+            lineHeight: 'normal',
+            display: 'block',
+            mx: 4,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            color: '#fff',  // Vit textfärg för rubriken
+          }}
+        >
+          {namn}
+        </Typography>
+
+        {/* Stäng-knapp i det övre högra hörnet */}
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
+            top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
+            color: '#fff',
+            zIndex: 2,
+          }}
+        >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
       </StyledDialogTitle>
+
       <StyledDialogContent>
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />

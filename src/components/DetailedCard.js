@@ -99,7 +99,7 @@ const InfoBox = styled(Box)(({ theme }) => ({
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
-  const { namn, adress, malibuData, schoolDetails, description, walkingTime } = schoolData;
+  const { namn, adress, malibuData, schoolDetails, walkingTime } = schoolData;
   const bildUrl = schoolData.bildUrl;
 
   const [chartData, setChartData] = useState([]);

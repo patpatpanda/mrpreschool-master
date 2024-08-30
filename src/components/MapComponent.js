@@ -550,7 +550,7 @@ const MapComponent = () => {
           >
             Högst rank
           </Button>
-          {/* {searchMade && (
+          {searchMade && (
             <>
               <Button
                 onClick={() => setFilterVisible(!filterVisible)}
@@ -575,23 +575,23 @@ const MapComponent = () => {
                     />
                   )}
                 </>
-              )} */}
+              )}
             </Box>
             )}
          {searchMade && (
   <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px', overflow: 'hidden' }}>
     <Button
       onClick={() => setView('list')}
-      style={{
-        backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff', // Använd en ljus rosa färg när view är 'list'
-        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 20px',
-        borderRight: '1px solid #e0e0e0',
-        fontWeight: view === 'list' ? 'bold' : 'normal',
-      }}
-      
+    style={{
+  backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff', // Använd en ljus rosa färg när view är 'list'
+  color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '10px 20px',
+  borderRight: '1px solid #e0e0e0',
+  fontWeight: view === 'list' ? 'bold' : 'normal',
+}}
+
     >
       <ListIcon style={{ marginRight: '8px' }} />
       List View

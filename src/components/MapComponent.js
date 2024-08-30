@@ -725,7 +725,7 @@ const MapComponent = () => {
       sx={{
         padding: '5px 10px',
         fontSize: '16px',
-        backgroundColor: '#3f1d3ba3',
+        backgroundColor: 'pink',
         borderRadius: '50px',
         marginTop:'55px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -754,8 +754,9 @@ const MapComponent = () => {
       sx={{
         padding: '5px 10px',
         fontSize: '16px',
-        backgroundColor: '#3f1d3ba3',
+        backgroundColor: 'pink',
         color: '#fff',
+        marginTop:'40px',
         borderRadius: '50px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         '&:hover': {

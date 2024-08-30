@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
-//import OrganisationFilter from './OrganisationFilter';
+// import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
-import { TextField,Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import { ButtonGroup} from '@mui/material';
+import { ButtonGroup } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
 
@@ -51,51 +50,47 @@ const MapComponent = () => {
   const addressRef = useRef(null);
   const [map, setMap] = useState(null);
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
-  const [allPlaces, setAllPlaces] = useState([]);
+  
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showPlaces, setShowPlaces] = useState(false);
   const [currentMarkers, setCurrentMarkers] = useState([]);
   const [originMarker, setOriginMarker] = useState(null);
   const [originPosition, setOriginPosition] = useState(null);
-  const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
+  
   const [view, setView] = useState('list');
   const [walkingTimes, setWalkingTimes] = useState({});
   const [showText, setShowText] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchMade, setSearchMade] = useState(false);
-  
+
   const directionsService = useRef(null);
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
-
-  
-
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
-    
+
       const map = new google.maps.Map(mapRef.current, {
         center: stockholm,
         zoom: 12,
         disableDefaultUI: true,
       });
       setMap(map);
-    
-      // Initialize DirectionsService and DirectionsRenderer
+
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
-        suppressMarkers: true, // Behåll om du vill dölja markörer, annars ta bort denna rad
+        suppressMarkers: true,
         polylineOptions: {
-          strokeColor: '#FF0000', // Ändra färg till röd
-          strokeOpacity: 0.7,    // Justera opaciteten om du vill ha en halvgenomskinlig linje
-          strokeWeight: 5        // Öka bredden på linjen
-        }
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.7,
+          strokeWeight: 5,
+        },
       });
       directionsRenderer.current.setMap(map);
-    
+
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
           bounds: {
@@ -109,12 +104,10 @@ const MapComponent = () => {
           strictBounds: false,
           types: ['address'],
         });
-    
+
         autocomplete.addListener('place_changed', () => {});
       }
     };
-    
-    
 
     const loadScript = () => {
       const script = document.createElement('script');
@@ -164,7 +157,7 @@ const MapComponent = () => {
     try {
       setLoading(true);
       console.log('Fetching nearby places for location:', location);
-      const places = await fetchNearbySchools(location.lat(), location.lng(), filter.join(','), 'alla');
+      const places = await fetchNearbySchools(location.lat(), location.lng(), 'alla');
 
       if (places.length > 0) {
         const nearestPlace = places[0];
@@ -194,7 +187,7 @@ const MapComponent = () => {
         );
 
         setNearbyPlaces(detailedResults);
-        setAllPlaces(detailedResults);
+        
         clearMarkers();
         detailedResults.forEach((result) => {
           createMarker(result, location);
@@ -210,77 +203,73 @@ const MapComponent = () => {
     } finally {
       setLoading(false);
     }
-  }, [map, filter]);
-
-  
+  }, [map]);
 
   const extractRelevantAddress = (fullAddress) => {
     const addressParts = fullAddress.split(',');
     return addressParts[0].trim();
   };
 
- const geocodeAddressHandler = useCallback(async (event) => {
-  event.preventDefault();
-  const address = document.getElementById('address').value.trim();
-  if (!address) {
-    setErrorMessage('Ange en giltig adress.');
-    return;
-  }
-
-  setLoading(true);
-  clearMarkers();
-  setNearbyPlaces([]);
-
-  const relevantAddress = extractRelevantAddress(address);
-  console.log('Relevant address extracted:', relevantAddress);
-  const coordinates = await geocodeAddress(relevantAddress);
-  console.log('Coordinates:', coordinates);
-
-  if (
-    !coordinates ||
-    (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
-      coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
-  ) {
-    console.log('Geocoding failed or out of bounds.');
-    setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
-    setLoading(false);
-    return;
-  }
-
-  const { latitude, longitude } = coordinates;
-  const location = new google.maps.LatLng(latitude, longitude);
-
-  if (map) {
-    map.setCenter(location);
-    map.setZoom(14);
-
-    if (originMarker) {
-      originMarker.setMap(null);
+  const geocodeAddressHandler = useCallback(async (event) => {
+    event.preventDefault();
+    const address = document.getElementById('address').value.trim();
+    if (!address) {
+      setErrorMessage('Ange en giltig adress.');
+      return;
     }
 
-    const marker = new google.maps.Marker({
-      map: map,
-      position: location,
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        scaledSize: new google.maps.Size(30, 30),
-      },
-    });
+    setLoading(true);
+    clearMarkers();
+    setNearbyPlaces([]);
 
-    setOriginMarker(marker);
-    setOriginPosition(location);
+    const relevantAddress = extractRelevantAddress(address);
+    console.log('Relevant address extracted:', relevantAddress);
+    const coordinates = await geocodeAddress(relevantAddress);
+    console.log('Coordinates:', coordinates);
 
-    await findNearbyPlaces(location);
-    setShowPlaces(true);
-    setShowText(false);
-    setSearchMade(true); // Keep track of search being made
-    // Remove or comment out the following line
-    // setView('map'); // Don't switch to map view automatically
-  } else {
-    setErrorMessage('Map is not initialized.');
-    setLoading(false);
-  }
-}, [map, originMarker, findNearbyPlaces]);
+    if (
+      !coordinates ||
+      (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
+        coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
+    ) {
+      console.log('Geocoding failed or out of bounds.');
+      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
+      setLoading(false);
+      return;
+    }
+
+    const { latitude, longitude } = coordinates;
+    const location = new google.maps.LatLng(latitude, longitude);
+
+    if (map) {
+      map.setCenter(location);
+      map.setZoom(14);
+
+      if (originMarker) {
+        originMarker.setMap(null);
+      }
+
+      const marker = new google.maps.Marker({
+        map: map,
+        position: location,
+        icon: {
+          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new google.maps.Size(30, 30),
+        },
+      });
+
+      setOriginMarker(marker);
+      setOriginPosition(location);
+
+      await findNearbyPlaces(location);
+      setShowPlaces(true);
+      setShowText(false);
+      setSearchMade(true);
+    } else {
+      setErrorMessage('Map is not initialized.');
+      setLoading(false);
+    }
+  }, [map, originMarker, findNearbyPlaces]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -421,25 +410,6 @@ const MapComponent = () => {
     setCurrentMarkers([]);
   };
 
-  const handleTopRanked = () => {
-  if (!originMarker) {
-    alert('Ange en adress först.');
-    return;
-  }
-
-  // Här ser vi till att `topPlaces` är korrekt definierad och inte orsakar felet
- 
-
-  setNearbyPlaces(topPlaces);
-  clearMarkers();
-  topPlaces.forEach((result) => {
-    createMarker(result, originMarker.getPosition());
-  });
-};
-
-
- 
-
   const calculateDistance = (origin, destination) => {
     const R = 6371;
     const dLat = (destination.lat() - origin.lat()) * Math.PI / 180;
@@ -459,7 +429,7 @@ const MapComponent = () => {
     if (originMarker && map) {
       findNearbyPlaces(originMarker.getPosition());
     }
-  }, [filter]);
+  }, []);
 
   useEffect(() => {
     const addressInput = document.getElementById('address');
@@ -481,298 +451,229 @@ const MapComponent = () => {
 
   return (
     <div className="app-container">
-        
-         {showText }
-         <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
-  <Container maxWidth="sm">
-    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
-      {showPlaces && (
-        <Box display="flex" justifyContent="center" width="100%" gap={2}>
-          {/* Commenting out the 5 nearest button */}
-          {/* <Button
-            onClick={filterClosestPreschools}
-            variant="contained"
-            color="secondary"
-            sx={{
-              marginTop: '10px',
-              padding: '5px 10px',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-            }}
-          >
-            De 5 närmaste
-          </Button> */}
-
-          {/* Commenting out the highest ranked button */}
-          {/* <Button
-            onClick={handleTopRanked}
-            variant="contained"
-            color="secondary"
-            sx={{
-              marginTop: '10px',
-              padding: '5px 10px',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-            }}
-          >
-            Högst rank
-          </Button> */}
-
-          {searchMade && (
-            <>
-              {/* Commenting out the filter by type button */}
-              {/* <Button
-                onClick={() => setFilterVisible(!filterVisible)}
-                variant="contained"
-                color="primary"
+      {showText}
+      <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
+        <Container maxWidth="sm">
+          <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
+            {showPlaces && (
+              <Box display="flex" justifyContent="center" width="100%" gap={2}>
+                {searchMade && (
+                  <>
+                    {/* Buttons or filters can go here */}
+                  </>
+                )}
+              </Box>
+            )}
+            {searchMade && (
+              <ButtonGroup
+                aria-label="view toggle button group"
+                style={{ borderRadius: '8px', marginTop: '10px', overflow: 'hidden' }}
+              >
+                <Button
+                  onClick={() => setView('list')}
+                  style={{
+                    backgroundColor: view === 'list' ? '#2196f3' : '#ffffff',
+                    color: view === 'list' ? '#ffffff' : '#2196f3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '5px 10px',
+                    borderRight: '1px solid #e0e0e0',
+                    fontWeight: view === 'list' ? 'bold' : 'normal',
+                  }}
+                >
+                  <ListIcon style={{ marginRight: '8px' }} />
+                  List View
+                </Button>
+                <Button
+                  onClick={() => setView('map')}
+                  style={{
+                    backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
+                    color: view === 'map' ? '#ffffff' : '#2196f3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '5px 10px',
+                    fontWeight: view === 'map' ? 'bold' : 'normal',
+                  }}
+                >
+                  <MapIcon style={{ marginRight: '8px' }} />
+                  Map View
+                </Button>
+              </ButtonGroup>
+            )}
+            <form onSubmit={geocodeAddressHandler} style={{ width: '100%', position: 'relative' }}>
+              <TextField
+                id="address"
+                variant="outlined"
+                placeholder="Skriv din adress för att hitta förskola"
+                fullWidth
+                sx={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '8px',
+                  border: '1px solid #e0e0e0',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  fontFamily: "'Helvetica Neue', sans-serif",
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  },
+                  '&:focus-within': {
+                    borderColor: '#bdbdbd',
+                    boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.1)',
+                  },
+                  'input::placeholder': {
+                    color: '#9e9e9e',
+                    fontStyle: 'italic',
+                    opacity: 1,
+                    fontFamily: "'Helvetica Neue', sans-serif",
+                  },
+                  'input': {
+                    padding: '12px 16px',
+                    fontSize: '16px',
+                    color: '#333333',
+                    fontFamily: "'Helvetica Neue', sans-serif",
+                    transition: 'color 0.3s ease',
+                    '&:focus': {
+                      outline: 'none',
+                      color: '#000000',
+                    },
+                  },
+                }}
+                inputRef={addressRef}
+                onKeyDown={handleKeyDown}
+                InputProps={{
+                  style: { color: '#333', padding: '10px 20px' },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={geocodeAddressHandler}
+                        edge="end"
+                        sx={{
+                          backgroundColor: '#333',
+                          color: 'white',
+                          borderRadius: '50%',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          '&:hover': {
+                            backgroundColor: '#45a045',
+                          },
+                          marginRight: '-10px',
+                        }}
+                      >
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </form>
+            {!searchMade && view === 'list' && (
+              <Box
                 sx={{
                   marginTop: '20px',
-                  padding: '5px 10px',
-                  borderRadius: '50px',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '15px',
+                  '@media (max-width: 600px)': {
+                    marginTop: '10px',
+                    gap: '10px',
+                  },
                 }}
               >
-                {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
-              </Button>
-              {!filterVisible && (
-                <OrganisationFilter
-                  organisationTypes={organisationTypes}
-                  filter={filter}
-                  handleFilterChange={handleFilterChange}
-                  visible={showPlaces}
-                  sx={{ marginTop: '20px' }}
-                />
-              )} */}
-                </>
-              )}
-            </Box>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    maxWidth: '300px',
+                    textAlign: 'center',
+                    color: '#333',
+                    padding: '20px',
+                    borderRadius: '12px',
+                    marginBottom: '20px',
+                    '@media (max-width: 600px)': {
+                      fontSize: '14px',
+                      padding: '15px',
+                    },
+                  }}
+                >
+                  Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => (window.location.href = 'https://blog.förskolekollen.se')}
+                  sx={{
+                    padding: '5px 10px',
+                    fontSize: '16px',
+                    backgroundColor: '#3f1d3ba3',
+                    borderRadius: '50px',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: '#d6b2e2',
+                    },
+                    width: '100%',
+                    maxWidth: '300px',
+                    '@media (max-width: 600px)': {
+                      fontSize: '14px',
+                      padding: '5px 10px',
+                    },
+                  }}
+                >
+                  Läs mer om förskolor och regler
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => navigate('/PreschoolApplicationInfo')}
+                  sx={{
+                    padding: '5px 10px',
+                    fontSize: '16px',
+                    backgroundColor: '#3f1d3ba3',
+                    color: '#fff',
+                    borderRadius: '50px',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                    '&:hover': {
+                      backgroundColor: '#d6b2e2',
+                    },
+                    width: '100%',
+                    maxWidth: '300px',
+                    '@media (max-width: 600px)': {
+                      fontSize: '14px',
+                      padding: '5px 10px',
+                    },
+                  }}
+                >
+                  Läs om hur du ansöker till förskola
+                </Button>
+              </Box>
             )}
-         {searchMade && (
-  <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px',marginTop:'10px', overflow: 'hidden' }}>
-    <Button
-      onClick={() => setView('list')}
-      style={{
-        backgroundColor: view === 'list' ? '#2196f3' : '#ffffff',
-        color: view === 'list' ? '#ffffff' : '#2196f3',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '5px 10px',
-        borderRight: '1px solid #e0e0e0',
-        fontWeight: view === 'list' ? 'bold' : 'normal',
-      }}
-    >
-      <ListIcon style={{ marginRight: '8px' }} />
-      List View
-    </Button>
-    <Button
-      onClick={() => setView('map')}
-      style={{
-        backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
-        color: view === 'map' ? '#ffffff' : '#2196f3',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '5px 10px',
-        fontWeight: view === 'map' ? 'bold' : 'normal',
-      }}
-    >
-      <MapIcon style={{ marginRight: '8px' }} />
-      Map View
-    </Button>
-  </ButtonGroup>
-)}
-
-
-<form onSubmit={geocodeAddressHandler} style={{ width: '100%', position: 'relative' }}>
-<TextField
-  id="address"
-  variant="outlined"
-  placeholder="Skriv din adress för att hitta förskola"
-  fullWidth
-  sx={{
-    backgroundColor: '#ffffff', // Helt vit bakgrund för ren och minimalistisk design
-    borderRadius: '8px', // Lätt rundade hörn för en modern känsla
-    border: '1px solid #e0e0e0', // Tunn grå kant för subtil definition
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)', // Lätt skugga för subtilt djup
-    overflow: 'hidden',
-    transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
-    fontFamily: "'Helvetica Neue', sans-serif", // Modern och stilren font
-    '&:hover': {
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Ökad skugga vid hover för lite mer djup
-    },
-    '&:focus-within': {
-        borderColor: '#bdbdbd', // Mörkare grå kant vid fokus för tydlig feedback
-        boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.1)', // Subtil fokusring för bättre synlighet
-    },
-    'input::placeholder': {
-        color: '#9e9e9e', // Grå färg för placeholder-text för diskret synlighet
-        fontStyle: 'italic', // Kursiv stil för att lägga till subtil elegans
-        opacity: 1,
-        fontFamily: "'Helvetica Neue', sans-serif", // Håller samma font som input
-    },
-    'input': {
-        padding: '12px 16px', // Bekväm padding för användarvänlighet
-        fontSize: '16px', // Standard textstorlek för god läsbarhet
-        color: '#333333', // Mörkgrå textfärg för hög kontrast
-        fontFamily: "'Helvetica Neue', sans-serif", // Samma stilrena font för input text
-        transition: 'color 0.3s ease', // Smidig övergång för textfärg vid interaktion
-        '&:focus': {
-            outline: 'none', // Ingen inbyggd outline vid fokus
-            color: '#000000', // Svart färg vid fokus för att maximera läsbarheten
-        },
-    },
-}}
-
-
-
-    inputRef={addressRef}
-    onKeyDown={handleKeyDown}
-    InputProps={{
-      style: { color: '#333', padding: '10px 20px' },
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton
-            onClick={geocodeAddressHandler}
-            edge="end"
-            sx={{
-              backgroundColor: '#333',
-              color: 'white',
-              borderRadius: '50%',
-              padding: '10px',
-              transition: 'background-color 0.3s ease',
-              '&:hover': {
-                backgroundColor: '#45a045',
-              },
-              marginRight: '-10px',
-            }}
-          >
-            <SearchIcon />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-  />
-</form>
-{!searchMade && view === 'list' && (
-  <Box
-    sx={{
-      marginTop: '20px', // Minskar avståndet för att flytta upp innehållet lite
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '15px',
-      '@media (max-width: 600px)': {
-        marginTop: '10px', // Minskar toppmarginalen ytterligare för små skärmar
-        gap: '10px', // Minskar gap mellan elementen för små skärmar
-      },
-    }}
-  >
-    {/* Information text */}
-    <Typography
-      variant="body1"
-      sx={{
-        maxWidth: '300px',
-        textAlign: 'center',
-        color: '#333',
-        padding: '20px',
-        borderRadius: '12px',
-        marginBottom: '20px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för små skärmar
-          padding: '15px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
-    </Typography>
-
-    {/* Button to external website */}
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => (window.location.href = 'https://blog.förskolekollen.se')}
-      sx={{
-        padding: '5px 10px',
-        fontSize: '16px',
-        backgroundColor: '#3f1d3ba3',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        color: '#fff',
-        '&:hover': {
-          backgroundColor: '#d6b2e2',
-        },
-        width: '100%',
-        maxWidth: '300px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '5px 10px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Läs mer om förskolor och regler
-    </Button>
-
-    {/* Button to survey page */}
-    
-    {/* New button to navigate to preschool application information */}
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => navigate('/PreschoolApplicationInfo')}
-      sx={{
-        padding: '5px 10px',
-        fontSize: '16px',
-        backgroundColor: '#3f1d3ba3',
-        color: '#fff',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        '&:hover': {
-          backgroundColor: '#d6b2e2',
-        },
-        width: '100%',
-        maxWidth: '300px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '5px 10px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Läs om hur du ansöker till förskola
-    </Button>
-  </Box>
-)}
-
-
-
-
-
           </Box>
         </Container>
       </div>
 
       {loading && (
-  <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-    <CircularProgress style={{ color: '#4CAF50' }} /> {/* Använd valfri färgkod */}
-  </div>
-)}
-
+        <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+          <CircularProgress style={{ color: '#4CAF50' }} />
+        </div>
+      )}
 
       <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
       <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
-  {showPlaces && nearbyPlaces.length > 0 ? (
-    nearbyPlaces.map((place, index) => (
-      <PreschoolCard
-        key={place.id}
-        preschool={place}
-        walkingTime={walkingTimes[place.id]}
-        onSelect={handleCardSelect}
-        className={index === nearbyPlaces.length - 1 ? 'last-card' : ''} // Lägg till klass om det är sista kortet
-      />
-    ))
-  ) : (
-    <p></p>
-  )}
-</div>
-
+        {showPlaces && nearbyPlaces.length > 0 ? (
+          nearbyPlaces.map((place, index) => (
+            <PreschoolCard
+              key={place.id}
+              preschool={place}
+              walkingTime={walkingTimes[place.id]}
+              onSelect={handleCardSelect}
+              className={index === nearbyPlaces.length - 1 ? 'last-card' : ''}
+            />
+          ))
+        ) : (
+          <p></p>
+        )}
+      </div>
 
       {selectedPlace && (
         <DetailedCard
@@ -792,7 +693,6 @@ const MapComponent = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
-
     </div>
   );
 };

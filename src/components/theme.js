@@ -52,7 +52,7 @@ const theme = createTheme({
           fontSize: '1rem',
           padding: '8px 16px',
           '@media (max-width:768px)': {
-            fontSize: '0.9rem',
+            fontSize: '0.6rem',
             padding: '7px 14px',
           },
         },

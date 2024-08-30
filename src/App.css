@@ -8,6 +8,15 @@
 
 
 /* Container for Map and Cards */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+ 
+  margin: 0;
+  padding: 0;
+  
+}
 
 
 /* Map Container */

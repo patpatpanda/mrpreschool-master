@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
-import OrganisationFilter from './OrganisationFilter';
+//import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
 import { TextField,Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -64,14 +64,14 @@ const MapComponent = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchMade, setSearchMade] = useState(false);
-  const [filterVisible, setFilterVisible] = useState(true);
+  
   const directionsService = useRef(null);
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
 
-  const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
+  
 
   useEffect(() => {
     const initMap = () => {
@@ -212,14 +212,7 @@ const MapComponent = () => {
     }
   }, [map, filter]);
 
-  const handleFilterChange = (event) => {
-    const value = event.target.value;
-    setFilter((prevFilter) =>
-      prevFilter.includes(value)
-        ? prevFilter.filter((item) => item !== value)
-        : [...prevFilter, value]
-    );
-  };
+  
 
   const extractRelevantAddress = (fullAddress) => {
     const addressParts = fullAddress.split(',');
@@ -435,10 +428,7 @@ const MapComponent = () => {
   }
 
   // Här ser vi till att `topPlaces` är korrekt definierad och inte orsakar felet
-  const topPlaces = allPlaces
-    .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined) // Filtrera bort platser utan omdöme
-    .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome) // Sortera efter helhetsomdome
-    .slice(0, 5); // Välj de fem bästa
+ 
 
   setNearbyPlaces(topPlaces);
   clearMarkers();
@@ -448,33 +438,7 @@ const MapComponent = () => {
 };
 
 
-  const filterClosestPreschools = () => {
-    if (!originMarker) {
-      alert('Ange en adress först.');
-      return;
-    }
-
-    const sortedPlaces = allPlaces.sort((a, b) => {
-      const distanceA = calculateDistance(
-        originMarker.getPosition(),
-        new google.maps.LatLng(a.latitude, a.longitude)
-      );
-      const distanceB = calculateDistance(
-        originMarker.getPosition(),
-        new google.maps.LatLng(b.latitude, b.longitude)
-      );
-
-      return distanceA - distanceB;
-    });
-
-    const closestPlaces = sortedPlaces.slice(0, 5);
-
-    setNearbyPlaces(closestPlaces);
-    clearMarkers();
-    closestPlaces.forEach((result) => {
-      createMarker(result, originMarker.getPosition());
-    });
-  };
+ 
 
   const calculateDistance = (origin, destination) => {
     const R = 6371;

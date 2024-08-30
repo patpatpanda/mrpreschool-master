@@ -1,13 +1,5 @@
 /* Global Styles */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
 
-  
-  
-}
 .survey-chart-container {
   max-height: 100vh; /* Begränsa tillgänglig höjd */
   overflow-y: auto;  /* Aktivera vertikal scrollning */
@@ -16,15 +8,6 @@ body, html {
 
 
 /* Container for Map and Cards */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
- 
-  margin: 0;
-  padding: 0;
-  
-}
 
 
 /* Map Container */

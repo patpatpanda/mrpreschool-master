@@ -174,7 +174,7 @@ const MapComponent = () => {
         );
 
         if (distanceToNearestPlace > 3) {
-          setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen!');
+          setErrorMessage('Ledsen att komma med tråkiga nyheter. För närvarande stöder vi endast Stockholm Stad. Prova igen!');
           setLoading(false);
           return;
         }
@@ -550,7 +550,7 @@ const MapComponent = () => {
           >
             Högst rank
           </Button>
-          {searchMade && (
+          {/* {searchMade && (
             <>
               <Button
                 onClick={() => setFilterVisible(!filterVisible)}
@@ -575,7 +575,7 @@ const MapComponent = () => {
                     />
                   )}
                 </>
-              )}
+              )} */}
             </Box>
             )}
          {searchMade && (
@@ -583,7 +583,7 @@ const MapComponent = () => {
     <Button
       onClick={() => setView('list')}
       style={{
-        backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
+        backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff', // Använd en ljus rosa färg när view är 'list'
         color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
         display: 'flex',
         alignItems: 'center',
@@ -591,6 +591,7 @@ const MapComponent = () => {
         borderRight: '1px solid #e0e0e0',
         fontWeight: view === 'list' ? 'bold' : 'normal',
       }}
+      
     >
       <ListIcon style={{ marginRight: '8px' }} />
       List View

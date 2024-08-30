@@ -417,11 +417,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
           <Typography variant="body2" sx={{ color: '#fff' }}>Ingen data att visa</Typography>
         )}
 
-        {description && (
-          <InfoBox sx={{ marginTop: '20px' }}>
-            <Typography variant="body2" sx={{ color: '#333' }}>{description}</Typography>
-          </InfoBox>
-        )}
+       
       </StyledDialogContent>
     </StyledDialog>
   );

@@ -174,7 +174,7 @@ const MapComponent = () => {
         );
 
         if (distanceToNearestPlace > 3) {
-          setErrorMessage('Ledsen att komma med tråkiga nyheter. För närvarande stöder vi endast Stockholm Stad. Prova igen!');
+          setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen!');
           setLoading(false);
           return;
         }
@@ -582,16 +582,15 @@ const MapComponent = () => {
   <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px', overflow: 'hidden' }}>
     <Button
       onClick={() => setView('list')}
-    style={{
-  backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff', // Använd en ljus rosa färg när view är 'list'
-  color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
-  display: 'flex',
-  alignItems: 'center',
-  padding: '10px 20px',
-  borderRight: '1px solid #e0e0e0',
-  fontWeight: view === 'list' ? 'bold' : 'normal',
-}}
-
+      style={{
+        backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
+        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        borderRight: '1px solid #e0e0e0',
+        fontWeight: view === 'list' ? 'bold' : 'normal',
+      }}
     >
       <ListIcon style={{ marginRight: '8px' }} />
       List View

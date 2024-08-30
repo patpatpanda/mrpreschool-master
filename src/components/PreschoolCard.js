@@ -20,6 +20,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       sx={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
+        marginTop:'50px',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.3s, box-shadow 0.3s',
         width: '100%',

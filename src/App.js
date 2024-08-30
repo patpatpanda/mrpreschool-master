@@ -25,7 +25,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div className="App">
+        <div className="App-container">
           <Header /> {/* Lägg till Header-komponenten här */}
           <Analytics /> {/* Lägg till Analytics-komponenten för att spåra sidvisningar */}
           <main>

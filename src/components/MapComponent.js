@@ -563,7 +563,7 @@ const MapComponent = () => {
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
                 }}
               >
-                {filterVisible ? 'Visa filter' : 'Dölj filter'}
+                {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
               </Button>
               {!filterVisible && (
                 <OrganisationFilter
@@ -578,37 +578,40 @@ const MapComponent = () => {
               )}
             </Box>
             )}
-           <ButtonGroup variant="contained" aria-label="view toggle button group" style={{ backgroundColor: '#e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
-  <Button
-    onClick={() => setView('list')}
-    style={{
-      backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
-      color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 20px',
-      borderRight: '1px solid #e0e0e0',
-      fontWeight: view === 'list' ? 'bold' : 'normal',
-    }}
-  >
-    <ListIcon style={{ marginRight: '8px' }} />
-    List View
-  </Button>
-  <Button
-    onClick={() => setView('map')}
-    style={{
-      backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
-      color: view === 'map' ? '#ffffff' : '#2196f3',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 20px',
-      fontWeight: view === 'map' ? 'bold' : 'normal',
-    }}
-  >
-    <MapIcon style={{ marginRight: '8px' }} />
-    Map View
-  </Button>
-</ButtonGroup>
+         {searchMade && (
+  <ButtonGroup variant="contained" aria-label="view toggle button group" style={{ backgroundColor: '#e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
+    <Button
+      onClick={() => setView('list')}
+      style={{
+        backgroundColor: view === 'list' ? '#3f1d3ba3' : '#ffffff',
+        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        borderRight: '1px solid #e0e0e0',
+        fontWeight: view === 'list' ? 'bold' : 'normal',
+      }}
+    >
+      <ListIcon style={{ marginRight: '8px' }} />
+      List View
+    </Button>
+    <Button
+      onClick={() => setView('map')}
+      style={{
+        backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
+        color: view === 'map' ? '#ffffff' : '#2196f3',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        fontWeight: view === 'map' ? 'bold' : 'normal',
+      }}
+    >
+      <MapIcon style={{ marginRight: '8px' }} />
+      Map View
+    </Button>
+  </ButtonGroup>
+)}
+
 
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
 <TextField

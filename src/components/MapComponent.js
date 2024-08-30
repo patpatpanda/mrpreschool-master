@@ -529,7 +529,7 @@ const MapComponent = () => {
             variant="contained"
             color="secondary"
             sx={{
-              marginTop: '20px',
+              marginTop: '40px',
               padding: '10px 20px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -542,7 +542,7 @@ const MapComponent = () => {
             variant="contained"
             color="secondary"
             sx={{
-              marginTop: '20px',
+              marginTop: '40px',
               padding: '10px 20px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -557,7 +557,7 @@ const MapComponent = () => {
                 variant="contained"
                 color="primary"
                 sx={{
-                  marginTop: '20px',
+                  marginTop: '40px',
                   padding: '10px 20px',
                   borderRadius: '50px',
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',

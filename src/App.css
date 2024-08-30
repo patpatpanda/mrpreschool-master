@@ -120,9 +120,8 @@ body, html {
 @media (max-width: 768px) {
   .initial-text {
    
-    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
+    max-width: 200px; /* Anpassa maximal bredd för små skärmar */
     height: 40px; /* Justera höjden för små skärmar */
-    top:100px
    
   }
 }

@@ -727,6 +727,7 @@ const MapComponent = () => {
         fontSize: '16px',
         backgroundColor: '#3f1d3ba3',
         borderRadius: '50px',
+        marginTop:'55px',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         color: '#fff',
         '&:hover': {

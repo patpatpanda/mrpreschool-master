@@ -14,7 +14,7 @@ const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, vis
       case 'Fristående':
         return '#FF69B4'; // Gul
       case 'Fristående (föräldrakooperativ)':
-        return '#32CD32'; // Röd
+        return '#3366FF'; // Röd
       default:
         return '#000'; // Standardfärg (svart)
     }

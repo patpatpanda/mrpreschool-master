@@ -83,17 +83,31 @@ const MapComponent = () => {
         disableDefaultUI: true,
       });
       setMap(map);
-    
-      // Initialize DirectionsService and DirectionsRenderer
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
         suppressMarkers: true, // Behåll om du vill dölja markörer, annars ta bort denna rad
         polylineOptions: {
-          strokeColor: '#FF0000', // Ändra färg till röd
-          strokeOpacity: 0.7,    // Justera opaciteten om du vill ha en halvgenomskinlig linje
-          strokeWeight: 5        // Öka bredden på linjen
+          strokeColor: '#007BFF',  // Grundfärg för linjen (kan ändras till en tydligare färg)
+          strokeOpacity: 0.5,      // Gör linjen halvgenomskinlig så att både linje och mönster syns
+          strokeWeight: 4,         // Öka bredden på linjen för bättre synlighet
+          icons: [{
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE, // Använd cirklar som mönster
+              fillColor: '#007BFF', // Fyllningsfärg för cirklarna (samma som linjefärgen)
+              fillOpacity: 1,       // Full opacitet för att göra cirklarna helt synliga
+              strokeColor: '#007BFF', // Samma färg som linjen för enhetlighet
+              strokeOpacity: 1,      // Full opacitet på cirkelns kant
+              scale: 4               // Öka storleken på cirklarna för bättre synlighet
+            },
+            offset: '0',             // Börjar från början av linjen
+            repeat: '20px'           // Upprepar cirklarna var 20:e pixel
+          }]
         }
       });
+      
+      
+
+    
       directionsRenderer.current.setMap(map);
     
       if (addressRef.current) {
@@ -225,70 +239,68 @@ const MapComponent = () => {
     const addressParts = fullAddress.split(',');
     return addressParts[0].trim();
   };
-
- const geocodeAddressHandler = useCallback(async (event) => {
-  event.preventDefault();
-  const address = document.getElementById('address').value.trim();
-  if (!address) {
-    setErrorMessage('Ange en giltig adress.');
-    return;
-  }
-
-  setLoading(true);
-  clearMarkers();
-  setNearbyPlaces([]);
-
-  const relevantAddress = extractRelevantAddress(address);
-  console.log('Relevant address extracted:', relevantAddress);
-  const coordinates = await geocodeAddress(relevantAddress);
-  console.log('Coordinates:', coordinates);
-
-  if (
-    !coordinates ||
-    (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
-      coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
-  ) {
-    console.log('Geocoding failed or out of bounds.');
-    setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
-    setLoading(false);
-    return;
-  }
-
-  const { latitude, longitude } = coordinates;
-  const location = new google.maps.LatLng(latitude, longitude);
-
-  if (map) {
-    map.setCenter(location);
-    map.setZoom(14);
-
-    if (originMarker) {
-      originMarker.setMap(null);
+  const geocodeAddressHandler = useCallback(async (event) => {
+    event.preventDefault();
+    const address = document.getElementById('address').value.trim();
+    if (!address) {
+      setErrorMessage('Ange en giltig adress.');
+      return;
     }
-
-    const marker = new google.maps.Marker({
-      map: map,
-      position: location,
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        scaledSize: new google.maps.Size(30, 30),
-      },
-    });
-
-    setOriginMarker(marker);
-    setOriginPosition(location);
-
-    await findNearbyPlaces(location);
-    setShowPlaces(true);
-    setShowText(false);
-    setSearchMade(true); // Keep track of search being made
-    // Remove or comment out the following line
-    // setView('map'); // Don't switch to map view automatically
-  } else {
-    setErrorMessage('Map is not initialized.');
-    setLoading(false);
-  }
-}, [map, originMarker, findNearbyPlaces]);
-
+  
+    setLoading(true);
+    clearMarkers();
+    setNearbyPlaces([]);
+  
+    const relevantAddress = extractRelevantAddress(address);
+    console.log('Relevant address extracted:', relevantAddress);
+    const coordinates = await geocodeAddress(relevantAddress);
+    console.log('Coordinates:', coordinates);
+  
+    if (
+      !coordinates ||
+      (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
+        coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
+    ) {
+      console.log('Geocoding failed or out of bounds.');
+      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
+      setLoading(false);
+      return;
+    }
+  
+    const { latitude, longitude } = coordinates;
+    const location = new google.maps.LatLng(latitude, longitude);
+  
+    if (map) {
+      map.setCenter(location);
+      map.setZoom(14);
+  
+      if (originMarker) {
+        originMarker.setMap(null);
+      }
+  
+      const marker = new google.maps.Marker({
+        map: map,
+        position: location,
+        icon: {
+          url: 'http://maps.google.com/mapfiles/kml/paddle/go.png', // Ny ikon för startpunkten
+          scaledSize: new google.maps.Size(40, 40), // Ökad storlek för att göra den mer framträdande
+          anchor: new google.maps.Point(20, 40), // För att centrera ikonen på markörens position
+        },
+      });
+  
+      setOriginMarker(marker);
+      setOriginPosition(location);
+  
+      await findNearbyPlaces(location);
+      setShowPlaces(true);
+      setShowText(false);
+      setSearchMade(true);
+    } else {
+      setErrorMessage('Map is not initialized.');
+      setLoading(false);
+    }
+  }, [map, originMarker, findNearbyPlaces]);
+  
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);
@@ -350,9 +362,9 @@ const MapComponent = () => {
     } else if (place.organisationsform === 'Fristående') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png';
     } else if (place.organisationsform === 'Föräldrakooperativ') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
     } else {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
     }
 
     const marker = new google.maps.Marker({

@@ -13,7 +13,7 @@ const PreschoolApplicationInfo = () => {
         // Responsive styles for scroll
         '@media (max-width: 600px)': {
           maxHeight: '100vh', // Adjust max height for scrolling if needed
-          overflowY: 'auto',  // Enable vertical scrolling on small screens
+         
         },
       }}
     >

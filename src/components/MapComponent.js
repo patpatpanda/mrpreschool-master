@@ -8,7 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
 import { ButtonGroup} from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
@@ -747,31 +747,10 @@ const MapComponent = () => {
     {/* Button to survey page */}
     
     {/* New button to navigate to preschool application information */}
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => navigate('/PreschoolApplicationInfo')}
-      sx={{
-        padding: '5px 10px',
-        fontSize: '16px',
-        backgroundColor: 'pink',
-        color: '#fff',
-        marginTop:'40px',
-        borderRadius: '50px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        '&:hover': {
-          backgroundColor: '#d6b2e2',
-        },
-        width: '100%',
-        maxWidth: '300px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '5px 10px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Läs om hur du ansöker till förskola
-    </Button>
+    <Box>
+      {/* Visa direkt komponenten med texten */}
+      <PreschoolApplicationInfo />
+    </Box>
   </Box>
 )}
 

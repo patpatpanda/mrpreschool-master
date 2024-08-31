@@ -4,15 +4,13 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-
+  overflow-y: auto;  /* Aktivera endast vertikal skrollning */
+  overflow-x: hidden; /* Förhindra horisontell skrollning */
   position: relative;
-  
+  touch-action: pan-y;
 }
-.survey-chart-container {
-  max-height: 100vh; /* Begränsa tillgänglig höjd */
-  overflow-y: auto;  /* Aktivera vertikal scrollning */
-  overflow-x: hidden; /* Inaktivera horisontell scrollning om det behövs */
-}
+
+
 
 
 /* Container for Map and Cards */
@@ -30,7 +28,7 @@ body, html {
 /* Map Container */
 .map-container {
   flex: 1;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
@@ -190,7 +188,8 @@ body, html {
     z-index: 10;
     padding-top: 450px;
    
-    
+    overflow-y: auto; /* Aktivera vertikal skrollning */
+    overflow-x: hidden; /* Förhindra horisontell skrollning */
 
     background-size: cover; /* Adjust the background size */
 }

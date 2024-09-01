@@ -8,7 +8,7 @@ body, html {
   overflow-x: hidden; /* Förhindra horisontell skrollning */
   position: relative;
   touch-action: pan-y;
-  background-color: #804394;
+
   
 }
 
@@ -101,7 +101,7 @@ body, html {
 }
 .header-container {
   position: relative;
-  
+  background-color: #804394;
   width: 100%;
 }
 @media (max-width: 42000px) {

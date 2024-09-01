@@ -539,13 +539,14 @@ const MapComponent = () => {
     variant="contained"
     color="secondary"
     sx={{
-      position: 'fixed',
-      top: { xs: '110px', sm: '130px' },  // Responsivt 'top' beroende på skärmbredd
+      position: 'absolut',
+      top: { xs: '110px', sm: '35px' },  // Responsivt 'top' beroende på skärmbredd
       left: '50%',
       transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
       zIndex: 1000,  // Högre z-index så att knappen alltid syns
       
       padding: '10px 40px',
+      width: '100px',
       
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
     }}

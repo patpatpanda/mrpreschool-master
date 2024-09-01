@@ -221,7 +221,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             left: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
             top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
             color: '#fff',
-            zIndex: 333333332,
+            zIndex: 3000,
           }}
         >
           <ChevronLeftIcon />

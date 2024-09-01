@@ -531,30 +531,29 @@ const MapComponent = () => {
     <div className="app-container">
       {showText}
       {/* Visa knappen endast om en sökning har gjorts */}
-      {searchMade && (
-        <button
-          onClick={toggleSearchContainerVisibility}
-          style={{
-            position: 'fixed',
-            top: '110px',
-            left: '50%',
-            transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
-            zIndex: 2000,  // Högre z-index så att knappen alltid syns
-            padding: '6px 12px',  // Ger extra utrymme runt texten
-            borderRadius: '8px',  // Rundade hörn för modern look
-            backgroundColor: 'rgba(0, 123, 255, 0.8)',  // Blå bakgrund med lite transparens
-            color: '#fff',  // Vit text för hög kontrast mot bakgrunden
-            border: 'none',  // Tar bort standardgränsen
-            cursor: 'pointer',  // Ändrar muspekaren till hand för klickbarhet
-            fontSize: '16px',  // Större text för bättre läsbarhet
-            fontWeight: 'bold',  // Gör texten fet för tydlighet
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',  // Subtil skugga för djup
-            transition: 'background-color 0.3s ease, transform 0.3s ease',
-          }}
-        >
-          {isSearchContainerVisible ? 'Dölj' : 'Visa'}
-        </button>
-      )}
+      
+
+{searchMade && (
+  <Button
+    onClick={toggleSearchContainerVisibility}
+    variant="contained"
+    color="secondary"
+    sx={{
+      position: 'fixed',
+      top: { xs: '110px', sm: '130px' },  // Responsivt 'top' beroende på skärmbredd
+      left: '50%',
+      transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
+      zIndex: 1000,  // Högre z-index så att knappen alltid syns
+      
+      padding: '10px 40px',
+      
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+    }}
+  >
+    {isSearchContainerVisible ? 'Dölj' : 'Visa'}
+  </Button>
+)}
+
 
       {/* Uppdatera search-container med dynamisk klass baserat på state */}
       <div className={`search-container ${showPlaces ? 'top' : 'center'} ${isSearchContainerVisible ? '' : 'no'}`}>

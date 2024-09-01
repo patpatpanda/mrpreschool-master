@@ -3,13 +3,13 @@ import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
 import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
-import { TextField,Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
-import { ButtonGroup} from '@mui/material';
+import { ButtonGroup } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
 
@@ -63,20 +63,26 @@ const MapComponent = () => {
   const [showText, setShowText] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [searchMade, setSearchMade] = useState(false);
+  const [searchMade, setSearchMade] = useState(false); // Används för att visa knappen efter sökning
   const [filterVisible, setFilterVisible] = useState(true);
   const directionsService = useRef(null);
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true); // State för synlighet
+
+  // Funktion för att toggla synligheten
+  const toggleSearchContainerVisibility = () => {
+    setIsSearchContainerVisible(!isSearchContainerVisible);
+  };
 
   const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
 
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
-    
+
       const map = new google.maps.Map(mapRef.current, {
         center: stockholm,
         zoom: 12,
@@ -85,31 +91,28 @@ const MapComponent = () => {
       setMap(map);
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
-        suppressMarkers: true, // Behåll om du vill dölja markörer, annars ta bort denna rad
+        suppressMarkers: true,
         polylineOptions: {
-          strokeColor: '#007BFF',  // Grundfärg för linjen (kan ändras till en tydligare färg)
-          strokeOpacity: 0.5,      // Gör linjen halvgenomskinlig så att både linje och mönster syns
-          strokeWeight: 4,         // Öka bredden på linjen för bättre synlighet
+          strokeColor: '#007BFF',
+          strokeOpacity: 0.5,
+          strokeWeight: 4,
           icons: [{
             icon: {
-              path: google.maps.SymbolPath.CIRCLE, // Använd cirklar som mönster
-              fillColor: '#007BFF', // Fyllningsfärg för cirklarna (samma som linjefärgen)
-              fillOpacity: 1,       // Full opacitet för att göra cirklarna helt synliga
-              strokeColor: '#007BFF', // Samma färg som linjen för enhetlighet
-              strokeOpacity: 1,      // Full opacitet på cirkelns kant
-              scale: 4               // Öka storleken på cirklarna för bättre synlighet
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: '#007BFF',
+              fillOpacity: 1,
+              strokeColor: '#007BFF',
+              strokeOpacity: 1,
+              scale: 4,
             },
-            offset: '0',             // Börjar från början av linjen
-            repeat: '20px'           // Upprepar cirklarna var 20:e pixel
+            offset: '0',
+            repeat: '20px',
           }]
         }
       });
-      
-      
 
-    
       directionsRenderer.current.setMap(map);
-    
+
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
           bounds: {
@@ -123,12 +126,10 @@ const MapComponent = () => {
           strictBounds: false,
           types: ['address'],
         });
-    
+
         autocomplete.addListener('place_changed', () => {});
       }
     };
-    
-    
 
     const loadScript = () => {
       const script = document.createElement('script');
@@ -239,6 +240,7 @@ const MapComponent = () => {
     const addressParts = fullAddress.split(',');
     return addressParts[0].trim();
   };
+  
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
@@ -246,16 +248,16 @@ const MapComponent = () => {
       setErrorMessage('Ange en giltig adress.');
       return;
     }
-  
+
     setLoading(true);
     clearMarkers();
     setNearbyPlaces([]);
-  
+
     const relevantAddress = extractRelevantAddress(address);
     console.log('Relevant address extracted:', relevantAddress);
     const coordinates = await geocodeAddress(relevantAddress);
     console.log('Coordinates:', coordinates);
-  
+
     if (
       !coordinates ||
       (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
@@ -266,41 +268,41 @@ const MapComponent = () => {
       setLoading(false);
       return;
     }
-  
+
     const { latitude, longitude } = coordinates;
     const location = new google.maps.LatLng(latitude, longitude);
-  
+
     if (map) {
       map.setCenter(location);
       map.setZoom(14);
-  
+
       if (originMarker) {
         originMarker.setMap(null);
       }
-  
+
       const marker = new google.maps.Marker({
         map: map,
         position: location,
         icon: {
-          url: 'http://maps.google.com/mapfiles/kml/paddle/go.png', // Ny ikon för startpunkten
-          scaledSize: new google.maps.Size(40, 40), // Ökad storlek för att göra den mer framträdande
-          anchor: new google.maps.Point(20, 40), // För att centrera ikonen på markörens position
+          url: 'http://maps.google.com/mapfiles/kml/paddle/go.png',
+          scaledSize: new google.maps.Size(40, 40),
+          anchor: new google.maps.Point(20, 40),
         },
       });
-  
+
       setOriginMarker(marker);
       setOriginPosition(location);
-  
+
       await findNearbyPlaces(location);
       setShowPlaces(true);
       setShowText(false);
-      setSearchMade(true);
+      setSearchMade(true); // Uppdatera searchMade till true efter första sökningen
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
   }, [map, originMarker, findNearbyPlaces]);
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);
@@ -441,24 +443,22 @@ const MapComponent = () => {
   };
 
   const handleTopRanked = () => {
-  if (!originMarker) {
-    alert('Ange en adress först.');
-    return;
-  }
+    if (!originMarker) {
+      alert('Ange en adress först.');
+      return;
+    }
 
-  // Här ser vi till att `topPlaces` är korrekt definierad och inte orsakar felet
-  const topPlaces = allPlaces
-    .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined) // Filtrera bort platser utan omdöme
-    .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome) // Sortera efter helhetsomdome
-    .slice(0, 5); // Välj de fem bästa
+    const topPlaces = allPlaces
+      .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined)
+      .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome)
+      .slice(0, 5);
 
-  setNearbyPlaces(topPlaces);
-  clearMarkers();
-  topPlaces.forEach((result) => {
-    createMarker(result, originMarker.getPosition());
-  });
-};
-
+    setNearbyPlaces(topPlaces);
+    clearMarkers();
+    topPlaces.forEach((result) => {
+      createMarker(result, originMarker.getPosition());
+    });
+  };
 
   const filterClosestPreschools = () => {
     if (!originMarker) {
@@ -529,10 +529,36 @@ const MapComponent = () => {
 
   return (
     <div className="app-container">
-        
-         {showText }
-   <div className={`search-container ${showPlaces ? 'top' : 'center'}`}>
-  <Container maxWidth="sm">
+      {showText}
+      {/* Visa knappen endast om en sökning har gjorts */}
+      {searchMade && (
+        <button
+          onClick={toggleSearchContainerVisibility}
+          style={{
+            position: 'fixed',
+            top: '110px',
+            left: '50%',
+            transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
+            zIndex: 2000,  // Högre z-index så att knappen alltid syns
+            padding: '6px 12px',  // Ger extra utrymme runt texten
+            borderRadius: '8px',  // Rundade hörn för modern look
+            backgroundColor: 'rgba(0, 123, 255, 0.8)',  // Blå bakgrund med lite transparens
+            color: '#fff',  // Vit text för hög kontrast mot bakgrunden
+            border: 'none',  // Tar bort standardgränsen
+            cursor: 'pointer',  // Ändrar muspekaren till hand för klickbarhet
+            fontSize: '16px',  // Större text för bättre läsbarhet
+            fontWeight: 'bold',  // Gör texten fet för tydlighet
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',  // Subtil skugga för djup
+            transition: 'background-color 0.3s ease, transform 0.3s ease',
+          }}
+        >
+          {isSearchContainerVisible ? 'Dölj' : 'Visa'}
+        </button>
+      )}
+
+      {/* Uppdatera search-container med dynamisk klass baserat på state */}
+      <div className={`search-container ${showPlaces ? 'top' : 'center'} ${isSearchContainerVisible ? '' : 'no'}`}>
+        <Container maxWidth="sm">
     <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
       {showPlaces && (
         <Box display="flex" justifyContent="center" width="100%" gap={2}>

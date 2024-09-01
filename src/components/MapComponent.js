@@ -540,7 +540,7 @@ const MapComponent = () => {
     color="secondary"
     sx={{
       position: 'absolut',
-      top: { xs: '110px', sm: '35px' },  // Responsivt 'top' beroende på skärmbredd
+      top: { xs: '65px', sm: '35px' },  // Responsivt 'top' beroende på skärmbredd
       left: '50%',
       transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
       zIndex: 1000,  // Högre z-index så att knappen alltid syns

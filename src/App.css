@@ -101,7 +101,7 @@ body, html {
 }
 .header-container {
   position: relative;
-  background-color: #804394;
+  background: linear-gradient(135deg, #e0f7e9 0%, #a5d6a7 100%);
   width: 100%;
 }
 @media (max-width: 42000px) {

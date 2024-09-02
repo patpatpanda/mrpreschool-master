@@ -17,17 +17,18 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '15px',
     overflow: 'hidden',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
     width: '100%',
     height: '100%',
     margin: 0,
     zIndex: 3000, // Sätt z-index här
+    color:'#333'
   },
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #f5b3fd 0%, #8e5597 100%)',
-  color: '#ffffff',
+  
+  color: '#333',
   textAlign: 'center',
   padding: '16px',
   fontFamily: '"Roboto", sans-serif',
@@ -36,6 +37,7 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: 'flex', // Använd flexbox för att organisera barnkomponenterna
   alignItems: 'center',
   justifyContent: 'center',
+  backgroundColor: '#fff',
   zIndex: 3000, // Sätt z-index här
 }));
 
@@ -237,14 +239,14 @@ const DetailedCard = ({ schoolData, onClose }) => {
           variant="h6"
           component="span"
           sx={{
-            fontSize: { xs: '1.2rem', sm: '1.5rem' },
+            
             lineHeight: 'normal',
             display: 'block',
             mx: 4,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            color: '#fff',  // Vit textfärg för rubriken
+            color: '#333',  // Vit textfärg för rubriken
             zIndex: 3000, // Sätt z-index här
           }}
         >
@@ -258,7 +260,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             position: 'absolute',
             right: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
             top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
-            color: '#fff',
+            color: '#333',
             zIndex: 3000, // Sätt z-index här
           }}
         >

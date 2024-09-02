@@ -106,8 +106,8 @@ body, html {
 @media (max-width: 42000px) {
   .initial-text {
     top: 0; /* Justera position för mindre skärmar */
-    max-width: 600px; /* Anpassa maximal bredd för mindre skärmar */
-    height: 90px; /* Justera höjden för mindre skärmar */
+    max-width: 500px; /* Anpassa maximal bredd för mindre skärmar */
+    height: 80px; /* Justera höjden för mindre skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }
 }

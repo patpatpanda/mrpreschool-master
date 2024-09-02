@@ -1,4 +1,3 @@
-/* Global Styles */
 body, html {
   margin: 0;
   padding: 0;
@@ -8,12 +7,10 @@ body, html {
   overflow-x: hidden; /* Förhindra horisontell skrollning */
   position: relative;
   touch-action: pan-y;
-
-  
 }
+main {
 
-
-
+}
 
 /* Container for Map and Cards */
 .app-container {
@@ -62,7 +59,7 @@ body, html {
   }
 
   .search-container.top {
-    top: 70px;
+    top: 200px;
     
     font-size: 16px;
     margin-right: 15px;
@@ -100,10 +97,14 @@ body, html {
   text-align: center; /* Centrera texten */
 }
 .header-container {
-  position: relative;
-  background: linear-gradient(135deg, #f5b3fd 0%, #8c5597 100%);
-  width: 100%;
+  position: fixed; /* Fixera headern längst upp */
+  top: 0; /* Sätt den längst upp */
+  left: 0; /* Sätt den längst till vänster */
+  width: 100%; /* Täcker hela bredden */
+  background: linear-gradient(135deg, #f5b3fd 0%, #8e5597 100%);
+  z-index: 1000; /* Se till att headern ligger över andra element */
 }
+
 @media (max-width: 42000px) {
   .initial-text {
     top: 0; /* Justera position för mindre skärmar */
@@ -221,12 +222,13 @@ body, html {
   }
 
   .search-container.top {
-    margin-top:10px;
+    top: 100px;
+    
     font-size: 16px;
     margin-right: 15px;
     position: absolute; /* Changed from fixed to absolute */
+    
   }
-
   
 
 

@@ -540,7 +540,7 @@ const MapComponent = () => {
     color="secondary"
     sx={{
       position: 'absolut',
-      top: { xs: '65px', sm: '35px' },  // Responsivt 'top' beroende på skärmbredd
+      top: { xs: '80px', sm: '120px' },  // Responsivt 'top' beroende på skärmbredd
       left: '50%',
       transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
       zIndex: 1000,  // Högre z-index så att knappen alltid syns
@@ -616,20 +616,19 @@ const MapComponent = () => {
               )}
             </Box>
             )}
-         {searchMade && (
-  <ButtonGroup  aria-label="view toggle button group" style={{  borderRadius: '8px', overflow: 'hidden' }}>
+  {searchMade && (
+  <ButtonGroup aria-label="view toggle button group" style={{ borderRadius: '8px', overflow: 'hidden' }}>
     <Button
       onClick={() => setView('list')}
-    style={{
-  backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff', // Använd en ljus rosa färg när view är 'list'
-  color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
-  display: 'flex',
-  alignItems: 'center',
-  padding: '10px 20px',
-  borderRight: '1px solid #e0e0e0',
-  fontWeight: view === 'list' ? 'bold' : 'normal',
-}}
-
+      style={{
+        backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff',
+        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        borderRight: '1px solid #e0e0e0',
+        fontWeight: view === 'list' ? 'bold' : 'normal',
+      }}
     >
       <ListIcon style={{ marginRight: '8px' }} />
       List View
@@ -648,8 +647,23 @@ const MapComponent = () => {
       <MapIcon style={{ marginRight: '8px' }} />
       Map View
     </Button>
+    {/* Här lägger vi till den nya knappen "Få koll" */}
+    <Button
+      onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
+      style={{
+        backgroundColor: '#ff69b4', // En rosa färg för knappen "Få koll"
+        color: '#ffffff',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        fontWeight: 'bold',
+      }}
+    >
+      Få koll
+    </Button>
   </ButtonGroup>
 )}
+
 
 
 <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>

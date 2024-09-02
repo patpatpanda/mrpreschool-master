@@ -82,12 +82,41 @@ const MapComponent = () => {
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
-
+    
+      // Define the styles array
+      const styles = [
+        {
+          featureType: 'poi', // 'poi' means 'Points of Interest'
+          elementType: 'labels',
+          stylers: [{ visibility: 'off' }], // Hide all labels
+        },
+        {
+          featureType: 'poi.business', // Specifically hides business POIs
+          stylers: [{ visibility: 'off' }],
+        },
+        {
+          featureType: 'transit',
+          elementType: 'labels.icon', // Hide icons for transit
+          stylers: [{ visibility: 'off' }],
+        },
+        {
+          featureType: 'road',
+          elementType: 'labels.icon', // Hide road icons
+          stylers: [{ visibility: 'off' }],
+        },
+        {
+          featureType: 'administrative.neighborhood', // Hide neighborhood labels
+          stylers: [{ visibility: 'off' }],
+        },
+      ];
+    
       const map = new google.maps.Map(mapRef.current, {
         center: stockholm,
         zoom: 12,
         disableDefaultUI: true,
+        styles: styles, // Apply the styles to the map
       });
+    
       setMap(map);
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
@@ -110,9 +139,9 @@ const MapComponent = () => {
           }]
         }
       });
-
+    
       directionsRenderer.current.setMap(map);
-
+    
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
           bounds: {
@@ -126,11 +155,11 @@ const MapComponent = () => {
           strictBounds: false,
           types: ['address'],
         });
-
+    
         autocomplete.addListener('place_changed', () => {});
       }
     };
-
+    
     const loadScript = () => {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJmqNnZHTZ99pPQ2uHfkDXwpMxOpfYLw&libraries=places`;

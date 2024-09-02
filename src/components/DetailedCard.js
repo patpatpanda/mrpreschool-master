@@ -25,7 +25,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #e0f7e9 0%, #a5d6a7 100%)',
+  background: 'linear-gradient(135deg, #f5b3fd 0%, #8e5597 100%)',
   color: '#ffffff',
   textAlign: 'center',
   padding: '16px',
@@ -220,7 +220,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             position: 'absolute',
             left: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
             top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
-            color: '#fff',
+            color: '#333',
             zIndex: 3000,
           }}
         >

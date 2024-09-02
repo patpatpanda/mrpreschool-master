@@ -21,6 +21,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     width: '100%',
     height: '100%',
     margin: 0,
+    zIndex: 3000, // Sätt z-index här
   },
 }));
 
@@ -35,6 +36,7 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: 'flex', // Använd flexbox för att organisera barnkomponenterna
   alignItems: 'center',
   justifyContent: 'center',
+  zIndex: 3000, // Sätt z-index här
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
@@ -42,6 +44,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   padding: '20px',
   height: 'calc(100% - 64px)',
   overflowY: 'auto',
+  zIndex: 3000, // Sätt z-index här
   [theme.breakpoints.down('sm')]: {
     padding: '10px',
   },
@@ -57,6 +60,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   marginTop: '20px',
   marginBottom: '20px',
+  zIndex: 3000, // Sätt z-index här
 
   img: {
     width: '100%',
@@ -83,7 +87,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
     width: '100%',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.4)',
-    zIndex: 1,
+    zIndex: 3000, // Sätt z-index här
     transition: 'opacity 0.5s ease',
     opacity: 0,
   },
@@ -93,6 +97,7 @@ const InfoBox = styled(Box)(({ theme }) => ({
   padding: '20px',
   borderRadius: '10px',
   marginBottom: '20px',
+  zIndex: 3000, // Sätt z-index här
   [theme.breakpoints.down('sm')]: {
     padding: '10px',
   },
@@ -221,7 +226,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             left: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
             top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
             color: '#333',
-            zIndex: 3000,
+            zIndex: 3000, // Sätt z-index här
           }}
         >
           <ChevronLeftIcon />
@@ -240,6 +245,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             color: '#fff',  // Vit textfärg för rubriken
+            zIndex: 3000, // Sätt z-index här
           }}
         >
           {namn}
@@ -253,7 +259,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             right: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
             top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
             color: '#fff',
-            zIndex: 2,
+            zIndex: 3000, // Sätt z-index här
           }}
         >
           <FontAwesomeIcon icon={faTimes} />
@@ -266,7 +272,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         </ImageContainer>
 
         {schoolDetails.beskrivning && (
-          <Box mb={4}>
+          <Box mb={4} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
             <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
               Beskrivning
             </Typography>
@@ -277,20 +283,20 @@ const DetailedCard = ({ schoolData, onClose }) => {
         )}
 
         {walkingTime && (
-          <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555' }}>
+          <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555', zIndex: 3000 }}>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} /> Beräknad gångtid: {walkingTime} minuter
           </Typography>
         )}
 
         {adress && (
-          <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333' }}>
+          <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333', zIndex: 3000 }}>
             <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} /> {adress}
           </Typography>
         )}
 
         <Grid container spacing={2}>
           {malibuData && (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
               <InfoBox>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Föräldraomdömen</Typography>
                 <Typography variant="body2">Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
@@ -335,7 +341,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             </Grid>
           )}
           {schoolDetails && (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
               <InfoBox>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Skoldetaljer</Typography>
                 <Typography variant="body2">Typ av Service: {schoolDetails.typAvService}</Typography>
@@ -351,7 +357,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             </Grid>
           )}
           {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
               <InfoBox>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Kontaktinformation</Typography>
                 {schoolDetails.kontakter.$values.map((kontakt, index) => (
@@ -368,11 +374,11 @@ const DetailedCard = ({ schoolData, onClose }) => {
         </Grid>
 
         {/* Visa stapeldiagrammen om datan har hämtats */}
-        {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px' }}>{error}</Typography>}
+        {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px', zIndex: 3000 }}>{error}</Typography>}
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
-          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#fff' }}>
-            <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center' }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
+          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#fff', zIndex: 3000 }}>
+            <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center', zIndex: 3000 }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
             <Bar
               data={chart.data}
               options={{
@@ -414,7 +420,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         ))}
 
         {dataFetched && chartData.length === 0 && !loading && (
-          <Typography variant="body2" sx={{ color: '#fff' }}>Ingen data att visa</Typography>
+          <Typography variant="body2" sx={{ color: '#fff', zIndex: 3000 }}>Ingen data att visa</Typography>
         )}
 
        

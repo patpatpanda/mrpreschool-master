@@ -7,6 +7,8 @@ body, html {
   overflow-x: hidden; /* Förhindra horisontell skrollning */
   position: relative;
   touch-action: pan-y;
+  
+
 }
 
 
@@ -95,12 +97,12 @@ body, html {
   text-align: center; /* Centrera texten */
 }
 .header-container {
- 
+  
   top: 0; /* Sätt den längst upp */
   left: 0; /* Sätt den längst till vänster */
   width: 100%; /* Täcker hela bredden */
-  background: linear-gradient(135deg, #f5b3fd 0%, #8e5597 100%);
-  z-index: 1000; /* Se till att headern ligger över andra element */
+ 
+  z-index: 1500; /* Se till att headern ligger över andra element */
 }
 
 @media (max-width: 42000px) {
@@ -220,7 +222,7 @@ body, html {
   }
 
   .search-container.top {
-    top: 100px;
+    top: 120px;
     
     font-size: 16px;
     margin-right: 15px;
@@ -228,7 +230,10 @@ body, html {
     
   }
   
-
+  main {
+    
+  }
+  
 
   .styled-button {
     padding: 5px 10px;

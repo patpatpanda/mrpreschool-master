@@ -569,7 +569,7 @@ const MapComponent = () => {
     color="secondary"
     sx={{
       position: 'absolut',
-      top: { xs: '80px', sm: '120px' },  // Responsivt 'top' beroende på skärmbredd
+      top: { xs: '60px', sm: '100px' },  // Responsivt 'top' beroende på skärmbredd
       left: '50%',
       transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
       zIndex: 1000,  // Högre z-index så att knappen alltid syns
@@ -580,7 +580,7 @@ const MapComponent = () => {
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
     }}
   >
-    {isSearchContainerVisible ? 'Dölj' : 'Visa'}
+    {isSearchContainerVisible ? 'Dölj fält' : 'Visa fält'}
   </Button>
 )}
 

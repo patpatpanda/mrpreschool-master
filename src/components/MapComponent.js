@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
 import OrganisationFilter from './OrganisationFilter';
@@ -12,6 +13,7 @@ import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera 
 import { ButtonGroup } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
+
 
 /*global google*/
 
@@ -69,6 +71,7 @@ const MapComponent = () => {
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  const clustererRef = useRef(null); 
 
   const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true); // State för synlighet
 
@@ -82,42 +85,41 @@ const MapComponent = () => {
   useEffect(() => {
     const initMap = () => {
       const stockholm = new google.maps.LatLng(59.3293, 18.0686);
-    
-      // Define the styles array
       const styles = [
         {
-          featureType: 'poi', // 'poi' means 'Points of Interest'
+          featureType: 'poi',
           elementType: 'labels',
-          stylers: [{ visibility: 'off' }], // Hide all labels
+          stylers: [{ visibility: 'off' }],
         },
         {
-          featureType: 'poi.business', // Specifically hides business POIs
+          featureType: 'poi.business',
           stylers: [{ visibility: 'off' }],
         },
         {
           featureType: 'transit',
-          elementType: 'labels.icon', // Hide icons for transit
+          elementType: 'labels.icon',
           stylers: [{ visibility: 'off' }],
         },
         {
           featureType: 'road',
-          elementType: 'labels.icon', // Hide road icons
+          elementType: 'labels.icon',
           stylers: [{ visibility: 'off' }],
         },
         {
-          featureType: 'administrative.neighborhood', // Hide neighborhood labels
+          featureType: 'administrative.neighborhood',
           stylers: [{ visibility: 'off' }],
         },
       ];
-    
       const map = new google.maps.Map(mapRef.current, {
         center: stockholm,
         zoom: 12,
         disableDefaultUI: true,
-        styles: styles, // Apply the styles to the map
+        styles: styles,
       });
-    
+  
       setMap(map);
+      clustererRef.current = new MarkerClusterer({ map, markers: [] });
+  
       directionsService.current = new google.maps.DirectionsService();
       directionsRenderer.current = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
@@ -139,9 +141,9 @@ const MapComponent = () => {
           }]
         }
       });
-    
+  
       directionsRenderer.current.setMap(map);
-    
+  
       if (addressRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
           bounds: {
@@ -155,26 +157,27 @@ const MapComponent = () => {
           strictBounds: false,
           types: ['address'],
         });
-    
+  
         autocomplete.addListener('place_changed', () => {});
       }
     };
-    
+  
     const loadScript = () => {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJmqNnZHTZ99pPQ2uHfkDXwpMxOpfYLw&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => initMap();
       document.head.appendChild(script);
     };
-
+  
     if (!window.google) {
       loadScript();
     } else {
       initMap();
     }
   }, []);
+  
 
   useEffect(() => {
     if (id && map) {
@@ -381,10 +384,9 @@ const MapComponent = () => {
       }
     });
   };
-
   const createMarker = async (place, originLocation) => {
     let iconUrl;
-
+  
     if (place.organisationsform === 'Kommunal') {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';
     } else if (place.organisationsform === 'Fristående') {
@@ -394,17 +396,24 @@ const MapComponent = () => {
     } else {
       iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
     }
-
+  
     const marker = new google.maps.Marker({
-      map: map,
       position: { lat: place.latitude, lng: place.longitude },
       title: place.namn,
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
       },
+      label: {
+        text: place.namn,
+        color: '#000000',
+        fontSize: '18px',
+        className: 'custom-marker-label',
+      },
     });
-
+  
+    clustererRef.current.addMarker(marker);
+  
     const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
       lat: place.latitude,
       lng: place.longitude,
@@ -413,20 +422,20 @@ const MapComponent = () => {
       walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
         ? walkingTimeInMinutes.toFixed(2)
         : 'N/A';
-
+  
     setWalkingTimes((prevTimes) => ({
       ...prevTimes,
       [place.id]: formattedWalkingTime,
     }));
-
+  
     marker.addListener('click', () => {
       selectPlace(place);
       createRoute(new google.maps.LatLng(place.latitude, place.longitude));
     });
-
+  
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
   };
-
+  
   const selectPlace = async (place) => {
     try {
       const cleanName = place.namn.trim();
@@ -464,9 +473,10 @@ const MapComponent = () => {
   };
 
   const clearMarkers = () => {
-    currentMarkers.forEach((marker) => marker.setMap(null));
+    clustererRef.current.clearMarkers();
     setCurrentMarkers([]);
   };
+  
 
   const handleTopRanked = () => {
     if (!originMarker) {
@@ -684,7 +694,7 @@ const MapComponent = () => {
       display: 'flex',
       alignItems: 'center',
       padding: '10px 20px',
-      fontFamily: 'Nunito, sans-serif',
+    fontFamily: 'Nunito, sans-serif',
     }}
   >
     Få koll

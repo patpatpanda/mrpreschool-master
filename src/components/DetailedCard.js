@@ -380,7 +380,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px', zIndex: 3000 }}>{error}</Typography>}
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
-          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#fff', zIndex: 3000 }}>
+          <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#333', zIndex: 3000 }}>
             <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center', zIndex: 3000 }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
             <Bar
               data={chart.data}

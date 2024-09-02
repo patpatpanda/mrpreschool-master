@@ -102,6 +102,16 @@ background-color: #f9f8f5;
 
   
 }
+/* Add this CSS to your styles file (e.g., GoogleMap.css) */
+.custom-marker-label {
+  transform: translate(-55%, -30%); /* Adjust the position of the label */
+  white-space: nowrap; /* Prevents text from wrapping */
+ 
+ 
+  padding: 2px 5px; /* Padding around the text */
+  border-radius: 4px; /* Rounded corners for the background */
+}
+
 
 @media (max-width: 42000px) {
   .initial-text {

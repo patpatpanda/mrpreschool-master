@@ -575,7 +575,7 @@ const MapComponent = () => {
       zIndex: 1000,  // Högre z-index så att knappen alltid syns
       
       padding: '10px 40px',
-      width: '100px',
+      width: '200px',
       
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
     }}

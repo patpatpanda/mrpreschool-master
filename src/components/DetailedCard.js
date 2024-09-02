@@ -115,6 +115,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [error, setError] = useState('');
 
   const years = [2023, 2022, 2021, 2020];
+  
 
   const fetchData = useCallback(async () => {
     setLoading(true);

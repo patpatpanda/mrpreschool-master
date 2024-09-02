@@ -3,11 +3,10 @@ import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import MapComponent from './components/MapComponent';
 import SurveyChart from './components/SurveyChart';
-import Header from './components/Header'; // Importera Header-komponenten
+import Header from './components/Header';
 import theme from './components/theme';
 import './App.css';
 import PreschoolApplicationInfo from './components/PreschoolApplicationInfo';
-// Google Analytics integration
 import ReactGA from 'react-ga';
 
 function Analytics() {
@@ -26,14 +25,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App-container">
-          <Header /> {/* Lägg till Header-komponenten här */}
-          <Analytics /> {/* Lägg till Analytics-komponenten för att spåra sidvisningar */}
+          <Header />
+          <Analytics />
           <main>
             <Routes>
               <Route path="/" element={<MapComponent />} />
               <Route path="/forskolan/:id" element={<MapComponent />} />
               <Route path="/survey" element={<SurveyChart />} />
               <Route path="/PreschoolApplicationInfo" element={<PreschoolApplicationInfo />} />
+              {/* Lägg till en dynamisk route för adresser */}
+              <Route path="/:address" element={<MapComponent />} />
             </Routes>
           </main>
         </div>

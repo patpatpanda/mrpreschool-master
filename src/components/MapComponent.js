@@ -22,10 +22,9 @@ const STOCKHOLM_BOUNDS = {
   east: 18.228,
 };
 
-const SERGELSTORG_COORDINATES = {
-  latitude: 59.33258,
-  longitude: 18.0649,
-};
+
+
+
 
 const geocodeAddress = async (address) => {
   console.log('Geocoding address:', address);
@@ -45,6 +44,7 @@ const geocodeAddress = async (address) => {
     return null;
   }
 };
+
 
 const MapComponent = () => {
   const mapRef = useRef(null);
@@ -283,16 +283,9 @@ const MapComponent = () => {
     setNearbyPlaces([]);
 
     const relevantAddress = extractRelevantAddress(address);
-    console.log('Relevant address extracted:', relevantAddress);
     const coordinates = await geocodeAddress(relevantAddress);
-    console.log('Coordinates:', coordinates);
 
-    if (
-      !coordinates ||
-      (coordinates.latitude === SERGELSTORG_COORDINATES.latitude &&
-        coordinates.longitude === SERGELSTORG_COORDINATES.longitude)
-    ) {
-      console.log('Geocoding failed or out of bounds.');
+    if (!coordinates) {
       setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
       setLoading(false);
       return;
@@ -325,12 +318,16 @@ const MapComponent = () => {
       await findNearbyPlaces(location);
       setShowPlaces(true);
       setShowText(false);
-      setSearchMade(true); // Uppdatera searchMade till true efter första sökningen
+      setSearchMade(true);
+
+      // Update URL with the searched address
+      navigate(`/${encodeURIComponent(relevantAddress)}`);
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
-  }, [map, originMarker, findNearbyPlaces]);
+  }, [map, originMarker, findNearbyPlaces, navigate]);
+
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -646,51 +643,53 @@ const MapComponent = () => {
             </Box>
             )}
   {searchMade && (
-  <ButtonGroup aria-label="view toggle button group" style={{ borderRadius: '8px', overflow: 'hidden' }}>
-    <Button
-      onClick={() => setView('list')}
-      style={{
-        backgroundColor: view === 'list' ? '#FFB6C1' : '#ffffff',
-        color: view === 'list' ? '#ffffff' : '#3f1d3ba3',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 20px',
-        borderRight: '1px solid #e0e0e0',
-        fontWeight: view === 'list' ? 'bold' : 'normal',
-      }}
-    >
-      <ListIcon style={{ marginRight: '8px' }} />
-      List View
-    </Button>
-    <Button
-      onClick={() => setView('map')}
-      style={{
-        backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
-        color: view === 'map' ? '#ffffff' : '#2196f3',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 20px',
-        fontWeight: view === 'map' ? 'bold' : 'normal',
-      }}
-    >
-      <MapIcon style={{ marginRight: '8px' }} />
-      Map View
-    </Button>
-    {/* Här lägger vi till den nya knappen "Få koll" */}
-    <Button
-      onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
-      style={{
-        backgroundColor: '#ff69b4', // En rosa färg för knappen "Få koll"
-        color: '#ffffff',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 20px',
-        fontWeight: 'bold',
-      }}
-    >
-      Få koll
-    </Button>
-  </ButtonGroup>
+<ButtonGroup aria-label="view toggle button group" style={{ borderRadius: '8px', overflow: 'hidden' }}>
+  <Button
+    onClick={() => setView('map')}
+    variant="contained"
+    color={view === 'map' ? 'primary' : 'secondary'}
+    sx={{
+      backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
+      color: view === 'map' ? '#ffffff' : '#2196f3',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '10px 20px',
+      fontFamily: 'Nunito, sans-serif',
+    }}
+  >
+    <MapIcon style={{ marginRight: '8px' }} />
+    Map View
+  </Button>
+  <Button
+    onClick={() => setView('list')}
+    variant="contained"
+    color={view === 'list' ? 'primary' : 'secondary'}
+    sx={{
+      backgroundColor: view === 'list' ? '#2196f3' : '#ffffff',
+      color: view === 'list' ? '#ffffff' : '#2196f3',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '10px 20px',
+      fontFamily: 'Nunito, sans-serif',
+    }}
+  >
+    <ListIcon style={{ marginRight: '8px' }} />
+    List View
+  </Button>
+  <Button
+    onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
+    variant="contained"
+    color="primary"
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      padding: '10px 20px',
+      fontFamily: 'Nunito, sans-serif',
+    }}
+  >
+    Få koll
+  </Button>
+</ButtonGroup>
 )}
 
 

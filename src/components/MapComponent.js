@@ -580,7 +580,7 @@ const MapComponent = () => {
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
     }}
   >
-    {isSearchContainerVisible ? 'Dölj fält' : 'Visa fält'}
+    {isSearchContainerVisible ? 'Dölj filter' : 'Visa filter'}
   </Button>
 )}
 

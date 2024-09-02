@@ -56,7 +56,7 @@ const MapComponent = () => {
   const [allPlaces, setAllPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showPlaces, setShowPlaces] = useState(false);
-  const [currentMarkers, setCurrentMarkers] = useState([]);
+  const [ setCurrentMarkers] = useState([]);
   const [originMarker, setOriginMarker] = useState(null);
   const [originPosition, setOriginPosition] = useState(null);
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);

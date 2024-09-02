@@ -226,8 +226,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
           onClick={onClose}
           sx={{
             position: 'absolute',
-            left: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
-            top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
+            left: { xs: 8, sm: 8 },  // 8px för mobil, 16px för större skärmar
+            top: { xs: 8, sm: 8 },    // 8px för mobil, 16px för större skärmar
             color: '#fff',
             zIndex: 3000, // Sätt z-index här
           }}
@@ -259,8 +259,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
           onClick={onClose}
           sx={{
             position: 'absolute',
-            right: { xs: 8, sm: 16 },  // 8px för mobil, 16px för större skärmar
-            top: { xs: 8, sm: 16 },    // 8px för mobil, 16px för större skärmar
+            right: { xs: 8, sm: 8 },  // 8px för mobil, 16px för större skärmar
+            top: { xs: 8, sm: 8 },    // 8px för mobil, 16px för större skärmar
             color: '#fff',
             zIndex: 3000, // Sätt z-index här
           }}

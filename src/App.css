@@ -97,12 +97,10 @@ body, html {
   text-align: center; /* Centrera texten */
 }
 .header-container {
-  
-  top: 0; /* Sätt den längst upp */
-  left: 0; /* Sätt den längst till vänster */
-  width: 100%; /* Täcker hela bredden */
- 
+  height: 40px;
   z-index: 1500; /* Se till att headern ligger över andra element */
+
+  
 }
 
 @media (max-width: 42000px) {

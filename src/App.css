@@ -8,9 +8,7 @@ body, html {
   position: relative;
   touch-action: pan-y;
 }
-main {
 
-}
 
 /* Container for Map and Cards */
 .app-container {
@@ -97,7 +95,7 @@ main {
   text-align: center; /* Centrera texten */
 }
 .header-container {
-  position: fixed; /* Fixera headern längst upp */
+ 
   top: 0; /* Sätt den längst upp */
   left: 0; /* Sätt den längst till vänster */
   width: 100%; /* Täcker hela bredden */

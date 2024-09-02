@@ -17,7 +17,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '15px',
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f8f5',
     width: '100%',
     height: '100%',
     margin: 0,
@@ -37,12 +37,12 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: 'flex', // Använd flexbox för att organisera barnkomponenterna
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '#fff',
+  backgroundColor: '#f9f8f5',
   zIndex: 3000, // Sätt z-index här
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  backgroundColor: '#ffffff',
+  backgroundColor: '#f9f8f5',
   padding: '20px',
   height: 'calc(100% - 64px)',
   overflowY: 'auto',

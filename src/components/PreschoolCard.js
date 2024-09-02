@@ -112,6 +112,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
               color: '#333',
               '&:hover': {
                 backgroundColor: '#555',
+                color:'#fff'
               },
             }}
             

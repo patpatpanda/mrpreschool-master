@@ -8,7 +8,7 @@ body, html {
   position: relative;
   touch-action: pan-y;
   
-
+background-color: #f9f8f5;
 }
 
 
@@ -136,7 +136,7 @@ body, html {
   grid-template-columns: 1fr 1fr 1fr;
  
   padding: 15px;
-  background: #fff;
+  background: #f9f8f5;
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 100;

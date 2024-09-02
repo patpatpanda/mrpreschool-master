@@ -56,7 +56,7 @@ const MapComponent = () => {
   const [allPlaces, setAllPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showPlaces, setShowPlaces] = useState(false);
-  const [ setCurrentMarkers] = useState([]);
+  const [currentMarkers, setCurrentMarkers] = useState([]);
   const [originMarker, setOriginMarker] = useState(null);
   const [originPosition, setOriginPosition] = useState(null);
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
@@ -164,7 +164,7 @@ const MapComponent = () => {
   
     const loadScript = () => {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJmqNnZHTZ99pPQ2uHfkDXwpMxOpfYLw&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => initMap();
@@ -407,7 +407,7 @@ const MapComponent = () => {
       label: {
         text: place.namn,
         color: '#000000',
-        fontSize: '18px',
+        fontSize: '14px',
         className: 'custom-marker-label',
       },
     });
@@ -418,6 +418,7 @@ const MapComponent = () => {
       lat: place.latitude,
       lng: place.longitude,
     });
+  
     const formattedWalkingTime =
       walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
         ? walkingTimeInMinutes.toFixed(2)
@@ -433,7 +434,7 @@ const MapComponent = () => {
       createRoute(new google.maps.LatLng(place.latitude, place.longitude));
     });
   
-    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
+    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]); // Store the marker in currentMarkers
   };
   
   const selectPlace = async (place) => {
@@ -473,7 +474,13 @@ const MapComponent = () => {
   };
 
   const clearMarkers = () => {
+    // Clear all markers from the map
+    currentMarkers.forEach((marker) => marker.setMap(null));
+  
+    // Clear all markers from the clusterer
     clustererRef.current.clearMarkers();
+  
+    // Clear the currentMarkers array
     setCurrentMarkers([]);
   };
   

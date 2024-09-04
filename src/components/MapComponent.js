@@ -204,7 +204,7 @@ const MapComponent = () => {
                 const location = new google.maps.LatLng(school.latitude, school.longitude);
                 selectPlace(school);
                 map.setCenter(location);
-                map.setZoom(14);
+                map.setZoom(12);
 
                 const marker = new google.maps.Marker({
                     map: map,
@@ -323,7 +323,7 @@ const MapComponent = () => {
 
     if (map) {
       map.setCenter(location);
-      map.setZoom(14);
+      map.setZoom(12);
 
       if (originMarker) {
         originMarker.setMap(null);

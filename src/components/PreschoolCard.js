@@ -111,7 +111,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
               fontSize: '0.75rem',
               marginTop: '4px',
               textTransform: 'none',
-              backgroundColor: 'rgba(252, 230, 213, 0.5)', // Genomskinlig färg
+             
               color: '#333',
               '&:hover': {
                 backgroundColor: '#555',

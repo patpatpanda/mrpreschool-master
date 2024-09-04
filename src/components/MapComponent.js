@@ -428,7 +428,8 @@ const MapComponent = () => {
         fontSize: '16px',  // Större textstorlek
         fontFamily: 'Roboto, Arial, sans-serif',
         className: 'custom-marker-label',
-        textShadow: '2px 2px 4px #ffffff',  // Lägger till en vit skugga för kontrast
+        textShadow: '2px 2px 4px #ffffff', 
+        fontFamily: 'bold', // Lägger till en vit skugga för kontrast
         background: '#ffffff',  // Vit bakgrund för texten
         padding: '2px',  // Lite padding runt texten för att separera den från bakgrunden
         borderRadius: '4px',  // Rundade hörn för bakgrunden

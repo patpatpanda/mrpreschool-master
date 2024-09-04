@@ -13,7 +13,9 @@ import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera 
 import { ButtonGroup } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import MapIcon from '@mui/icons-material/Map';
-
+import schoolIcon from '../images/icons8-school-48.png';
+import school from '../images/icons8-school-64.png';
+import kooperativ from '../images/icons8-school-building-48.png';
 
 /*global google*/
 
@@ -72,8 +74,24 @@ const MapComponent = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const clustererRef = useRef(null); 
+  const [isMapVisible, setIsMapVisible] = useState(false);
+
 
   const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true); // State för synlighet
+
+  // Funktion för att toggla synligheten
+  useEffect(() => {
+    if (isMapVisible) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+
+    // Rensa upp när komponenten avmonteras eller när tillståndet ändras
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
+  }, [isMapVisible]);
 
   // Funktion för att toggla synligheten
   const toggleSearchContainerVisibility = () => {
@@ -387,15 +405,14 @@ const MapComponent = () => {
   };
   const createMarker = async (place, originLocation) => {
     let iconUrl;
-  
     if (place.organisationsform === 'Kommunal') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';
+      iconUrl = schoolIcon;
     } else if (place.organisationsform === 'Fristående') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png';
+     iconUrl = school;
     } else if (place.organisationsform === 'Föräldrakooperativ') {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+     iconUrl = kooperativ;
     } else {
-      iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+      iconUrl = kooperativ;
     }
   
     const marker = new google.maps.Marker({
@@ -407,10 +424,19 @@ const MapComponent = () => {
       },
       label: {
         text: place.namn,
-        color: '#000000',
-        fontSize: '14px',
+        color: '#333',  // Ljusröd färg för att sticka ut
+        fontSize: '16px',  // Större textstorlek
+        fontFamily: 'Roboto, Arial, sans-serif',
         className: 'custom-marker-label',
+        textShadow: '2px 2px 4px #ffffff',  // Lägger till en vit skugga för kontrast
+        background: '#ffffff',  // Vit bakgrund för texten
+        padding: '2px',  // Lite padding runt texten för att separera den från bakgrunden
+        borderRadius: '4px',  // Rundade hörn för bakgrunden
+        
+        borderWidth: '1px',  // Tjocklek på kantlinjen
+        borderStyle: 'solid',  // Typ av kantlinje
       },
+      
     });
   
     clustererRef.current.addMarker(marker);
@@ -661,53 +687,93 @@ const MapComponent = () => {
             </Box>
             )}
   {searchMade && (
-<ButtonGroup aria-label="view toggle button group" style={{ borderRadius: '8px', overflow: 'hidden' }}>
-  <Button
-    onClick={() => setView('map')}
-    variant="contained"
-    color={view === 'map' ? 'primary' : 'secondary'}
-    sx={{
-      backgroundColor: view === 'map' ? '#2196f3' : '#ffffff',
-      color: view === 'map' ? '#ffffff' : '#2196f3',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 20px',
-      fontFamily: 'Nunito, sans-serif',
-    }}
-  >
-    <MapIcon style={{ marginRight: '8px' }} />
-    Map View
-  </Button>
-  <Button
-    onClick={() => setView('list')}
-    variant="contained"
-    color={view === 'list' ? 'primary' : 'secondary'}
-    sx={{
-      backgroundColor: view === 'list' ? '#2196f3' : '#ffffff',
-      color: view === 'list' ? '#ffffff' : '#2196f3',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 20px',
-      fontFamily: 'Nunito, sans-serif',
-    }}
-  >
-    <ListIcon style={{ marginRight: '8px' }} />
-    List View
-  </Button>
-  <Button
-    onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
-    variant="contained"
-    color="primary"
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 20px',
-    fontFamily: 'Nunito, sans-serif',
-    }}
-  >
-    Få koll
-  </Button>
+ <ButtonGroup
+ aria-label="view toggle button group"
+ style={{ borderRadius: '8px', overflow: 'hidden' }}
+ sx={{
+   backgroundColor: 'transparent',  // Ingen bakgrund för ButtonGroup
+   boxShadow: 'none',               // Ingen skugga för ButtonGroup
+   border: 'none',                  // Ingen kantlinje för ButtonGroup
+ }}
+>
+ <Button
+   onClick={() => {
+     setView('map');
+     setIsMapVisible(true);  // Sätt till true när kartan är synlig
+   }}
+   variant="contained"
+   sx={{
+     backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
+     color: view === 'map' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+     padding: '10px 20px',
+     fontFamily: 'Nunito, sans-serif',
+     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
+     boxShadow: 'none',  // Ingen skugga för knappen
+     width: '120px',  // Fixad bredd för att matcha alla knappar
+     borderRadius: '8px',  // Rundade hörn
+     '&:hover': {
+       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
+     },
+   }}
+ >
+   <MapIcon style={{ marginRight: '8px' }} />
+   Map View
+ </Button>
+ <Button
+   onClick={() => {
+     setView('list');
+     setIsMapVisible(false);  // Sätt till false när kartan inte är synlig
+   }}
+   variant="contained"
+   sx={{
+     backgroundColor: view === 'list' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
+     color: view === 'list' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+     padding: '10px 20px',
+     fontFamily: 'Nunito, sans-serif',
+     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
+     boxShadow: 'none',  // Ingen skugga för knappen
+     width: '120px',  // Fixad bredd för att matcha alla knappar
+     borderRadius: '8px',  // Rundade hörn
+     '&:hover': {
+       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
+     },
+   }}
+ >
+   <ListIcon style={{ marginRight: '8px' }} />
+   List View
+ </Button>
+ <Button
+   onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
+   variant="contained"
+   sx={{
+     backgroundColor: '#ffffff',  // Vit bakgrund för icke-aktiv knapp
+     color: '#333',  // Mörk textfärg för läsbarhet
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+     padding: '10px 20px',
+     fontFamily: 'Nunito, sans-serif',
+     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
+     boxShadow: 'none',  // Ingen skugga för knappen
+     width: '120px',  // Fixad bredd för att matcha alla knappar
+     borderRadius: '8px',  // Rundade hörn
+     '&:hover': {
+       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
+     },
+   }}
+ >
+   Få koll
+ </Button>
 </ButtonGroup>
+
+ 
+
 )}
 
 

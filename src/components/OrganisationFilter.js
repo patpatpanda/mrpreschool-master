@@ -1,35 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import kommunalIcon from '../images/icons8-school-48.png';
+import fristaendeIcon from '../images/icons8-school-64.png';
+import foraldrakooperativIcon from '../images/icons8-school-building-48.png';
 
 const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, visible }) => {
   if (!visible) {
     return null; // Om komponenten inte är synlig, returnera null för att inte rendera något
   }
 
-  // Funktion för att returnera färg baserat på organisationstyp
-   const getColorForType = (type) => {
+  // Funktion för att returnera ikon baserat på organisationstyp
+  const getIconForType = (type) => {
     switch (type) {
       case 'Kommunal':
-        return '#FFA500'; // Orange
+        return kommunalIcon; // Ikon för Kommunal
       case 'Fristående':
-        return '#FF69B4'; // Gul
+        return fristaendeIcon; // Ikon för Fristående
       case 'Fristående (föräldrakooperativ)':
-        return '#3366FF'; // Röd
+        return foraldrakooperativIcon; // Ikon för Fristående (föräldrakooperativ)
       default:
-        return '#000'; // Standardfärg (svart)
+        return foraldrakooperativIcon; // Standardikon
     }
   };
 
   return (
     <div style={styles.container}>
       {organisationTypes.map((type) => (
-        <label key={type} style={{ ...styles.label, color: getColorForType(type) }}>
+        <label key={type} style={styles.label}>
           <input
             type="checkbox"
             value={type}
             checked={filter.includes(type)}
             onChange={handleFilterChange}
             style={styles.checkbox}
+          />
+          <img
+            src={getIconForType(type)} // Använd rätt bild här
+            alt={`${type} ikon`}
+            style={styles.icon} // Style för bilder
           />
           {type}
         </label>
@@ -56,6 +64,11 @@ const styles = {
     flexDirection: 'row',
   },
   checkbox: {
+    marginRight: '8px',
+  },
+  icon: {
+    width: '20px', // Ställ in bildstorlek här
+    height: '20px',
     marginRight: '8px',
   },
 };

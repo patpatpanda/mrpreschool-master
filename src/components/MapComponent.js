@@ -426,10 +426,10 @@ const MapComponent = () => {
         text: place.namn,
         color: '#333',  // Ljusröd färg för att sticka ut
         fontSize: '16px',  // Större textstorlek
-        fontFamily: 'Roboto, Arial, sans-serif',
+        fontFamily: 'Roboto, Arial, sans-serif,bold',
         className: 'custom-marker-label',
         textShadow: '2px 2px 4px #ffffff', 
-        fontFamily: 'bold', // Lägger till en vit skugga för kontrast
+       
         background: '#ffffff',  // Vit bakgrund för texten
         padding: '2px',  // Lite padding runt texten för att separera den från bakgrunden
         borderRadius: '4px',  // Rundade hörn för bakgrunden

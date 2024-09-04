@@ -7,7 +7,10 @@ import myImage from '../images/seri.webp'; // Standardbild
 
 const PreschoolCard = ({ preschool, onSelect }) => (
   <ButtonBase
-    onClick={() => onSelect(preschool)}
+  onClick={(event) => {
+    event.preventDefault(); // Förhindrar att standardbeteende av klick eventuellt triggar något annat
+    onSelect(preschool);
+  }}
     style={{
       display: 'block',
       textAlign: 'left',

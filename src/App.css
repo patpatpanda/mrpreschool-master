@@ -32,7 +32,7 @@ background-color: #f9f8f5;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+ 
   overflow: hidden; /* Förhindra skrollning */
 }
 
@@ -50,8 +50,12 @@ background-color: #f9f8f5;
   display: flex;
   justify-content: center;
   padding: 10px;
+  pointer-events: none;
 }
 
+.search-container > * {
+  pointer-events: auto; /* Tillåt interaktioner på barnen (som texter och inputfält) */
+}
   .search-container.center {
     margin-top: 200px;
     font-size: 16px;

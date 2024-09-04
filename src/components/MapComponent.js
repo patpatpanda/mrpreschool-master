@@ -75,13 +75,12 @@ const MapComponent = () => {
   const { id } = useParams();
   const clustererRef = useRef(null); 
   const [isMapVisible, setIsMapVisible] = useState(false);
-
-
-  const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true); // State för synlighet
-
-  // Funktion för att toggla synligheten
+  
+  const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true);
+ 
   useEffect(() => {
-    if (isMapVisible) {
+    // Ställ in body overflow-y baserat på om kartvyn är aktiv eller inte
+    if (view === 'map') {
       document.body.style.overflowY = 'hidden';
     } else {
       document.body.style.overflowY = 'auto';
@@ -200,31 +199,37 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (id && map) {
-      fetchSchoolById(id).then((school) => {
-        if (school) {
-          const location = new google.maps.LatLng(school.latitude, school.longitude);
-          selectPlace(school);
-          map.setCenter(location);
-          map.setZoom(12);
+        fetchSchoolById(id).then((school) => {
+            if (school) {
+                const location = new google.maps.LatLng(school.latitude, school.longitude);
+                selectPlace(school);
+                map.setCenter(location);
+                map.setZoom(14);
 
-          const marker = new google.maps.Marker({
-            map: map,
-            position: location,
-            icon: {
-              url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-              scaledSize: new google.maps.Size(1, 1),
-            },
-          });
+                const marker = new google.maps.Marker({
+                    map: map,
+                    position: location,
+                    icon: {
+                        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                        scaledSize: new google.maps.Size(1, 1),
+                    },
+                });
 
-          setOriginMarker(marker);
-          createMarker(school, location);
-          setShowPlaces(true);
-          setShowText(false);
-          setView('map');
-        }
-      });
+                setOriginMarker(marker);
+                createMarker(school, location);
+                setShowPlaces(true);
+                setShowText(false);
+
+                // Lägg till en kontroll för när `setView('map')` ska anropas
+                if (window.location.pathname.includes('map')) {
+                    setView('map');
+                }
+                // Alternativt, kontrollera om det finns en specifik anledning att byta till map view
+            }
+        });
     }
-  }, [id, map]);
+}, [id, map]);
+
 
   const findNearbyPlaces = useCallback(async (location) => {
     try {
@@ -464,41 +469,43 @@ const MapComponent = () => {
   
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]); // Store the marker in currentMarkers
   };
-  
-  const selectPlace = async (place) => {
+  const selectPlace = async (place, changeView = false) => {
     try {
-      const cleanName = place.namn.trim();
-      const malibuData = await fetchMalibuByName(cleanName);
-      if (malibuData) {
-        console.log(`Fetched Malibu data for ${cleanName}:`, malibuData);
-      } else {
-        console.log(`No Malibu data found for ${cleanName}`);
-      }
-      const relevantAddress = extractRelevantAddress(place.adress);
-      const schoolDetails = await fetchSchoolDetailsByAddress(relevantAddress);
+        const cleanName = place.namn.trim();
+        const malibuData = await fetchMalibuByName(cleanName);
+        const relevantAddress = extractRelevantAddress(place.adress);
+        const schoolDetails = await fetchSchoolDetailsByAddress(relevantAddress);
 
-      const walkingTime = walkingTimes[place.id];
+        const walkingTime = walkingTimes[place.id];
 
-      const detailedPlace = {
-        ...place,
-        malibuData: malibuData || null,
-        schoolDetails: schoolDetails ? schoolDetails : null,
-        walkingTime: walkingTime,
-      };
+        const detailedPlace = {
+            ...place,
+            malibuData: malibuData || null,
+            schoolDetails: schoolDetails ? schoolDetails : null,
+            walkingTime: walkingTime,
+        };
 
-      setSelectedPlace(detailedPlace);
-      navigate(`/forskolan/${place.id}`);
+        setSelectedPlace(detailedPlace);
+        navigate(`/forskolan/${place.id}`);
 
-      if (originMarker) {
-        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
-      }
+        if (originMarker) {
+            createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+        }
+
+        // Ändra vy till 'map' endast om `changeView` är sant
+        if (changeView) {
+            setView('map');
+        }
+
     } catch (error) {
-      console.error('Error selecting place:', error);
+        console.error('Error selecting place:', error);
     }
-  };
+};
 
+  
+  
   const handleCardSelect = (place) => {
-    selectPlace(place);
+    selectPlace(place, false);  // Skicka `false` för att inte ändra till 'map view'
   };
 
   const clearMarkers = () => {
@@ -934,29 +941,27 @@ const MapComponent = () => {
 )}
 
 
-      <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
-      <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
-  {showPlaces && nearbyPlaces.length > 0 ? (
-    nearbyPlaces.map((place, index) => (
-      <PreschoolCard
-        key={place.id}
-        preschool={place}
-        walkingTime={walkingTimes[place.id]}
-        onSelect={handleCardSelect}
-        className={index === nearbyPlaces.length - 1 ? 'last-card' : ''} // Lägg till klass om det är sista kortet
-      />
-    ))
-  ) : (
-    <p></p>
-  )}
+<div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
+<div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
+    {showPlaces && nearbyPlaces.length > 0 ? (
+        nearbyPlaces.map((place, index) => (
+            <PreschoolCard
+                key={place.id}
+                preschool={place}
+                onSelect={handleCardSelect}  // För att inte växla till kartvy
+            />
+        ))
+    ) : (
+        <p></p>
+    )}
 </div>
 
 
       {selectedPlace && (
-        <DetailedCard
-          schoolData={selectedPlace}
-          onClose={() => setSelectedPlace(null)}
-        />
+       <DetailedCard
+       schoolData={selectedPlace}
+       onClose={() => setSelectedPlace(null)} // Kontrollera att detta inte triggar `setView('map')`
+     />
       )}
 
       <Snackbar

@@ -90,7 +90,7 @@ const MapComponent = () => {
     return () => {
       document.body.style.overflowY = 'auto';
     };
-  }, [isMapVisible]);
+  }, [isMapVisible,view]);
 
   // Funktion för att toggla synligheten
   const toggleSearchContainerVisibility = () => {
@@ -327,6 +327,8 @@ const MapComponent = () => {
 
       if (originMarker) {
         originMarker.setMap(null);
+
+
       }
 
       const marker = new google.maps.Marker({
@@ -426,24 +428,28 @@ const MapComponent = () => {
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
+        labelOrigin: new google.maps.Point(40, 15), // Flytta labeln 40 pixlar till höger
       },
-      label: {
-        text: place.namn,
-        color: '#333',  // Ljusröd färg för att sticka ut
-        fontSize: '16px',  // Större textstorlek
-        fontFamily: 'Roboto, Arial, sans-serif,bold',
-        className: 'custom-marker-label',
-        textShadow: '2px 2px 4px #ffffff', 
-       
-        background: '#ffffff',  // Vit bakgrund för texten
-        padding: '2px',  // Lite padding runt texten för att separera den från bakgrunden
-        borderRadius: '4px',  // Rundade hörn för bakgrunden
-        
-        borderWidth: '1px',  // Tjocklek på kantlinjen
-        borderStyle: 'solid',  // Typ av kantlinje
-      },
-      
     });
+    
+    const infoWindow = new google.maps.InfoWindow({
+      content: `<div style="
+      
+        color: black; 
+        padding: 5px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        border-radius: 3px;
+        
+      ">${place.namn}</div>`,
+    });
+    
+    // Öppna InfoWindow direkt för att visa labeln med bakgrundsfärg
+    infoWindow.open(map, marker);
+    
+    
+    // Här har vi flyttat texten 40 pixlar till höger och justerat den vertikalt med 15 pixlar nedanför markören.
+    
   
     clustererRef.current.addMarker(marker);
   
@@ -611,22 +617,20 @@ const MapComponent = () => {
       {/* Visa knappen endast om en sökning har gjorts */}
       
 
-{searchMade && (
+      {searchMade && (
   <Button
     onClick={toggleSearchContainerVisibility}
     variant="contained"
     color="secondary"
     sx={{
-      position: 'absolut',
-      top: { xs: '60px', sm: '100px' },  // Responsivt 'top' beroende på skärmbredd
-      left: '50%',
-      transform: 'translateX(-50%)',  // Centrerar knappen horisontellt
-      zIndex: 1000,  // Högre z-index så att knappen alltid syns
-      
+      position: 'fixed', // Ändra till 'fixed' så att den inte påverkar layouten
+      top: { xs: '60px', sm: '100px' }, // Placera den längre ner om nödvändigt
+      left: '50%', // Håll den centrerad
+      transform: 'translateX(-50%)', // Centrerar knappen horisontellt
+      zIndex: 1000, // Se till att den visas ovanpå kartan
       padding: '10px 40px',
       width: '200px',
-      
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)', // Skugga för synlighet
     }}
   >
     {isSearchContainerVisible ? 'Dölj filter' : 'Visa filter'}
@@ -728,7 +732,7 @@ const MapComponent = () => {
    }}
  >
    <MapIcon style={{ marginRight: '8px' }} />
-   Map View
+   Karta
  </Button>
  <Button
    onClick={() => {
@@ -754,7 +758,7 @@ const MapComponent = () => {
    }}
  >
    <ListIcon style={{ marginRight: '8px' }} />
-   List View
+   Lista
  </Button>
  <Button
    onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}

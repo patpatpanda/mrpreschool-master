@@ -23,6 +23,12 @@ background-color: #f9f8f5;
   
 }
 
+/* Justera knappens position */
+button.MuiButtonBase-root {
+  z-index: 20; /* Säkerställer att den visas ovanpå kartan */
+
+ 
+}
 
 /* Map Container */
 .map-container {
@@ -32,7 +38,7 @@ background-color: #f9f8f5;
   left: 0;
   right: 0;
   bottom: 0;
- 
+ z-index: 2;
   overflow: hidden; /* Förhindra skrollning */
 }
 
@@ -101,20 +107,14 @@ background-color: #f9f8f5;
   text-align: center; /* Centrera texten */
 }
 .header-container {
-  height: 40px;
-  z-index: 1500; /* Se till att headern ligger över andra element */
+  height: 1px;
+
+  z-index: 1; /* Se till att headern ligger över andra element */
 
   
 }
 /* Add this CSS to your styles file (e.g., GoogleMap.css) */
-.custom-marker-label {
-  transform: translate(-55%, -30%); /* Adjust the position of the label */
-  white-space: nowrap; /* Prevents text from wrapping */
- 
- 
-  padding: 2px 5px; /* Padding around the text */
-  border-radius: 4px; /* Rounded corners for the background */
-}
+
 
 
 @media (max-width: 42000px) {
@@ -150,7 +150,7 @@ background-color: #f9f8f5;
   grid-template-columns: 1fr 1fr 1fr;
  
   padding: 15px;
-  background: #f9f8f5;
+  background: #f5f9f5;
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 100;

@@ -17,6 +17,7 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 
+
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -77,7 +78,36 @@ const MapComponent = () => {
   const [isMapVisible, setIsMapVisible] = useState(false);
   
   const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true);
- 
+  const filterPedagogiskOmsorg = async () => {
+    if (!originPosition) {
+      console.error("Ingen plats vald. Ange en adress.");
+      return;
+    }
+  
+    try {
+      const lat = originPosition.lat();  // Hämta latitud från positionen
+      const lng = originPosition.lng();  // Hämta longitud från positionen
+  
+      // Hämta förskolor med "Pedagogisk omsorg" som är nära användarens plats
+      const filteredPlaces = await fetchNearbySchools(lat, lng, '', 'Pedagogisk omsorg');
+  
+      // Kontrollera om resultatet inte är tomt
+      if (filteredPlaces && filteredPlaces.length > 0) {
+        setNearbyPlaces(filteredPlaces);  // Uppdatera lista med de filtrerade förskolorna
+        clearMarkers();
+        filteredPlaces.forEach((result) => {
+          createMarker(result, originPosition);
+        });
+      } else {
+        console.error('Inga förskolor hittades med "Pedagogisk omsorg" i detta område');
+      }
+    } catch (error) {
+      console.error('Ett fel inträffade vid filtrering av förskolor:', error);
+    }
+  };
+  
+  
+  
   useEffect(() => {
     // Ställ in body overflow-y baserat på om kartvyn är aktiv eller inte
     if (view === 'map') {
@@ -623,7 +653,7 @@ const MapComponent = () => {
     variant="contained"
     color="secondary"
     sx={{
-      position: 'fixed', // Ändra till 'fixed' så att den inte påverkar layouten
+      position: 'absolute', // Ändra till 'fixed' så att den inte påverkar layouten
       top: { xs: '60px', sm: '100px' }, // Placera den längre ner om nödvändigt
       left: '50%', // Håll den centrerad
       transform: 'translateX(-50%)', // Centrerar knappen horisontellt
@@ -670,6 +700,7 @@ const MapComponent = () => {
           >
             Högst rank
           </Button>
+       
           {searchMade && (
             <>
               <Button
@@ -686,13 +717,15 @@ const MapComponent = () => {
                 {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
               </Button>
               {!filterVisible && (
-                <OrganisationFilter
-                  organisationTypes={organisationTypes}
-                  filter={filter}
-                  handleFilterChange={handleFilterChange}
-                  visible={showPlaces}
-                  sx={{ marginTop: '20px' }}
-                    />
+              <OrganisationFilter
+              organisationTypes={organisationTypes}
+              filter={filter}
+              handleFilterChange={handleFilterChange}
+              visible={showPlaces}
+              onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}  // Lägg till detta
+              sx={{ marginTop: '20px' }}
+            />
+            
                   )}
                 </>
               )}

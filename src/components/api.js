@@ -90,6 +90,19 @@ export const fetchSchoolDetailsByAddress = async (address) => {
     return null;
   }
 };
+export const fetchSchoolsByTypAvService = async (typAvService) => {
+  try {
+    const url = `${backendUrl}/api/Forskolan/filter-by-service?typAvService=${encodeURIComponent(typAvService)}`;
+    const response = await axios.get(url);
+    
+    // Se till att hämta rätt värde från responsen
+    return response.data?.$values || [];  // Om svaret innehåller $values, använd det
+  } catch (error) {
+    console.error('Error fetching schools by TypAvService:', error);
+    return [];
+  }
+};
+
 
 export const fetchNearbySchools = async (lat, lng, organisationsform, typAvService) => {
   try {
@@ -98,6 +111,7 @@ export const fetchNearbySchools = async (lat, lng, organisationsform, typAvServi
       return nearbySchoolsCache.get(cacheKey);
     }
     const url = `${backendUrl}/api/Forskolan/nearby/${lat}/${lng}?organisationsform=${organisationsform}&typAvService=${typAvService}`;
+
     const response = await axios.get(url);
     const data = response.data?.$values || [];
     nearbySchoolsCache.set(cacheKey, data);

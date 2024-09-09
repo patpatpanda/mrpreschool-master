@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import kommunalIcon from '../images/icons8-school-48.png';
 import fristaendeIcon from '../images/icons8-school-64.png';
 import foraldrakooperativIcon from '../images/icons8-school-building-48.png';
+import { IconButton, Tooltip, Box } from '@mui/material';  // Importera IconButton, Tooltip, och Box
+import ChildCareIcon from '@mui/icons-material/ChildCare';  // Importera en lämplig ikon
 
-const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, visible }) => {
+const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, visible, onFilterPedagogiskOmsorg }) => {
   if (!visible) {
     return null; // Om komponenten inte är synlig, returnera null för att inte rendera något
   }
@@ -42,6 +44,27 @@ const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, vis
           {type}
         </label>
       ))}
+
+      {/* Lägg till en ikon och text för att filtrera "Pedagogisk omsorg" */}
+      <Box display="flex" alignItems="center" marginTop="10px" style={styles.label}>
+        <Tooltip title="Visa endast Pedagogisk omsorg">  {/* Tooltip för att förklara ikonen */}
+          <IconButton
+            onClick={onFilterPedagogiskOmsorg}
+            sx={{
+              backgroundColor: '#4CAF50',
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: '#45a045',
+              },
+              marginRight: '8px',
+            }}
+          >
+            <ChildCareIcon />  {/* Byt till den ikon du vill använda */}
+          </IconButton>
+        </Tooltip>
+        {/* Texten "Dagmamma" med samma stil som övrig text */}
+        <span style={styles.labelText}>Dagmamma</span>
+      </Box>
     </div>
   );
 };
@@ -63,6 +86,11 @@ const styles = {
     alignItems: 'center',
     flexDirection: 'row',
   },
+  labelText: {
+    fontSize: '16px', // Matchar storleken på organisationstypernas text
+    color: '#333',    // Matchar textfärgen
+    marginLeft: '8px',  // Avstånd mellan ikon och text
+  },
   checkbox: {
     marginRight: '8px',
   },
@@ -78,6 +106,7 @@ OrganisationFilter.propTypes = {
   filter: PropTypes.array.isRequired,
   handleFilterChange: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  onFilterPedagogiskOmsorg: PropTypes.func.isRequired, // Ny prop för ikonen
 };
 
 export default OrganisationFilter;

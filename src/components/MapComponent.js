@@ -470,24 +470,30 @@ const MapComponent = () => {
   
     const marker = new google.maps.Marker({
       position: { lat: place.latitude, lng: place.longitude },
-      map: map, // Din Google Maps instans
       title: place.namn,
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(60, 15), // Flytta labeln 40 pixlar till höger
+        labelOrigin: new google.maps.Point(40, 15), // Flytta labeln 40 pixlar till höger
       },
     });
     
     const infoWindow = new google.maps.InfoWindow({
-      content: `<div class="custom-info-window">${place.namn}</div>`,
+      content: `<div style="
+      
+        color: black; 
+        padding: 5px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        border-radius: 3px;
+      
+
+        
+      ">${place.namn}</div>`,
     });
-    
     
     // Öppna InfoWindow direkt för att visa labeln med bakgrundsfärg
     infoWindow.open(map, marker);
-    
-    
     // Här har vi flyttat texten 40 pixlar till höger och justerat den vertikalt med 15 pixlar nedanför markören.
     
   

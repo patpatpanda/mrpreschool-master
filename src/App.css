@@ -115,16 +115,6 @@ button.MuiButtonBase-root {
 }
 /* Add this CSS to your styles file (e.g., GoogleMap.css) */
 
-.custom-info-window {
-  margin-bottom: 6px;
-  color: black;
-  padding: 1px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 3px;
-  margin-left: 10px;
- 
-}
 
 
 @media (max-width: 42000px) {
@@ -373,32 +363,7 @@ p {
   display: none !important;
 }
 
-.info-window-title {
-  display: flex;
-  font-size: 15px;
-  margin: 0 15px 0 0;
-  color: #222;
-  white-space: nowrap;
-}
 
-.info-window-rating,
-.info-window-walking-time {
-  display: flex;
-  font-size: 12px;
-  margin: 0 10px 0 0;
-  font-weight: normal;
-  white-space: nowrap;
-}
-
-.info-window-rating {
-  display: flex;
-  color: #ff22e2;
-}
-
-.info-window-walking-time {
-  display: flex;
-  color: #333;
-}
 
 
 

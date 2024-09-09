@@ -16,7 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-import omsorg from '../images/icons8-toy-train-64.png';
+
 
 /*global google*/
 
@@ -465,7 +465,7 @@ const MapComponent = () => {
     } else if (place.organisationsform === 'Föräldrakooperativ') {
      iconUrl = kooperativ;
     } else {
-      iconUrl = omsorg;
+      iconUrl = kooperativ;
     }
   
     const marker = new google.maps.Marker({
@@ -701,12 +701,23 @@ const MapComponent = () => {
             onClick={handleTopRanked}
             variant="contained"
             color="secondary"
-            sx={{
-              marginTop: '40px',
-              padding: '10px 20px',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-            }}
+           sx={{
+  marginTop: '40px',
+  padding: '10px 20px',
+  borderRadius: '50px',
+  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+  transition: 'none',  // Förhindrar ändringar vid interaktioner
+  ':active': {
+    transform: 'none',  // Förhindrar förändringar vid aktivt klick
+  },
+  ':hover': {
+    transform: 'none',  // Förhindrar förändringar vid hover
+  },
+  ':focus': {
+    outline: 'none',  // Förhindrar fokusramen som kan ändra form
+  },
+}}
+
           >
             Högst rank
           </Button>
@@ -722,7 +733,18 @@ const MapComponent = () => {
                   padding: '10px 20px',
                   borderRadius: '50px',
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                  transition: 'none',  // Förhindrar ändringar vid interaktioner
+                  ':active': {
+                    transform: 'none',  // Förhindrar förändringar vid aktivt klick
+                  },
+                  ':hover': {
+                    transform: 'none',  // Förhindrar förändringar vid hover
+                  },
+                  ':focus': {
+                    outline: 'none',  // Förhindrar fokusramen som kan ändra form
+                  },
                 }}
+                
               >
                 {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
               </Button>

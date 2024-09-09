@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material'; // Importera ChevronLeftIcon
+
 import { styled } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
@@ -221,23 +221,11 @@ const DetailedCard = ({ schoolData, onClose }) => {
   return (
     <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
-        {/* Tillbaka ikon */}
-        <IconButton
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            left: { xs: 8, sm: 8 },  // 8px för mobil, 16px för större skärmar
-            top: { xs: 8, sm: 8 },    // 8px för mobil, 16px för större skärmar
-            color: '#fff',
-            zIndex: 3000, // Sätt z-index här
-          }}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-
+        
+         
         {/* Rubrik som tidigare */}
         <Typography
-          variant="h6"
+          variant="h3"
           component="span"
           sx={{
             
@@ -276,10 +264,10 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
         {schoolDetails.beskrivning && (
           <Box mb={4} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+            <Typography variant="h6" sx={{  color: '#333', marginBottom: '8px' }}>
               Beskrivning
             </Typography>
-            <Typography variant="body1" sx={{ color: '#555' }}>
+            <Typography variant="body2" sx={{ color: '#555' }}>
               {schoolDetails.beskrivning}
             </Typography>
           </Box>

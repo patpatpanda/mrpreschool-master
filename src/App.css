@@ -115,6 +115,16 @@ button.MuiButtonBase-root {
 }
 /* Add this CSS to your styles file (e.g., GoogleMap.css) */
 
+.custom-info-window {
+  margin-bottom: 6px;
+  color: black;
+  padding: 1px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 3px;
+  margin-left: 10px;
+ 
+}
 
 
 @media (max-width: 42000px) {

@@ -16,7 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-
+import omsorg from '../images/icons8-toy-train-64.png';
 
 /*global google*/
 
@@ -449,30 +449,24 @@ const MapComponent = () => {
     } else if (place.organisationsform === 'Föräldrakooperativ') {
      iconUrl = kooperativ;
     } else {
-      iconUrl = kooperativ;
+      iconUrl = omsorg;
     }
   
     const marker = new google.maps.Marker({
       position: { lat: place.latitude, lng: place.longitude },
+      map: map, // Din Google Maps instans
       title: place.namn,
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(40, 15), // Flytta labeln 40 pixlar till höger
+        labelOrigin: new google.maps.Point(60, 15), // Flytta labeln 40 pixlar till höger
       },
     });
     
     const infoWindow = new google.maps.InfoWindow({
-      content: `<div style="
-      
-        color: black; 
-        padding: 5px; 
-        font-size: 12px; 
-        font-weight: bold; 
-        border-radius: 3px;
-        
-      ">${place.namn}</div>`,
+      content: `<div class="custom-info-window">${place.namn}</div>`,
     });
+    
     
     // Öppna InfoWindow direkt för att visa labeln med bakgrundsfärg
     infoWindow.open(map, marker);

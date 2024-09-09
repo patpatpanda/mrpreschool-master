@@ -27,6 +27,10 @@ const STOCKHOLM_BOUNDS = {
   east: 18.228,
 };
 
+const SERGELSTORG_COORDINATES = {
+  latitude: 59.33258,
+  longitude: 18.0649,
+};
 
 
 
@@ -105,6 +109,7 @@ const MapComponent = () => {
       console.error('Ett fel inträffade vid filtrering av förskolor:', error);
     }
   };
+  
   
   
   
@@ -330,64 +335,75 @@ const MapComponent = () => {
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
+    
     if (!address) {
       setErrorMessage('Ange en giltig adress.');
       return;
     }
-
+  
     setLoading(true);
     clearMarkers();
     setNearbyPlaces([]);
-
+  
     const relevantAddress = extractRelevantAddress(address);
+    console.log('Relevant address extracted:', relevantAddress);
+    
+    // Försök att geokoda adressen
     const coordinates = await geocodeAddress(relevantAddress);
-
+    
+    // Kontrollera om geokodningen misslyckades eller om ingen plats hittades
     if (!coordinates) {
+      console.log('Geocoding failed or no coordinates found.');
+      setErrorMessage('Ogiltig adress, försök igen.');
+      setLoading(false);
+      return;
+    }
+  
+    const { latitude, longitude } = coordinates;
+  
+    if (
+      latitude === SERGELSTORG_COORDINATES.latitude &&
+      longitude === SERGELSTORG_COORDINATES.longitude
+    ) {
+      console.log('Geocoding returned default coordinates (Sergels Torg).');
       setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
       setLoading(false);
       return;
     }
-
-    const { latitude, longitude } = coordinates;
+  
     const location = new google.maps.LatLng(latitude, longitude);
-
+  
     if (map) {
       map.setCenter(location);
-      map.setZoom(12);
-
+      map.setZoom(14);
+  
       if (originMarker) {
         originMarker.setMap(null);
-
-
       }
-
+  
       const marker = new google.maps.Marker({
         map: map,
         position: location,
         icon: {
-          url: 'http://maps.google.com/mapfiles/kml/paddle/go.png',
-          scaledSize: new google.maps.Size(40, 40),
-          anchor: new google.maps.Point(20, 40),
+          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new google.maps.Size(30, 30),
         },
       });
-
+  
       setOriginMarker(marker);
       setOriginPosition(location);
-
+  
       await findNearbyPlaces(location);
       setShowPlaces(true);
       setShowText(false);
-      setSearchMade(true);
-
-      // Update URL with the searched address
-      navigate(`/${encodeURIComponent(relevantAddress)}`);
+      setSearchMade(true); // Mark that a search has been made
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
-  }, [map, originMarker, findNearbyPlaces, navigate]);
-
-
+  }, [map, originMarker, findNearbyPlaces]);
+  
+  
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);

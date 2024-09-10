@@ -236,7 +236,7 @@ button.MuiButtonBase-root {
 }
 
   .search-container.center {
-    margin-top:100px;
+    margin-top:150px;
     font-size: 16px;
     position: absolute; /* Changed from fixed to absolute */
   }

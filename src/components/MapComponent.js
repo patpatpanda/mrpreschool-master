@@ -937,7 +937,7 @@ const MapComponent = () => {
     <Typography
       variant="body1"
       sx={{
-        maxWidth: '300px',
+        maxWidth: '600px',
         textAlign: 'center',
         color: '#333',
         padding: '20px',
@@ -949,7 +949,8 @@ const MapComponent = () => {
         },
       }}
     >
-      Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning.
+      Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning. För närvarande stödjer vi bara förskolor i stockholmsområdet.
+      Ange en adress för att komma igång.
     </Typography>
 
     {/* Button to external website */}

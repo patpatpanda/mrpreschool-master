@@ -17,7 +17,7 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 
-
+import StyledBtn from './StyledBtn';
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -78,7 +78,6 @@ const MapComponent = () => {
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  
   const clustererRef = useRef(null); 
   const [isMapVisible, setIsMapVisible] = useState(false);
   
@@ -682,23 +681,9 @@ const MapComponent = () => {
       
 
       {searchMade && (
-  <Button
-    onClick={toggleSearchContainerVisibility}
-    variant="contained"
-    color="secondary"
-    sx={{
-      position: 'absolute', // Ändra till 'fixed' så att den inte påverkar layouten
-      top: { xs: '80px', sm: '110px' }, // Placera den längre ner om nödvändigt
-      left: '50%', // Håll den centrerad
-      transform: 'translateX(-50%)', // Centrerar knappen horisontellt
-      zIndex: 1000, // Se till att den visas ovanpå kartan
-      padding: '10px 40px',
-      width: '150px',
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)', // Skugga för synlighet
-    }}
-  >
-    {isSearchContainerVisible ? 'Dölj filter' : 'Visa filter'}
-  </Button>
+  <StyledBtn onClick={toggleSearchContainerVisibility}>
+  {isSearchContainerVisible ? 'Dölj filter' : 'Visa filter'}
+</StyledBtn>
 )}
 
 
@@ -714,6 +699,7 @@ const MapComponent = () => {
             color="secondary"
             sx={{
               marginTop: '40px',
+              background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
               padding: '10px 20px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -730,6 +716,7 @@ const MapComponent = () => {
   padding: '10px 20px',
   borderRadius: '50px',
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
   transition: 'none',  // Förhindrar ändringar vid interaktioner
   ':active': {
     transform: 'none',  // Förhindrar förändringar vid aktivt klick
@@ -756,6 +743,7 @@ const MapComponent = () => {
                   marginTop: '40px',
                   padding: '10px 20px',
                   borderRadius: '50px',
+                  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
                   transition: 'none',  // Förhindrar ändringar vid interaktioner
                   ':active': {
@@ -807,6 +795,7 @@ const MapComponent = () => {
      backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
      color: view === 'map' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
      display: 'flex',
+     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
      alignItems: 'center',
      justifyContent: 'center',
      padding: '10px 20px',
@@ -836,6 +825,7 @@ const MapComponent = () => {
      alignItems: 'center',
      justifyContent: 'center',
      padding: '10px 20px',
+     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
      fontFamily: 'Nunito, sans-serif',
      border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
      boxShadow: 'none',  // Ingen skugga för knappen

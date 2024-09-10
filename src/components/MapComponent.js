@@ -78,6 +78,7 @@ const MapComponent = () => {
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  
   const clustererRef = useRef(null); 
   const [isMapVisible, setIsMapVisible] = useState(false);
   
@@ -331,7 +332,6 @@ const MapComponent = () => {
     const addressParts = fullAddress.split(',');
     return addressParts[0].trim();
   };
-  
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
@@ -340,47 +340,44 @@ const MapComponent = () => {
       setErrorMessage('Ange en giltig adress.');
       return;
     }
-  
+
     setLoading(true);
     clearMarkers();
     setNearbyPlaces([]);
-  
+
     const relevantAddress = extractRelevantAddress(address);
     console.log('Relevant address extracted:', relevantAddress);
-    
+
     // Försök att geokoda adressen
     const coordinates = await geocodeAddress(relevantAddress);
-    
-    // Kontrollera om geokodningen misslyckades eller om ingen plats hittades
+
     if (!coordinates) {
-      console.log('Geocoding failed or no coordinates found.');
       setErrorMessage('Ogiltig adress, försök igen.');
       setLoading(false);
       return;
     }
-  
+
     const { latitude, longitude } = coordinates;
-  
+
     if (
       latitude === SERGELSTORG_COORDINATES.latitude &&
       longitude === SERGELSTORG_COORDINATES.longitude
     ) {
-      console.log('Geocoding returned default coordinates (Sergels Torg).');
       setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
       setLoading(false);
       return;
     }
-  
+
     const location = new google.maps.LatLng(latitude, longitude);
-  
+
     if (map) {
       map.setCenter(location);
       map.setZoom(14);
-  
+
       if (originMarker) {
         originMarker.setMap(null);
       }
-  
+
       const marker = new google.maps.Marker({
         map: map,
         position: location,
@@ -389,21 +386,43 @@ const MapComponent = () => {
           scaledSize: new google.maps.Size(30, 30),
         },
       });
-  
+
       setOriginMarker(marker);
       setOriginPosition(location);
-  
+
+      // Skapa en instans av LatLngBounds
+      const bounds = new google.maps.LatLngBounds();
+
+      // Hitta förskolor och skapa markörer
       await findNearbyPlaces(location);
+
+      // Efter att alla förskolor har laddats, utvidga bounds och autozoom
+      nearbyPlaces.forEach((place) => {
+        bounds.extend(new google.maps.LatLng(place.latitude, place.longitude));
+      });
+
+      // Lägg även till användarens plats (origin)
+      bounds.extend(location);
+
+      // Autozoom kartan för att inkludera alla markörer
+      map.fitBounds(bounds);
+
+      // Kontrollera om zoomnivån är för hög och justera den
+      google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+        if (map.getZoom() > 15) {
+          map.setZoom(15); // Ställ in en maxzoom om den är för inzoomad
+        }
+      });
+
       setShowPlaces(true);
       setShowText(false);
-      setSearchMade(true); // Mark that a search has been made
+      setSearchMade(true);
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
-  }, [map, originMarker, findNearbyPlaces]);
-  
-  
+}, [map, originMarker, findNearbyPlaces]);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       geocodeAddressHandler(event);
@@ -461,67 +480,65 @@ const MapComponent = () => {
     if (place.organisationsform === 'Kommunal') {
       iconUrl = schoolIcon;
     } else if (place.organisationsform === 'Fristående') {
-     iconUrl = school;
+      iconUrl = school;
     } else if (place.organisationsform === 'Föräldrakooperativ') {
-     iconUrl = kooperativ;
+      iconUrl = kooperativ;
     } else {
       iconUrl = kooperativ;
     }
-  
-    const marker = new google.maps.Marker({
-      position: { lat: place.latitude, lng: place.longitude },
-      title: place.namn,
-      icon: {
-        url: iconUrl,
-        scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(40, 15), // Flytta labeln 40 pixlar till höger
-      },
-    });
-    
-    const infoWindow = new google.maps.InfoWindow({
-      content: `<div style="
-      
-        color: black; 
-        padding: 5px; 
-        font-size: 12px; 
-        font-weight: bold; 
-        border-radius: 3px;
-    
-      
 
-        
-      ">${place.namn}</div>`,
+    const marker = new google.maps.Marker({
+        position: { lat: place.latitude, lng: place.longitude },
+        title: place.namn,
+        icon: {
+          url: iconUrl,
+          scaledSize: new google.maps.Size(30, 30),
+          labelOrigin: new google.maps.Point(40, 15),
+        },
     });
-    
-    // Öppna InfoWindow direkt för att visa labeln med bakgrundsfärg
+
+    const infoWindow = new google.maps.InfoWindow({
+        content: `<div style="color: black; padding: 5px; font-size: 12px; font-weight: bold; border-radius: 3px;">${place.namn}</div>`,
+    });
     infoWindow.open(map, marker);
-    // Här har vi flyttat texten 40 pixlar till höger och justerat den vertikalt med 15 pixlar nedanför markören.
-    
-  
+
+    // Lägg till varje markörs position i bounds
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker.position);
+
     clustererRef.current.addMarker(marker);
-  
+
+    // Om du har originLocation kan du även inkludera den i bounds
+    if (originLocation) {
+        bounds.extend(originLocation);
+    }
+
+    // Autozooma kartan för att inkludera alla markörer
+    map.fitBounds(bounds);
+
     const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
-      lat: place.latitude,
-      lng: place.longitude,
+        lat: place.latitude,
+        lng: place.longitude,
     });
-  
+
     const formattedWalkingTime =
-      walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
-        ? walkingTimeInMinutes.toFixed(2)
-        : 'N/A';
-  
+        walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
+            ? walkingTimeInMinutes.toFixed(2)
+            : 'N/A';
+
     setWalkingTimes((prevTimes) => ({
-      ...prevTimes,
-      [place.id]: formattedWalkingTime,
+        ...prevTimes,
+        [place.id]: formattedWalkingTime,
     }));
-  
+
     marker.addListener('click', () => {
-      selectPlace(place);
-      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+        selectPlace(place);
+        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
     });
-  
-    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]); // Store the marker in currentMarkers
-  };
+
+    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
+};
+
   const selectPlace = async (place, changeView = false) => {
     try {
         const cleanName = place.namn.trim();

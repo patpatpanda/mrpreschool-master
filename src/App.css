@@ -8,7 +8,7 @@ body, html {
   position: relative;
   touch-action: pan-y;
   
-background-color: #f9f8f5;
+  background-color: #ffffff;
 }
 
 
@@ -19,6 +19,7 @@ background-color: #f9f8f5;
   height: 100vh;
  position: relative;
   margin: 0;
+  background-color: #ffffff;
   padding: 0;
   
 }
@@ -143,22 +144,16 @@ button.MuiButtonBase-root {
   }
 }
 
-@media (max-width: 768px) {
-  .initial-text {
-   
-    max-width: 250px; /* Anpassa maximal bredd för små skärmar */
-    height: 50px; /* Justera höjden för små skärmar */
-   
-  }
-}
+
+
 .cards-container {
   display: grid;
   flex-wrap: wrap;
   justify-content: center;
   grid-template-columns: 1fr 1fr 1fr;
- 
+  background-color: #ffffff;
   padding: 15px;
-  background-color: #f0f0f0;
+
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 10;

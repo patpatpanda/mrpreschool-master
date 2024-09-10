@@ -226,7 +226,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
             position: 'absolute',
             right: { xs: 8, sm: 8 },
             top: { xs: 8, sm: 8 },
-            color: '#333',
+            color: '#fff',
           }}
         >
           <FontAwesomeIcon icon={faTimes} />

@@ -16,7 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-
+import hus from '../images/icons8-start-94.png';
 import StyledBtn from './StyledBtn';
 /*global google*/
 
@@ -381,8 +381,8 @@ const MapComponent = () => {
         map: map,
         position: location,
         icon: {
-          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-          scaledSize: new google.maps.Size(30, 30),
+         url: hus, 
+          scaledSize: new google.maps.Size(35, 35),
         },
       });
 

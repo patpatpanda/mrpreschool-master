@@ -7,10 +7,10 @@ import myImage from '../images/seri.webp'; // Standardbild
 
 const PreschoolCard = ({ preschool, onSelect }) => (
   <ButtonBase
-  onClick={(event) => {
-    event.preventDefault(); // Förhindrar att standardbeteende av klick eventuellt triggar något annat
-    onSelect(preschool);
-  }}
+    onClick={(event) => {
+      event.preventDefault(); // Förhindrar att standardbeteende av klick eventuellt triggar något annat
+      onSelect(preschool);
+    }}
     style={{
       display: 'block',
       textAlign: 'left',
@@ -29,6 +29,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         transition: 'transform 0.3s, box-shadow 0.3s',
         width: '100%',
         maxWidth: { xs: '100%', sm: '400px', md: '500px' }, // Använd responsiva maxWidth-värden
+        position: 'relative', // Behövs för den mintgröna sidan
         '&:hover': {
           transform: 'translateY(-2px)',
           boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
@@ -38,6 +39,20 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         },
       }}
     >
+      {/* Mintgrön sida */}
+      <Box
+        sx={{
+          backgroundColor: '#AAF0D1',  // Mintgrön färg
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '4px',  // Bredden på den färgade sidan
+          borderTopLeftRadius: '8px',
+          borderBottomLeftRadius: '8px',
+        }}
+      />
+
       <CardHeader
         title={
           <Typography variant="subtitle1" sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '0.75rem', md: '0.85rem' } }}>

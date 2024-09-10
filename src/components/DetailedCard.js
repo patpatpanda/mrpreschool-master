@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -13,96 +12,102 @@ import myImage from '../images/seri.webp';
 // Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: '15px',
-    overflow: 'hidden',
-    backgroundColor: '#f9f8f5',
-    width: '100%',
-    height: '100%',
-    margin: 0,
-    zIndex: 3000, // Sätt z-index här
-    color:'#333'
-  },
-}));
+// Keyframes för titelanimation
+const slideIn = keyframes`
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 
-const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+// Keyframes för zoom in/zoom out
+
+
+// Stil för titeln med animation
+const AnimatedTitle = styled(Typography)(({ theme }) => ({
+  animation: `${slideIn} 1s ease-in-out`,
+  fontSize: '1.5rem',
   
   color: '#333',
   textAlign: 'center',
-  padding: '16px',
-  fontFamily: '"Roboto", sans-serif',
-  fontWeight: 'bold',
-  position: 'relative',
-  display: 'flex', // Använd flexbox för att organisera barnkomponenterna
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: '#f9f8f5',
-  zIndex: 3000, // Sätt z-index här
-}));
-
-const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  backgroundColor: '#f9f8f5',
-  padding: '20px',
-  height: 'calc(100% - 64px)',
-  overflowY: 'auto',
-  zIndex: 3000, // Sätt z-index här
+  marginTop: theme.spacing(2),
   [theme.breakpoints.down('sm')]: {
-    padding: '10px',
+    fontSize: '1.5',
   },
 }));
 
+// Stil för bildcontainern med zoom-effekt
 const ImageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '100%',
-  maxWidth: '100%',
-  overflow: 'hidden',
   position: 'relative',
-  marginTop: '20px',
-  marginBottom: '20px',
-  zIndex: 3000, // Sätt z-index här
+  overflow: 'hidden',
+  width: '100%',
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
 
-  img: {
+  '& img': {
     width: '100%',
     height: 'auto',
-    display: 'block',
     objectFit: 'cover',
-    transition: 'transform 0.5s ease',
-    maxHeight: '400px',
-    [theme.breakpoints.up('md')]: {
-      maxHeight: '500px',
-      maxWidth: '80%',
-    },
-    [theme.breakpoints.up('lg')]: {
-      maxHeight: '600px',
-      maxWidth: '70%',
-    },
+    transition: 'none', // Ingen transitionseffekt längre
   },
 
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: 'rgba(0, 0, 0, 0.4)',
-    zIndex: 3000, // Sätt z-index här
-    transition: 'opacity 0.5s ease',
-    opacity: 0,
+  // Standardhöjd för mobila enheter
+  maxHeight: '300px',
+
+  // Anpassa höjden för större skärmar med breakpoints
+  [theme.breakpoints.up('sm')]: {
+    maxHeight: '400px',
+  },
+  [theme.breakpoints.up('md')]: {
+    maxHeight: '500px',
+  },
+  [theme.breakpoints.up('lg')]: {
+    maxHeight: '600px',
+  },
+  [theme.breakpoints.up('xl')]: {
+    maxHeight: '800px',
   },
 }));
 
-const InfoBox = styled(Box)(({ theme }) => ({
-  padding: '20px',
-  borderRadius: '10px',
-  marginBottom: '20px',
-  zIndex: 3000, // Sätt z-index här
-  [theme.breakpoints.down('sm')]: {
-    padding: '10px',
+
+
+// Stil för dialogfönstret
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: '20px',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.default,
+    width: '100%',
+    height: '100%',
+    margin: 0,
+    color: '#333',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
   },
+}));
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+  textAlign: 'center',
+  padding: theme.spacing(2),
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'center',
+  backgroundColor: '#AAF0D1', 
+}));
+
+const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  padding: theme.spacing(2.5),
+  height: 'calc(100% - 64px)',
+  overflowY: 'auto',
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
@@ -115,7 +120,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [error, setError] = useState('');
 
   const years = [2023, 2022, 2021, 2020];
-  
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -203,11 +207,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
       "3": "Instämmer till viss del",
       "4": "Instämmer i stor utsträckning",
       "5": "Instämmer helt",
-      "Instämmer inte alls": "Instämmer inte alls",
-      "Instämmer i liten utsträckning": "Instämmer i liten utsträckning",
-      "Instämmer till viss del": "Instämmer till viss del",
-      "Instämmer i stor utsträckning": "Instämmer i stor utsträckning",
-      "Instämmer helt": "Instämmer helt",
       "Vet ej": "Vet ej",
       "Övrig": "Övrig"
     };
@@ -221,36 +220,13 @@ const DetailedCard = ({ schoolData, onClose }) => {
   return (
     <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
-        
-         
-        {/* Rubrik som tidigare */}
-        <Typography
-          variant="h3"
-          component="span"
-          sx={{
-            
-            lineHeight: 'normal',
-            display: 'block',
-            mx: 4,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            color: '#333',  // Vit textfärg för rubriken
-            zIndex: 3000, // Sätt z-index här
-          }}
-        >
-          {namn}
-        </Typography>
-
-        {/* Stäng-knapp i det övre högra hörnet */}
         <IconButton
           onClick={onClose}
           sx={{
             position: 'absolute',
-            right: { xs: 8, sm: 8 },  // 8px för mobil, 16px för större skärmar
-            top: { xs: 8, sm: 8 },    // 8px för mobil, 16px för större skärmar
+            right: { xs: 8, sm: 8 },
+            top: { xs: 8, sm: 8 },
             color: '#fff',
-            zIndex: 3000, // Sätt z-index här
           }}
         >
           <FontAwesomeIcon icon={faTimes} />
@@ -258,13 +234,17 @@ const DetailedCard = ({ schoolData, onClose }) => {
       </StyledDialogTitle>
 
       <StyledDialogContent>
+        {/* Kreativ titel med animation */}
+        <AnimatedTitle>{namn}</AnimatedTitle>
+
+        {/* Bild med zoom-effekt vid hover */}
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
 
         {schoolDetails.beskrivning && (
-          <Box mb={4} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
-            <Typography variant="h6" sx={{  color: '#333', marginBottom: '8px' }}>
+          <Box mb={4}>
+            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
               Beskrivning
             </Typography>
             <Typography variant="body2" sx={{ color: '#555' }}>
@@ -280,61 +260,27 @@ const DetailedCard = ({ schoolData, onClose }) => {
         )}
 
         {adress && (
-          <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333', zIndex: 3000 }}>
+          <Typography variant="body2" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333', zIndex: 3000 }}>
             <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} /> {adress}
           </Typography>
         )}
 
         <Grid container spacing={2}>
           {malibuData && (
-            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Föräldraomdömen</Typography>
+            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>
+              <Box>
+                <Typography variant="h6" sx={{ }}>Föräldraomdömen</Typography>
                 <Typography variant="body2">Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
                 <Typography variant="body2">Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
                 <Typography variant="body2">Antal Svar: {malibuData.antalSvar}</Typography>
-                {malibuData.questions && malibuData.questions.$values && (
-                  <Box mt={2}>
-                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Frågor</Typography>
-                    {malibuData.questions.$values.map((question, index) => (
-                      <Box key={index} mb={2}>
-                        <Typography variant="body2">Fråga: {question.frageText}</Typography>
-                        {question.frageText.includes('HELHETSOMDÖME') && (
-                          <Typography variant="body2">
-                            Här ser vi att {question.andelInstammer}% av de tillfrågade är nöjda med förskolans helhetsintryck.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('UTVECKLING OCH LÄRANDE') && (
-                          <Typography variant="body2">
-                            Resultatet visar att {question.andelInstammer}% av föräldrarna upplever att deras barn utvecklas och lär sig bra.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('NORMER OCH VÄRDEN') && (
-                          <Typography variant="body2">
-                            Frågan om normer och värden visar att {question.andelInstammer}% av de svarande instämmer i att förskolan arbetar väl med dessa aspekter.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('SAMVERKAN MED HEMMET') && (
-                          <Typography variant="body2">
-                            Denna fråga belyser samverkan med hemmet. Här ser vi att {question.andelInstammer}% av föräldrarna tycker att samarbetet med förskolan fungerar bra.
-                          </Typography>
-                        )}
-                        {question.frageText.includes('KOST, RÖRELSE OCH HÄLSA') && (
-                          <Typography variant="body2">
-                            {question.andelInstammer}% är nöjda med förskolans arbete inom dessa områden.
-                          </Typography>
-                        )}
-                      </Box>
-                    ))}
-                  </Box>
-                )}
-              </InfoBox>
+              </Box>
             </Grid>
           )}
+
           {schoolDetails && (
-            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Skoldetaljer</Typography>
+            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>
+              <Box>
+                <Typography variant="h6" sx={{ }}>Skoldetaljer</Typography>
                 <Typography variant="body2">Typ av Service: {schoolDetails.typAvService}</Typography>
                 <Typography variant="body2">Verksam i: {schoolDetails.verksamI}</Typography>
                 <Typography variant="body2">Organisationsform: {schoolDetails.organisationsform}</Typography>
@@ -342,30 +288,11 @@ const DetailedCard = ({ schoolData, onClose }) => {
                 <Typography variant="body2">Antal Barn per Årsarbetare: {schoolDetails.antalBarnPerArsarbetare}</Typography>
                 <Typography variant="body2">Andel Legitimerade Förskollärare: {schoolDetails.andelLegitimeradeForskollarare}%</Typography>
                 <Typography variant="body2">Inriktning och Profil: {schoolDetails.inriktningOchProfil}</Typography>
-                <Typography variant="body2">Mer om Oss: {schoolDetails.merOmOss}</Typography>
                 <Typography variant="body2">Webbplats: <a href={schoolDetails.webbplats} target="_blank" rel="noopener noreferrer">{schoolDetails.webbplats}</a></Typography>
-              </InfoBox>
-            </Grid>
-          )}
-          {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
-            <Grid item xs={12} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
-              <InfoBox>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#4CAF50' }}>Kontaktinformation</Typography>
-                {schoolDetails.kontakter.$values.map((kontakt, index) => (
-                  <Box key={index} mb={2}>
-                    <Typography variant="body2">Namn: {kontakt.namn}</Typography>
-                    <Typography variant="body2">Roll: {kontakt.roll}</Typography>
-                    <Typography variant="body2">E-post: {kontakt.epost}</Typography>
-                    <Typography variant="body2">Telefon: {kontakt.telefon}</Typography>
-                  </Box>
-                ))}
-              </InfoBox>
+              </Box>
             </Grid>
           )}
         </Grid>
-
-        {/* Visa stapeldiagrammen om datan har hämtats */}
-        {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px', zIndex: 3000 }}>{error}</Typography>}
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (
           <div key={index} style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#333', zIndex: 3000 }}>
@@ -410,11 +337,10 @@ const DetailedCard = ({ schoolData, onClose }) => {
           </div>
         ))}
 
+        {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px', zIndex: 3000 }}>{error}</Typography>}
         {dataFetched && chartData.length === 0 && !loading && (
-          <Typography variant="body2" sx={{ color: '#fff', zIndex: 3000 }}>Ingen data att visa</Typography>
+          <Typography variant="body2" sx={{ color: '#333', zIndex: 3000 }}></Typography>
         )}
-
-       
       </StyledDialogContent>
     </StyledDialog>
   );
@@ -426,7 +352,6 @@ DetailedCard.propTypes = {
     adress: PropTypes.string,
     malibuData: PropTypes.object,
     schoolDetails: PropTypes.object,
-    description: PropTypes.string,
     walkingTime: PropTypes.string,
     bildUrl: PropTypes.string,
   }).isRequired,

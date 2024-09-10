@@ -467,30 +467,36 @@ const MapComponent = () => {
     } else {
       iconUrl = kooperativ;
     }
-  
+    const malibuData = await fetchMalibuByName(place.namn);
+
+    // Kontrollera om Malibu-data finns och hämta "Helhetsomdöme"
+    const helhetsomdome = malibuData?.helhetsomdome || 'Saknas';
     const marker = new google.maps.Marker({
       position: { lat: place.latitude, lng: place.longitude },
+      map: map,
       title: place.namn,
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(40, 15), // Flytta labeln 40 pixlar till höger
       },
     });
-    
+  
+    // Skapa InfoWindow med Helhetsomdöme-data
     const infoWindow = new google.maps.InfoWindow({
-      content: `<div style="
-      
-        color: black; 
-        padding: 5px; 
-        font-size: 12px; 
-        font-weight: bold; 
-        border-radius: 3px;
-      
-
-        
-      ">${place.namn}</div>`,
+      content: `
+        <div style="
+          padding: 0;
+          font-family: 'Roboto', Arial, sans-serif;
+          color: #333;
+          text-align: center;
+        ">
+          <strong>${place.namn}</strong>
+          <br/>
+          <p style="margin: 0;">Helhetsomdöme: ${helhetsomdome}%</p>
+        </div>
+      `,
     });
+    
     
     // Öppna InfoWindow direkt för att visa labeln med bakgrundsfärg
     infoWindow.open(map, marker);

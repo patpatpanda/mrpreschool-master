@@ -292,6 +292,21 @@ const DetailedCard = ({ schoolData, onClose }) => {
               </Box>
             </Grid>
           )}
+            {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
+            <Grid item xs={12} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
+              
+                <Typography variant="h6" sx={{  }}>Kontaktinformation</Typography>
+                {schoolDetails.kontakter.$values.map((kontakt, index) => (
+                  <Box key={index} mb={2}>
+                    <Typography variant="body2"> {kontakt.namn}</Typography>
+                    <Typography variant="body2">{kontakt.roll}</Typography>
+                    <Typography variant="body2">{kontakt.epost}</Typography>
+                    <Typography variant="body2">{kontakt.telefon}</Typography>
+                  </Box>
+                ))}
+             
+            </Grid>
+          )}
         </Grid>
 
         {dataFetched && chartData.length > 0 && chartData.map((chart, index) => (

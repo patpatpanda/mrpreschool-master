@@ -76,7 +76,10 @@ button.MuiButtonBase-root {
     position: absolute; /* Changed from fixed to absolute */
     
   }
-  
+  .search-container.no {
+    z-index: -1
+    
+  }
 .loading-spinner {
   position: fixed;
   top: 50%;
@@ -117,7 +120,7 @@ button.MuiButtonBase-root {
 @media (max-width: 42000px) {
   .initial-text {
     top: 0; /* Justera position för mindre skärmar */
-    max-width: 400px; /* Anpassa maximal bredd för mindre skärmar */
+    max-width: 500px; /* Anpassa maximal bredd för mindre skärmar */
     height: 80px; /* Justera höjden för mindre skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }
@@ -126,7 +129,7 @@ button.MuiButtonBase-root {
 @media (max-width: 900px) {
   .initial-text {
     top:0; /* Justera position för ännu mindre skärmar */
-    max-width: 200px; /* Anpassa maximal bredd för små skärmar */
+    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
     height: 60px; /* Justera höjden för små skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }
@@ -135,7 +138,7 @@ button.MuiButtonBase-root {
 @media (max-width: 768px) {
   .initial-text {
    
-    max-width: 170px; /* Anpassa maximal bredd för små skärmar */
+    max-width: 250px; /* Anpassa maximal bredd för små skärmar */
     height: 50px; /* Justera höjden för små skärmar */
    
   }
@@ -150,7 +153,7 @@ button.MuiButtonBase-root {
   background: #f5f9f5;
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
-  z-index: 10;
+  z-index: 100;
   height: 100vh;
   padding-top: 600px;
 }
@@ -236,6 +239,10 @@ button.MuiButtonBase-root {
     font-size: 16px;
     margin-right: 15px;
     position: absolute; /* Changed from fixed to absolute */
+    
+  }
+  
+  main {
     
   }
   

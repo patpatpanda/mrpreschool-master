@@ -862,6 +862,7 @@ const MapComponent = () => {
     overflow: 'hidden',
     transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
     fontFamily: "'Helvetica Neue', sans-serif", // Modern och stilren font
+    color:'#333',
     '&:hover': {
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Ökad skugga vid hover för lite mer djup
     },
@@ -952,31 +953,7 @@ const MapComponent = () => {
     </Typography>
 
     {/* Button to external website */}
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={() => (window.location.href = 'https://blog.förskolekollen.se')}
-      sx={{
-        padding: '5px 10px',
-        fontSize: '16px',
-        backgroundColor: 'pink',
-        borderRadius: '50px',
-        marginTop:'55px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        color: '#fff',
-        '&:hover': {
-          backgroundColor: '#d6b2e2',
-        },
-        width: '100%',
-        maxWidth: '300px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för knappen för små skärmar
-          padding: '5px 10px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Läs mer om förskolor och regler
-    </Button>
+    
 
     {/* Button to survey page */}
     

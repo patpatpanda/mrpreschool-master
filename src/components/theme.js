@@ -106,7 +106,7 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)', // Dark gray background
+          backgroundColor: '#333', // Dark gray background
           color: 'white',
           borderRadius: '50%',
           padding: '10px',

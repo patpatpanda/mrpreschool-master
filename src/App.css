@@ -42,7 +42,14 @@ button.MuiButtonBase-root {
   overflow: hidden; /* Förhindra skrollning */
 }
 
+.spinner {
+  animation: spin 1s infinite linear;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 .search-container {
   position: static; /* Ta bort positionering eller sätt till static */

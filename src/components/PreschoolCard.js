@@ -126,7 +126,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
               fontSize: '0.75rem',
               marginTop: '4px',
               textTransform: 'none',
-             
+             background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
               color: '#333',
               '&:hover': {
                 backgroundColor: '#555',

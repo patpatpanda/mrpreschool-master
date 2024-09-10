@@ -699,7 +699,8 @@ const MapComponent = () => {
             color="secondary"
             sx={{
               marginTop: '40px',
-              background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
+              background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+              color: '#ffffff',  // Vit textfärg för kontrast
               padding: '10px 20px',
               borderRadius: '50px',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -716,7 +717,8 @@ const MapComponent = () => {
   padding: '10px 20px',
   borderRadius: '50px',
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
+  background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+  color: '#ffffff',  // Vit textfärg för kontrast
   transition: 'none',  // Förhindrar ändringar vid interaktioner
   ':active': {
     transform: 'none',  // Förhindrar förändringar vid aktivt klick
@@ -743,7 +745,8 @@ const MapComponent = () => {
                   marginTop: '40px',
                   padding: '10px 20px',
                   borderRadius: '50px',
-                  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
+                  background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+                  color: '#ffffff',  // Vit textfärg för kontrast
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
                   transition: 'none',  // Förhindrar ändringar vid interaktioner
                   ':active': {
@@ -792,10 +795,11 @@ const MapComponent = () => {
    }}
    variant="contained"
    sx={{
-     backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
-     color: view === 'map' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
+    background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+  
+     color: '#fff',  // Vit text om aktiv, annars mörkgrå
      display: 'flex',
-     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
+     
      alignItems: 'center',
      justifyContent: 'center',
      padding: '10px 20px',
@@ -819,13 +823,13 @@ const MapComponent = () => {
    }}
    variant="contained"
    sx={{
-     backgroundColor: view === 'list' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
-     color: view === 'list' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
+    background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+  color: '#ffffff',  // Vit textfärg för kontrast
      display: 'flex',
      alignItems: 'center',
      justifyContent: 'center',
      padding: '10px 20px',
-     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
+     
      fontFamily: 'Nunito, sans-serif',
      border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
      boxShadow: 'none',  // Ingen skugga för knappen
@@ -857,7 +861,7 @@ const MapComponent = () => {
   sx={{
     backgroundColor: '#ffffff', // Helt vit bakgrund för ren och minimalistisk design
     borderRadius: '8px', // Lätt rundade hörn för en modern känsla
-    border: '1px solid #e0e0e0', // Tunn grå kant för subtil definition
+    border: '2px solid linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)', // Lätt skugga för subtilt djup
     overflow: 'hidden',
     transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner

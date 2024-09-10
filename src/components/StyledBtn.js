@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
 
 const StyledBtn = styled(Button)(({ theme }) => ({
-  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-  color: '#333',  // Mörk textfärg för kontrast
+  background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+  color: '#ffffff',  // Vit textfärg för kontrast
   position: 'absolute',  // Absolut position för att efterlikna den ursprungliga placeringen
   top: '80px',  // Placering från toppen
   left: '50%',  // Håll den centrerad horisontellt
@@ -12,15 +12,15 @@ const StyledBtn = styled(Button)(({ theme }) => ({
   padding: '10px 40px',  // Liknande padding
   width: '150px',  // Fast bredd
   fontFamily: 'Nunito, sans-serif',  // Modern font
- 
+  
   borderRadius: '12px',  // Rundade hörn
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',  // Skugga för synlighet
-  border: '2px solid #333',  // Mintgrön kant
+  border: '2px solid #00c853',  // Grön kant
   textTransform: 'none',  // Ingen versal text
   transition: 'all 0.3s ease',  // Smooth transition för alla effekter
 
   '&:hover': {
-    background: 'linear-gradient(45deg, #e0e0e0 30%, #f5f5f5 90%)',  // Omvänd vit till grå gradient vid hover
+    background: 'linear-gradient(45deg, #b2ff59 30%, #00c853 90%)',  // Omvänd ljusgrön till grön gradient vid hover
     boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',  // Större skugga vid hover
   },
   

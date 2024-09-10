@@ -8,7 +8,7 @@ import theme from './components/theme';
 import './App.css';
 import PreschoolApplicationInfo from './components/PreschoolApplicationInfo';
 import ReactGA from 'react-ga';
-
+import StyledButton from './components/StyledButton';  // Importera StyledButton
 
 function Analytics() {
   const location = useLocation();
@@ -41,7 +41,9 @@ function App() {
           </main>
 
           {/* Använd StyledButton här */}
-          
+          <StyledButton onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}>
+            Få koll
+          </StyledButton>
 
         </div>
       </Router>

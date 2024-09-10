@@ -670,12 +670,12 @@ const MapComponent = () => {
     color="secondary"
     sx={{
       position: 'absolute', // Ändra till 'fixed' så att den inte påverkar layouten
-      top: { xs: '60px', sm: '100px' }, // Placera den längre ner om nödvändigt
+      top: { xs: '80px', sm: '110px' }, // Placera den längre ner om nödvändigt
       left: '50%', // Håll den centrerad
       transform: 'translateX(-50%)', // Centrerar knappen horisontellt
       zIndex: 1000, // Se till att den visas ovanpå kartan
       padding: '10px 40px',
-      width: '200px',
+      width: '150px',
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)', // Skugga för synlighet
     }}
   >
@@ -831,28 +831,7 @@ const MapComponent = () => {
    <ListIcon style={{ marginRight: '8px' }} />
    Lista
  </Button>
- <Button
-   onClick={() => window.location.href = 'https://blog.xn--frskolekollen-imb.se/'}
-   variant="contained"
-   sx={{
-     backgroundColor: '#ffffff',  // Vit bakgrund för icke-aktiv knapp
-     color: '#333',  // Mörk textfärg för läsbarhet
-     display: 'flex',
-     alignItems: 'center',
-     justifyContent: 'center',
-     padding: '10px 20px',
-     fontFamily: 'Nunito, sans-serif',
-     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
-     boxShadow: 'none',  // Ingen skugga för knappen
-     width: '120px',  // Fixad bredd för att matcha alla knappar
-     borderRadius: '8px',  // Rundade hörn
-     '&:hover': {
-       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
-     },
-   }}
- >
-   Få koll
- </Button>
+ 
 </ButtonGroup>
 
  

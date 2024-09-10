@@ -11,7 +11,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   zIndex: 9999,  // Hög z-index för att den ska synas över allt
   padding: '12px 24px',  // Ökad padding för en lyxigare känsla
   fontFamily: 'Nunito, sans-serif',  // Modern font
-  
+   border: '2px solid #333',
   borderRadius: '12px',  // Rundade hörn
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',  // Lättare skugga för att matcha den ljusa bakgrunden
   textTransform: 'none',  // Ingen versal text

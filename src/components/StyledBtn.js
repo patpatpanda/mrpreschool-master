@@ -15,7 +15,7 @@ const StyledBtn = styled(Button)(({ theme }) => ({
   
   borderRadius: '12px',  // Rundade hörn
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',  // Skugga för synlighet
-  border: '2px solid #00c853',  // Grön kant
+  border: '2px solid #333',  // Grön kant
   textTransform: 'none',  // Ingen versal text
   transition: 'all 0.3s ease',  // Smooth transition för alla effekter
 

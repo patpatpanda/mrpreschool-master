@@ -43,7 +43,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       <Box
         sx={{
           
-          background: 'linear-gradient(45deg, #00c853 30%, #b2ff59 90%)',  // Grön till ljusgrön gradient bakgrund
+          background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)',
   
           position: 'absolute',
           left: 0,

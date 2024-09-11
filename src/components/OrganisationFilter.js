@@ -4,7 +4,7 @@ import kommunalIcon from '../images/icons8-school-48.png';
 import fristaendeIcon from '../images/icons8-school-64.png';
 import foraldrakooperativIcon from '../images/icons8-school-building-48.png';
 import customIcon from '../images/icons8-children-48.png';  // Importera din anpassade ikon
-import { IconButton, Tooltip, Box, Button } from '@mui/material';  // Importera Button
+import {  Box, Button } from '@mui/material';  // Importera Button
 
 const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, onFilterPedagogiskOmsorg }) => {
   // Funktion för att returnera ikon baserat på organisationstyp

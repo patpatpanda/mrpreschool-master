@@ -484,15 +484,17 @@ const createMarker = async (place, originLocation) => {
     // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
       content: `
-        <div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px; line-height: 1.2em;">
-          <div>${place.namn}</div>
-          <div style="display: flex; align-items: center;">
+        <div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px; line-height: 1.2em; max-width: 150px; margin: 0;">
+          <div style="margin: 0; padding: 0;">${place.namn}</div>
+          <div style="display: flex; align-items: center; margin: 0; padding: 0; line-height: 1.1em;">
             <span>Betyg:</span>
             ${ratingContent}
           </div>
         </div>
       `,
     });
+    
+    
 
     infoWindow.open(map, marker);
 

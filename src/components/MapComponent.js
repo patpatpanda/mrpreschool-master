@@ -856,69 +856,57 @@ const createMarker = async (place, originLocation) => {
   placeholder="Skriv din adress för att hitta förskola"
   fullWidth
   sx={{
-    backgroundColor: '#ffffff', // Helt vit bakgrund för ren och minimalistisk design
-    borderRadius: '8px', // Lätt rundade hörn för en modern känsla
-    border: '1px solid #e0e0e0', // Tunn grå kant för subtil definition
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)', // Lätt skugga för subtilt djup
+    background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)', // Gradientbakgrund
+    borderRadius: '12px', // Mer rundade hörn för en modern känsla
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Lätt skugga för djup
     overflow: 'hidden',
     transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
-    fontFamily: "'Helvetica Neue', sans-serif", // Modern och stilren font
-    color:'#333',
-    '&:hover': {
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Ökad skugga vid hover för lite mer djup
-    },
-    '&:focus-within': {
-        borderColor: '#bdbdbd', // Mörkare grå kant vid fokus för tydlig feedback
-        boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.1)', // Subtil fokusring för bättre synlighet
+    '& .MuiOutlinedInput-root': {
+      color: '#ffffff', // Vit textfärg
+      padding: '12px 16px', // Bekväm padding för insidan
+      '& fieldset': {
+        borderColor: 'transparent', // Gör kantlinjen osynlig initialt
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.8)', // Ljus vit kant vid hover
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'rgba(255, 255, 255, 1)', // Helt vit kant vid fokus
+      },
     },
     'input::placeholder': {
-        color: '#9e9e9e', // Grå färg för placeholder-text för diskret synlighet
-        fontStyle: 'italic', // Kursiv stil för att lägga till subtil elegans
-        opacity: 1,
-        fontFamily: "'Helvetica Neue', sans-serif", // Håller samma font som input
+      color: 'rgba(255, 255, 255, 0.9)', // Tydligare, nästan helt vit placeholder-text
+      fontSize: '18px', // Större text för bättre läsbarhet
+      fontWeight: 'bold', // Fetare text för att göra den mer framträdande
     },
-    'input': {
-        padding: '12px 16px', // Bekväm padding för användarvänlighet
-        fontSize: '16px', // Standard textstorlek för god läsbarhet
-        color: '#333333', // Mörkgrå textfärg för hög kontrast
-        fontFamily: "'Helvetica Neue', sans-serif", // Samma stilrena font för input text
-        transition: 'color 0.3s ease', // Smidig övergång för textfärg vid interaktion
-        '&:focus': {
-            outline: 'none', // Ingen inbyggd outline vid fokus
-            color: '#000000', // Svart färg vid fokus för att maximera läsbarheten
-        },
-    },
-}}
+  }}
+  inputRef={addressRef}
+  onKeyDown={handleKeyDown}
+  InputProps={{
+    style: { color: '#ffffff' }, // Vit textfärg i input
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={geocodeAddressHandler}
+          edge="end"
+          sx={{
+            backgroundColor: '#ffffff', // Vit bakgrund för knappen
+            color: '#62727b', // Färg som matchar gradienten
+            borderRadius: '50%', // Rund knapp
+            padding: '8px',
+            '&:hover': {
+              backgroundColor: '#a7c0cd', // Ljusare nyans vid hover
+            },
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/>
 
 
-
-    inputRef={addressRef}
-    onKeyDown={handleKeyDown}
-    InputProps={{
-      style: { color: '#333', padding: '10px 20px' },
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton
-            onClick={geocodeAddressHandler}
-            edge="end"
-            sx={{
-              backgroundColor: '#333',
-              color: 'white',
-              borderRadius: '50%',
-              padding: '10px',
-              transition: 'background-color 0.3s ease',
-              '&:hover': {
-                backgroundColor: '#45a045',
-              },
-              marginRight: '-10px',
-            }}
-          >
-            <SearchIcon />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-  />
 </form>
 {!searchMade && view === 'list' && (
   <Box

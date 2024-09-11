@@ -805,47 +805,13 @@ const createMarker = async (place, originLocation) => {
     Högst rank
   </Button>
 
-  {searchMade && (
-    <>
-      <Button
-        onClick={() => setFilterVisible(!filterVisible)}
-        variant="contained"
-        color="primary"
-        sx={{
-          marginTop: '10px',
-          padding: '5px 10px',
-          borderRadius: '25px',
-          background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-          fontSize: '14px',
-          minWidth: '100px',
-          whiteSpace: 'nowrap',
-          transition: 'background-color 0.3s ease, border 0.3s ease',
-          '&:hover': {
-            background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',
-          },
-          '&.active': {
-            background: '#c0c0c0',
-            border: '2px solid #666',
-          },
-        }}
-      >
-        {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
-      </Button>
-
-      {!filterVisible && (
-        <OrganisationFilter
-          organisationTypes={organisationTypes}
-          filter={filter}
-          handleFilterChange={handleFilterChange}
-          visible={showPlaces}
-          onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
-          sx={{ marginTop: '20px' }}
-        />
-      )}
-    </>
-  )}
-
+  
+ <OrganisationFilter
+              organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
+              filter={filter}
+              handleFilterChange={handleFilterChange}
+              onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
+            />
 </Box>
 
   

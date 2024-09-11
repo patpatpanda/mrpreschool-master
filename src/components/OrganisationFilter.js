@@ -32,9 +32,10 @@ const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, onF
           sx={{
             backgroundColor: filter.includes(type) ? '#4CAF50' : 'white',
             color: filter.includes(type) ? '#fff' : '#333',
+            marginTop:'10px',
             borderRadius: '25px',
             padding: '5px 10px',
-            minWidth: '120px',
+            minWidth: '55px',
             boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
             '&:hover': {
               backgroundColor: filter.includes(type) ? '#45a045' : '#f5f5f5',
@@ -52,6 +53,7 @@ const OrganisationFilter = ({ organisationTypes, filter, handleFilterChange, onF
         startIcon={<img src={customIcon} alt="Pedagogisk omsorg ikon" style={styles.icon} />}
         sx={{
           backgroundColor: '#4CAF50',
+          marginTop:'10px',
           color: '#fff',
           borderRadius: '25px',
           padding: '5px 10px',

@@ -17,7 +17,7 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 import hus from '../images/icons8-start-94.png';
-import StyledBtn from './StyledBtn';
+
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -62,7 +62,7 @@ const MapComponent = () => {
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
   const [view, setView] = useState('list');
   const [walkingTimes, setWalkingTimes] = useState({});
-  const [showText, setShowText] = useState(true);
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchMade, setSearchMade] = useState(false); // Används för att visa knappen efter sökning
@@ -74,7 +74,7 @@ const MapComponent = () => {
   const clustererRef = useRef(null); 
   const [isMapVisible, setIsMapVisible] = useState(false);
   
-  const [isSearchContainerVisible, setIsSearchContainerVisible] = useState(true);
+  
   const filterPedagogiskOmsorg = async () => {
     if (!originPosition) {
       console.error("Ingen plats vald. Ange en adress.");
@@ -121,9 +121,7 @@ const MapComponent = () => {
   }, [isMapVisible,view]);
 
   // Funktion för att toggla synligheten
-  const toggleSearchContainerVisibility = () => {
-    setIsSearchContainerVisible(!isSearchContainerVisible);
-  };
+  
 
   const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
 
@@ -246,7 +244,7 @@ const MapComponent = () => {
                 setOriginMarker(marker);
                 createMarker(school, location);
                 setShowPlaces(true);
-                setShowText(false);
+               
 
                 // Lägg till en kontroll för när `setView('map')` ska anropas
                 if (window.location.pathname.includes('map')) {
@@ -311,14 +309,14 @@ const MapComponent = () => {
     }
   }, [map, filter]);
 
-  const handleFilterChange = (event) => {
-    const value = event.target.value;
+  const handleFilterChange = (type) => {
     setFilter((prevFilter) =>
-      prevFilter.includes(value)
-        ? prevFilter.filter((item) => item !== value)
-        : [...prevFilter, value]
+      prevFilter.includes(type)
+        ? prevFilter.filter((item) => item !== type)
+        : [...prevFilter, type]
     );
   };
+  
 
   const extractRelevantAddress = (fullAddress) => {
     const addressParts = fullAddress.split(',');
@@ -376,7 +374,7 @@ const MapComponent = () => {
       await findNearbyPlaces(location);
   
       setShowPlaces(true);
-      setShowText(false);
+   
       setSearchMade(true);
     } else {
       setErrorMessage('Map is not initialized.');
@@ -671,114 +669,27 @@ const createMarker = async (place, originLocation) => {
 
   return (
     <div className="app-container">
-      {showText}
-      {/* Visa knappen endast om en sökning har gjorts */}
-      
+    
 
-      {searchMade && (
-  <StyledBtn onClick={toggleSearchContainerVisibility}>
-  {isSearchContainerVisible ? 'Dölj filter' : 'Visa filter'}
-</StyledBtn>
-)}
+    
+
 
 
       {/* Uppdatera search-container med dynamisk klass baserat på state */}
-      <div className={`search-container ${showPlaces ? 'top' : 'center'} ${isSearchContainerVisible ? '' : 'no'}`}>
+      <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
         <Container maxWidth="sm">
-    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={2}>
+    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={0}>
       {showPlaces && (
-        <Box display="flex" justifyContent="center" width="100%" gap={2}>
-          <Button
-            onClick={filterClosestPreschools}
-            variant="contained"
-            color="secondary"
-            sx={{
-              marginTop: '40px',
-              background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-              padding: '10px 20px',
-              borderRadius: '50px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-            }}
-          >
-            De 5 närmaste
-          </Button>
-          <Button
-            onClick={handleTopRanked}
-            variant="contained"
-            color="secondary"
-           sx={{
-  marginTop: '40px',
-  padding: '10px 20px',
-  borderRadius: '50px',
-  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-  transition: 'none',  // Förhindrar ändringar vid interaktioner
-  ':active': {
-    transform: 'none',  // Förhindrar förändringar vid aktivt klick
-  },
-  ':hover': {
-    transform: 'none',  // Förhindrar förändringar vid hover
-  },
-  ':focus': {
-    outline: 'none',  // Förhindrar fokusramen som kan ändra form
-  },
-}}
-
-          >
-            Högst rank
-          </Button>
-       
-          {searchMade && (
-            <>
-              <Button
-                onClick={() => setFilterVisible(!filterVisible)}
-                variant="contained"
-                color="primary"
-                sx={{
-                  marginTop: '40px',
-                  padding: '10px 20px',
-                  borderRadius: '50px',
-                  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                  transition: 'none',  // Förhindrar ändringar vid interaktioner
-                  ':active': {
-                    transform: 'none',  // Förhindrar förändringar vid aktivt klick
-                  },
-                  ':hover': {
-                    transform: 'none',  // Förhindrar förändringar vid hover
-                  },
-                  ':focus': {
-                    outline: 'none',  // Förhindrar fokusramen som kan ändra form
-                  },
-                }}
-                
-              >
-                {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
-              </Button>
-              {!filterVisible && (
-              <OrganisationFilter
-              organisationTypes={organisationTypes}
-              filter={filter}
-              handleFilterChange={handleFilterChange}
-              visible={showPlaces}
-              onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}  // Lägg till detta
-              sx={{ marginTop: '20px' }}
-            />
-            
-                  )}
-                </>
-              )}
-            </Box>
-            )}
-  {searchMade && (
- <ButtonGroup
- aria-label="view toggle button group"
- style={{ borderRadius: '8px', overflow: 'hidden' }}
- sx={{
-   backgroundColor: 'transparent',  // Ingen bakgrund för ButtonGroup
-   boxShadow: 'none',               // Ingen skugga för ButtonGroup
-   border: 'none',                  // Ingen kantlinje för ButtonGroup
- }}
+  <Box
+  display="flex"
+  justifyContent="flex-start"
+  width="100%"
+  gap={1}
+  sx={{
+    overflowX: 'auto',  // Horisontell scroll
+    whiteSpace: 'nowrap',  // Ingen radbrytning
+    paddingBottom: '10px',
+  }}
 >
 <Button
   onClick={() => {
@@ -792,20 +703,21 @@ const createMarker = async (place, originLocation) => {
   }}
   variant="contained"
   sx={{
-    backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Ändra stil om aktiv
-    color: view === 'map' ? '#ffffff' : '#333',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px 20px',
+    marginTop: '10px',
     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-    fontFamily: 'Nunito, sans-serif',
-    border: '2px solid #333',
-    boxShadow: 'none',
-    width: '120px',
-    borderRadius: '8px',
+    padding: '5px 10px',
+    borderRadius: '25px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+    fontSize: '14px',
+    minWidth: '100px',
+    whiteSpace: 'nowrap',
+    transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
     '&:hover': {
-      backgroundColor: 'lightgrey',
+      background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
+    },
+    '&.active': {
+      background: '#c0c0c0',  // Markerad färg när knappen är vald
+      border: '2px solid #666',  // Kantlinje för vald knapp
     },
   }}
 >
@@ -820,26 +732,136 @@ const createMarker = async (place, originLocation) => {
    }}
    variant="contained"
    sx={{
-     backgroundColor: view === 'list' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
-     color: view === 'list' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
-     display: 'flex',
-     alignItems: 'center',
-     justifyContent: 'center',
-     padding: '10px 20px',
-     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-     fontFamily: 'Nunito, sans-serif',
-     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
-     boxShadow: 'none',  // Ingen skugga för knappen
-     width: '120px',  // Fixad bredd för att matcha alla knappar
-     borderRadius: '8px',  // Rundade hörn
-     '&:hover': {
-       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
-     },
-   }}
+    marginTop: '10px',
+    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+    padding: '5px 10px',
+    borderRadius: '25px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+    fontSize: '14px',
+    minWidth: '100px',
+    whiteSpace: 'nowrap',
+    transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
+    '&:hover': {
+      background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
+    },
+    '&.active': {
+      background: '#c0c0c0',  // Markerad färg när knappen är vald
+      border: '2px solid #666',  // Kantlinje för vald knapp
+    },
+  }}
  >
    <ListIcon style={{ marginRight: '8px' }} />
    Lista
  </Button>
+  <Button
+    onClick={filterClosestPreschools}
+    variant="contained"
+    color="secondary"
+    sx={{
+      marginTop: '10px',
+      background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+      padding: '5px 10px',
+      borderRadius: '25px',
+      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+      fontSize: '14px',
+      minWidth: '100px',
+      whiteSpace: 'nowrap',
+      transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
+      '&:hover': {
+        background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
+      },
+      '&.active': {
+        background: '#c0c0c0',  // Markerad färg när knappen är vald
+        border: '2px solid #666',  // Kantlinje för vald knapp
+      },
+    }}
+  >
+    De 5 närmaste
+  </Button>
+
+  <Button
+    onClick={handleTopRanked}
+    variant="contained"
+    color="secondary"
+    sx={{
+      marginTop: '10px',
+      padding: '5px 10px',
+      borderRadius: '25px',
+      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+      background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+      fontSize: '14px',
+      minWidth: '100px',
+      whiteSpace: 'nowrap',
+      transition: 'background-color 0.3s ease, border 0.3s ease',
+      '&:hover': {
+        background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',
+      },
+      '&.active': {
+        background: '#c0c0c0',
+        border: '2px solid #666',
+      },
+    }}
+  >
+    Högst rank
+  </Button>
+
+  {searchMade && (
+    <>
+      <Button
+        onClick={() => setFilterVisible(!filterVisible)}
+        variant="contained"
+        color="primary"
+        sx={{
+          marginTop: '10px',
+          padding: '5px 10px',
+          borderRadius: '25px',
+          background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+          fontSize: '14px',
+          minWidth: '100px',
+          whiteSpace: 'nowrap',
+          transition: 'background-color 0.3s ease, border 0.3s ease',
+          '&:hover': {
+            background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',
+          },
+          '&.active': {
+            background: '#c0c0c0',
+            border: '2px solid #666',
+          },
+        }}
+      >
+        {filterVisible ? 'Typ av förskola' : 'Typ av förskola'}
+      </Button>
+
+      {!filterVisible && (
+        <OrganisationFilter
+          organisationTypes={organisationTypes}
+          filter={filter}
+          handleFilterChange={handleFilterChange}
+          visible={showPlaces}
+          onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
+          sx={{ marginTop: '20px' }}
+        />
+      )}
+    </>
+  )}
+
+</Box>
+
+  
+     
+            )}
+  {searchMade && (
+ <ButtonGroup
+ aria-label="view toggle button group"
+ style={{ borderRadius: '8px', overflow: 'hidden' }}
+ sx={{
+   backgroundColor: 'transparent',  // Ingen bakgrund för ButtonGroup
+   boxShadow: 'none',               // Ingen skugga för ButtonGroup
+   border: 'none',                  // Ingen kantlinje för ButtonGroup
+ }}
+>
+
  
 </ButtonGroup>
 
@@ -863,7 +885,7 @@ const createMarker = async (place, originLocation) => {
     transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
     '& .MuiOutlinedInput-root': {
       color: '#333', // Vit textfärg
-      padding: '12px 16px', // Bekväm padding för insidan
+      padding: '1px 22px', // Bekväm padding för insidan
       '& fieldset': {
         borderColor: 'transparent', // Gör kantlinjen osynlig initialt
       },
@@ -964,36 +986,9 @@ const createMarker = async (place, originLocation) => {
       </div>
 
       {loading && (
- <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
- <div style={{ 
-   position: 'relative', 
-   display: 'inline-block',
-   width: '40px', 
-   height: '40px' 
- }}>
-   {/* Background gradient ring */}
-   <div style={{
-     position: 'absolute',
-     top: 0,
-     left: 0,
-     width: '100%',
-     height: '100%',
-     borderRadius: '50%',
-     background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)',
-     zIndex: 1
-   }}>
-   </div>
-   {/* Actual CircularProgress */}
-   <CircularProgress
-     style={{
-       position: 'relative',
-       zIndex: 2,
-       color: '#ffffff' // Inner spinner color
-     }}
-   />
- </div>
-</div>
-
+  <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+    <CircularProgress style={{ color: '#4CAF50' }} /> {/* Använd valfri färgkod */}
+  </div>
 )}
 
 

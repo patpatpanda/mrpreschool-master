@@ -67,6 +67,31 @@ button.MuiButtonBase-root {
   pointer-events: none;
   
 }
+.button-scroll-container {
+  display: flex;
+  overflow-x: scroll;
+  white-space: nowrap;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.button-scroll-container::-webkit-scrollbar {
+  display: none; /* Göm scrollbar på webkit-baserade webbläsare */
+}
+
+.button-scroll-container {
+  -ms-overflow-style: none; /* Göm scrollbar för IE och Edge */
+  scrollbar-width: none; /* Göm scrollbar för Firefox */
+}
+
+.scroll-button {
+  flex: 0 0 auto; /* Håll varje knapp till sin naturliga storlek */
+  padding: 10px 20px;
+  border-radius: 25px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
 .search-container > * {
   pointer-events: auto; /* Tillåt interaktioner på barnen (som texter och inputfält) */
@@ -78,7 +103,7 @@ button.MuiButtonBase-root {
   }
 
   .search-container.top {
-    top: 200px;
+    top: 90px;
     
     font-size: 16px;
     margin-right: 15px;
@@ -143,7 +168,14 @@ button.MuiButtonBase-root {
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }
 }
-
+@media (max-width: 760px) {
+  .initial-text {
+    top:0; /* Justera position för ännu mindre skärmar */
+    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
+    height: 60px; /* Justera höjden för små skärmar */
+    background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
+  }
+}
 
 
 .cards-container {
@@ -237,7 +269,7 @@ button.MuiButtonBase-root {
   }
 
   .search-container.top {
-    top: 120px;
+    top: 50px;
     
     font-size: 16px;
     margin-right: 15px;

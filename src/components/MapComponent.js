@@ -964,9 +964,36 @@ const createMarker = async (place, originLocation) => {
       </div>
 
       {loading && (
-  <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-    <CircularProgress style={{ color: '#4CAF50' }} /> {/* Använd valfri färgkod */}
-  </div>
+ <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+ <div style={{ 
+   position: 'relative', 
+   display: 'inline-block',
+   width: '40px', 
+   height: '40px' 
+ }}>
+   {/* Background gradient ring */}
+   <div style={{
+     position: 'absolute',
+     top: 0,
+     left: 0,
+     width: '100%',
+     height: '100%',
+     borderRadius: '50%',
+     background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)',
+     zIndex: 1
+   }}>
+   </div>
+   {/* Actual CircularProgress */}
+   <CircularProgress
+     style={{
+       position: 'relative',
+       zIndex: 2,
+       color: '#ffffff' // Inner spinner color
+     }}
+   />
+ </div>
+</div>
+
 )}
 
 

@@ -474,69 +474,107 @@ const MapComponent = () => {
       }
     });
   };
-  const createMarker = async (place, originLocation) => {
-    let iconUrl;
-    if (place.organisationsform === 'Kommunal') {
+  class CustomInfoWindow extends google.maps.OverlayView {
+    constructor(position, content) {
+        super();
+        this.position = position;
+        this.content = content;
+        this.div = null;
+    }
+
+    onAdd() {
+        this.div = document.createElement('div');
+        this.div.style.position = 'absolute';
+        this.div.style.backgroundColor = 'white';
+        this.div.style.padding = '5px';
+        this.div.style.borderRadius = '3px';
+        this.div.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+        this.div.innerHTML = this.content;
+        
+        const panes = this.getPanes();
+        panes.overlayLayer.appendChild(this.div);
+    }
+
+    draw() {
+        const projection = this.getProjection();
+        const position = projection.fromLatLngToDivPixel(this.position);
+        if (position && this.div) {
+            this.div.style.left = `${position.x}px`;
+            this.div.style.top = `${position.y - 40}px`; // Justera så att infoboxen visas ovanför markören
+        }
+    }
+
+    onRemove() {
+        if (this.div) {
+            this.div.parentNode.removeChild(this.div);
+            this.div = null;
+        }
+    }
+}
+
+const createMarker = async (place, originLocation) => {
+  let iconUrl;
+  if (place.organisationsform === 'Kommunal') {
       iconUrl = schoolIcon;
-    } else if (place.organisationsform === 'Fristående') {
+  } else if (place.organisationsform === 'Fristående') {
       iconUrl = school;
-    } else if (place.organisationsform === 'Föräldrakooperativ') {
+  } else if (place.organisationsform === 'Föräldrakooperativ') {
       iconUrl = kooperativ;
-    } else {
+  } else {
       iconUrl = kooperativ;
-    }
+  }
 
-    const marker = new google.maps.Marker({
-        position: { lat: place.latitude, lng: place.longitude },
-        title: place.namn,
-        icon: {
-          url: iconUrl,
-          scaledSize: new google.maps.Size(30, 30),
-          labelOrigin: new google.maps.Point(40, 15),
-        },
-    });
+  const marker = new google.maps.Marker({
+      position: { lat: place.latitude, lng: place.longitude },
+      title: place.namn,
+      icon: {
+        url: iconUrl,
+        scaledSize: new google.maps.Size(30, 30),
+        labelOrigin: new google.maps.Point(40, 15),
+      },
+  });
 
-    const infoWindow = new google.maps.InfoWindow({
-        content: `<div style="color: black; padding: 5px; font-size: 12px; font-weight: bold; border-radius: 3px;">${place.namn}</div>`,
-    });
-    infoWindow.open(map, marker);
+  // Skapa ett CustomInfoWindow istället för standard InfoWindow
+  const infoWindowContent = `<div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px;">${place.namn}</div>`;
+  const customInfoWindow = new CustomInfoWindow(new google.maps.LatLng(place.latitude, place.longitude), infoWindowContent);
+  
+  customInfoWindow.setMap(map); // Lägg till din anpassade InfoWindow på kartan
 
-    // Lägg till varje markörs position i bounds
-    const bounds = new google.maps.LatLngBounds();
-    bounds.extend(marker.position);
+  // Lägg till markörens position i bounds
+  const bounds = new google.maps.LatLngBounds();
+  bounds.extend(marker.position);
 
-    clustererRef.current.addMarker(marker);
+  clustererRef.current.addMarker(marker);
 
-    // Om du har originLocation kan du även inkludera den i bounds
-    if (originLocation) {
-        bounds.extend(originLocation);
-    }
+  if (originLocation) {
+      bounds.extend(originLocation);
+  }
 
-    // Autozooma kartan för att inkludera alla markörer
-    map.fitBounds(bounds);
+  map.fitBounds(bounds);
 
-    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
-        lat: place.latitude,
-        lng: place.longitude,
-    });
+  const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
+      lat: place.latitude,
+      lng: place.longitude,
+  });
 
-    const formattedWalkingTime =
-        walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
-            ? walkingTimeInMinutes.toFixed(2)
-            : 'N/A';
+  const formattedWalkingTime =
+      walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
+          ? walkingTimeInMinutes.toFixed(2)
+          : 'N/A';
 
-    setWalkingTimes((prevTimes) => ({
-        ...prevTimes,
-        [place.id]: formattedWalkingTime,
-    }));
+  setWalkingTimes((prevTimes) => ({
+      ...prevTimes,
+      [place.id]: formattedWalkingTime,
+  }));
 
-    marker.addListener('click', () => {
-        selectPlace(place);
-        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
-    });
+  marker.addListener('click', () => {
+      selectPlace(place);
+      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+  });
 
-    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
+  setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
 };
+
 
   const selectPlace = async (place, changeView = false) => {
     try {

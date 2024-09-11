@@ -853,7 +853,7 @@ const createMarker = async (place, originLocation) => {
 <TextField
   id="address"
   variant="outlined"
-  placeholder="Skriv din adress för att hitta förskola"
+  placeholder="Skriv din adress för att hitta förskola..."
   fullWidth
   sx={{
     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
@@ -876,8 +876,8 @@ const createMarker = async (place, originLocation) => {
     },
     'input::placeholder': {
       color: '#333', // Tydligare, nästan helt vit placeholder-text
-      fontSize: '18px', // Större text för bättre läsbarhet
-      fontWeight: 'bold', // Fetare text för att göra den mer framträdande
+      fontSize: '14px', // Större text för bättre läsbarhet
+     
     },
   }}
   inputRef={addressRef}

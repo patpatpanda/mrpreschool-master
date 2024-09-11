@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)', // Mildare färger
-  color: '#fff',
+  background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+  color: '#333',
   position: 'absolute',
   top: '85px',
   left: '10px',
@@ -19,6 +19,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
     background: 'linear-gradient(45deg, #a7c0cd 30%, #62727b 90%)', // Subtil hover-effekt
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.12)', // Lättare hover-skugga
     transform: 'scale(1.03)', // Liten storleksökning på hover
+    color:'#fff'
   },
   [theme.breakpoints.up('md')]: {
     top: '40px',

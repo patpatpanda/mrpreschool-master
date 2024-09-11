@@ -66,7 +66,7 @@ const MapComponent = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchMade, setSearchMade] = useState(false); // Används för att visa knappen efter sökning
-  const [filterVisible, setFilterVisible] = useState(true);
+  
   const directionsService = useRef(null);
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
@@ -123,7 +123,7 @@ const MapComponent = () => {
   // Funktion för att toggla synligheten
   
 
-  const organisationTypes = ['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)'];
+  
 
   useEffect(() => {
     const initMap = () => {

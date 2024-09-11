@@ -677,7 +677,7 @@ const createMarker = async (place, originLocation) => {
 
       {/* Uppdatera search-container med dynamisk klass baserat på state */}
       <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
-        <Container maxWidth="sm">
+        <Container maxWidth="l">
     <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={0}>
       {showPlaces && (
   <Box

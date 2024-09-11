@@ -21,18 +21,11 @@ import StyledBtn from './StyledBtn';
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
-  north: 59.435,
-  south: 59.261,
-  west: 17.757,
-  east: 18.228,
+  north: 59.485,  // Flyttar den norra gränsen lite högre upp
+  south: 59.200,  // Flyttar den södra gränsen längre ner
+  west: 17.600,   // Flyttar den västra gränsen längre västerut
+  east: 18.400,   // Flyttar den östra gränsen längre österut
 };
-
-const SERGELSTORG_COORDINATES = {
-  latitude: 59.33258,
-  longitude: 18.0649,
-};
-
-
 
 
 const geocodeAddress = async (address) => {
@@ -334,85 +327,54 @@ const MapComponent = () => {
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
-    
+  
     if (!address) {
       setErrorMessage('Ange en giltig adress.');
       return;
     }
-
+  
     setLoading(true);
     clearMarkers();
     setNearbyPlaces([]);
-
+  
     const relevantAddress = extractRelevantAddress(address);
     console.log('Relevant address extracted:', relevantAddress);
-
-    // Försök att geokoda adressen
+  
     const coordinates = await geocodeAddress(relevantAddress);
-
+  
     if (!coordinates) {
       setErrorMessage('Ogiltig adress, försök igen.');
       setLoading(false);
       return;
     }
-
+  
     const { latitude, longitude } = coordinates;
-
-    if (
-      latitude === SERGELSTORG_COORDINATES.latitude &&
-      longitude === SERGELSTORG_COORDINATES.longitude
-    ) {
-      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
-      setLoading(false);
-      return;
-    }
-
     const location = new google.maps.LatLng(latitude, longitude);
-
+  
     if (map) {
+      // Sätt kartans center och zoomnivå direkt
       map.setCenter(location);
-      map.setZoom(14);
-
+      map.setZoom(14); // Här sätter du den zoomnivå du önskar direkt utan att använda fitBounds
+  
       if (originMarker) {
         originMarker.setMap(null);
       }
-
+  
       const marker = new google.maps.Marker({
         map: map,
         position: location,
         icon: {
-         url: hus, 
+          url: hus,
           scaledSize: new google.maps.Size(35, 35),
         },
       });
-
+  
       setOriginMarker(marker);
       setOriginPosition(location);
-
-      // Skapa en instans av LatLngBounds
-      const bounds = new google.maps.LatLngBounds();
-
-      // Hitta förskolor och skapa markörer
+  
+      // Skapa markörer utan att använda fitBounds om det orsakar problem
       await findNearbyPlaces(location);
-
-      // Efter att alla förskolor har laddats, utvidga bounds och autozoom
-      nearbyPlaces.forEach((place) => {
-        bounds.extend(new google.maps.LatLng(place.latitude, place.longitude));
-      });
-
-      // Lägg även till användarens plats (origin)
-      bounds.extend(location);
-
-      // Autozoom kartan för att inkludera alla markörer
-      map.fitBounds(bounds);
-
-      // Kontrollera om zoomnivån är för hög och justera den
-      google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
-        if (map.getZoom() > 15) {
-          map.setZoom(15); // Ställ in en maxzoom om den är för inzoomad
-        }
-      });
-
+  
       setShowPlaces(true);
       setShowText(false);
       setSearchMade(true);
@@ -420,7 +382,8 @@ const MapComponent = () => {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
-}, [map, originMarker, findNearbyPlaces]);
+  }, [map, originMarker, findNearbyPlaces]);
+  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -474,7 +437,7 @@ const MapComponent = () => {
       }
     });
   };
-  const createMarker = async (place, originLocation) => {
+const createMarker = async (place, originLocation) => {
     let iconUrl;
     if (place.organisationsform === 'Kommunal') {
       iconUrl = schoolIcon;
@@ -815,33 +778,39 @@ const MapComponent = () => {
    border: 'none',                  // Ingen kantlinje för ButtonGroup
  }}
 >
- <Button
-   onClick={() => {
-     setView('map');
-     setIsMapVisible(true);  // Sätt till true när kartan är synlig
-   }}
-   variant="contained"
-   sx={{
-     backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Rosa bakgrund om aktiv, annars vit
-     color: view === 'map' ? '#ffffff' : '#333',  // Vit text om aktiv, annars mörkgrå
-     display: 'flex',
-     background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',  // Vit till ljusgrå gradient bakgrund
-     alignItems: 'center',
-     justifyContent: 'center',
-     padding: '10px 20px',
-     fontFamily: 'Nunito, sans-serif',
-     border: '2px solid #333',  // Fullständig definition av kantlinje: 2px bredd, solid stil, mörkgrå färg
-     boxShadow: 'none',  // Ingen skugga för knappen
-     width: '120px',  // Fixad bredd för att matcha alla knappar
-     borderRadius: '8px',  // Rundade hörn
-     '&:hover': {
-       backgroundColor: 'lightgrey',  // Ljusare rosa vid hover
-     },
-   }}
- >
-   <MapIcon style={{ marginRight: '8px' }} />
-   Karta
- </Button>
+<Button
+  onClick={() => {
+    setView('map');
+    setIsMapVisible(true);  // Sätt till true när kartan är synlig
+
+    // Lägg till följande för att zooma in när knappen "Karta" klickas
+    if (map) {
+      map.setZoom(14);  // Här väljer du zoomnivån du vill ha när kartan visas
+    }
+  }}
+  variant="contained"
+  sx={{
+    backgroundColor: view === 'map' ? 'lightgrey' : '#ffffff',  // Ändra stil om aktiv
+    color: view === 'map' ? '#ffffff' : '#333',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '10px 20px',
+    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+    fontFamily: 'Nunito, sans-serif',
+    border: '2px solid #333',
+    boxShadow: 'none',
+    width: '120px',
+    borderRadius: '8px',
+    '&:hover': {
+      backgroundColor: 'lightgrey',
+    },
+  }}
+>
+  <MapIcon style={{ marginRight: '8px' }} />
+  Karta
+</Button>
+
  <Button
    onClick={() => {
      setView('list');

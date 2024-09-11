@@ -474,7 +474,6 @@ const MapComponent = () => {
       }
     });
   };
-  
   const createMarker = async (place, originLocation) => {
     let iconUrl;
     if (place.organisationsform === 'Kommunal') {
@@ -487,6 +486,28 @@ const MapComponent = () => {
       iconUrl = kooperativ;
     }
 
+    // Hämta Malibu-data
+    const malibuData = await fetchMalibuByName(place.namn);
+    const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
+
+    // Funktion för att generera stjärnor och visa rating bredvid
+    const getRatingWithIcon = (rating) => {
+        if (rating === null) {
+            return 'Ingen data'; // Om inget betyg finns
+        }
+
+        return `
+          <div style="display: flex; align-items: center;">
+            <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
+            <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
+            <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
+          </div>
+        `;
+    };
+
+    // Generera betygsikonen med värde eller visa "Ingen data"
+    const ratingContent = getRatingWithIcon(helhetsomdome);
+
     const marker = new google.maps.Marker({
         position: { lat: place.latitude, lng: place.longitude },
         title: place.namn,
@@ -497,24 +518,30 @@ const MapComponent = () => {
         },
     });
 
+    // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
-      content: `<div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px; line-height: 1.2em; max-height: 50px; overflow: hidden;">${place.namn}</div>`,
-  });
-  
+      content: `
+        <div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px; line-height: 1.2em;">
+          <div>${place.namn}</div>
+          <div style="display: flex; align-items: center;">
+            <span>Betyg:</span>
+            ${ratingContent}
+          </div>
+        </div>
+      `,
+    });
+
     infoWindow.open(map, marker);
 
-    // Lägg till varje markörs position i bounds
     const bounds = new google.maps.LatLngBounds();
     bounds.extend(marker.position);
 
     clustererRef.current.addMarker(marker);
 
-    // Om du har originLocation kan du även inkludera den i bounds
     if (originLocation) {
         bounds.extend(originLocation);
     }
 
-    // Autozooma kartan för att inkludera alla markörer
     map.fitBounds(bounds);
 
     const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
@@ -539,6 +566,7 @@ const MapComponent = () => {
 
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
 };
+
 
   const selectPlace = async (place, changeView = false) => {
     try {

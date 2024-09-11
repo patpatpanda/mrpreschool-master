@@ -435,7 +435,7 @@ const MapComponent = () => {
       }
     });
   };
-const createMarker = async (place, originLocation) => {
+  const createMarker = async (place, originLocation) => {
     let iconUrl;
     if (place.organisationsform === 'Kommunal') {
       iconUrl = schoolIcon;
@@ -469,9 +469,16 @@ const createMarker = async (place, originLocation) => {
     // Generera betygsikonen med värde eller visa "Ingen data"
     const ratingContent = getRatingWithIcon(helhetsomdome);
 
+    // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
+    const cleanedName = place.namn
+        .replace(/förskolan/gi, '') 
+        .replace(/förskola/gi, '')         // Tar bort "förskola"
+        .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
+        .trim();
+
     const marker = new google.maps.Marker({
         position: { lat: place.latitude, lng: place.longitude },
-        title: place.namn,
+        title: cleanedName,
         icon: {
           url: iconUrl,
           scaledSize: new google.maps.Size(30, 30),
@@ -482,18 +489,16 @@ const createMarker = async (place, originLocation) => {
     // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
       content: `
-        <div style="color: black; padding: 2px 5px; font-size: 12px; font-weight: bold; border-radius: 3px; line-height: 1.2em; max-width: 150px; margin: 0;">
-          <div style="margin: 0; padding: 0;">${place.namn}</div>
-          <div style="display: flex; align-items: center; margin: 0; padding: 0; line-height: 1.1em;">
-            <span>Betyg:</span>
+        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
+          <div style="margin: 0; padding: 0;">${cleanedName}</div>
+          <div style="display: flex; align-items: center; margin: 0; padding: 0;">
+            <span style="margin-right: 2px;">Betyg:</span>
             ${ratingContent}
           </div>
         </div>
       `,
     });
     
-    
-
     infoWindow.open(map, marker);
 
     const bounds = new google.maps.LatLngBounds();

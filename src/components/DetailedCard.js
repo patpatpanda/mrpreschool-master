@@ -313,51 +313,64 @@ const DetailedCard = ({ schoolData, onClose }) => {
   <div style={{ width: '100%', maxWidth: '800px', margin: '40px auto', height: '50vh', marginBottom: '100px', color: '#333', zIndex: 3000 }}>
     <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center', zIndex: 3000 }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
     <Bar
-      data={{
-        labels: chartData[0].data.labels, // Använd etiketter från det första årets data
-        datasets: chartData.map((chart) => ({
-          label: `Resultat för ${chart.year}`,
-          data: chart.data.datasets[0].data, // Data för respektive år
-          backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`, // Slumpmässig färg
-          borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
-          borderWidth: 1
-        }))
-      }}
-      options={{
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            labels: {
-              color: '#333',
-              font: {
-                size: 14
-              }
-            }
-          },
-          title: {
-            display: true,
-            text: `Jämförelse mellan år`,
-            color: '#333',
-            font: {
-              size: 18
-            }
-          }
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: '#333'
-            }
-          },
-          y: {
-            ticks: {
-              color: '#333'
-            }
+  data={{
+    labels: chartData[0].data.labels, // Använd etiketter från det första årets data
+    datasets: chartData.map((chart) => ({
+      label: `Resultat för ${chart.year}`,
+      data: chart.data.datasets[0].data, // Data för respektive år
+      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`, // Slumpmässig färg
+      borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+      borderWidth: 1
+    }))
+  }}
+  options={{
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#333',
+          font: {
+            size: 14
           }
         }
-      }}
-    />
+      },
+      title: {
+        display: true,
+        text: 'Jämförelse mellan år',
+        color: '#333',
+        font: {
+          size: 18
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}%`; // Lägg till procentsymbol i tooltip
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#333'
+        }
+      },
+      y: {
+        ticks: {
+          color: '#333',
+          callback: function (value) {
+            return value + '%'; // Visa procentsymbol på y-axeln
+          }
+        },
+        beginAtZero: true,
+        max: 100 // Sätter maximivärdet till 100 för procent
+      }
+    }
+  }}
+/>
+
   </div>
 )}
 

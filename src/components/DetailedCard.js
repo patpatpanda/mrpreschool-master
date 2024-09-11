@@ -101,7 +101,7 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   position: 'relative',
   display: 'flex',
   justifyContent: 'center',
-  backgroundColor: '#AAF0D1', 
+  background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)', // Mildare färger
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({

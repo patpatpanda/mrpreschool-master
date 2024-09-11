@@ -856,13 +856,13 @@ const createMarker = async (place, originLocation) => {
   placeholder="Skriv din adress för att hitta förskola"
   fullWidth
   sx={{
-    background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)', // Gradientbakgrund
+    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
     borderRadius: '12px', // Mer rundade hörn för en modern känsla
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Lätt skugga för djup
     overflow: 'hidden',
     transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
     '& .MuiOutlinedInput-root': {
-      color: '#ffffff', // Vit textfärg
+      color: '#333', // Vit textfärg
       padding: '12px 16px', // Bekväm padding för insidan
       '& fieldset': {
         borderColor: 'transparent', // Gör kantlinjen osynlig initialt
@@ -875,7 +875,7 @@ const createMarker = async (place, originLocation) => {
       },
     },
     'input::placeholder': {
-      color: 'rgba(255, 255, 255, 0.9)', // Tydligare, nästan helt vit placeholder-text
+      color: '#333', // Tydligare, nästan helt vit placeholder-text
       fontSize: '18px', // Större text för bättre läsbarhet
       fontWeight: 'bold', // Fetare text för att göra den mer framträdande
     },
@@ -883,7 +883,7 @@ const createMarker = async (place, originLocation) => {
   inputRef={addressRef}
   onKeyDown={handleKeyDown}
   InputProps={{
-    style: { color: '#ffffff' }, // Vit textfärg i input
+    style: { color: '#333' }, // Vit textfärg i input
     endAdornment: (
       <InputAdornment position="end">
         <IconButton

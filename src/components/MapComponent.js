@@ -472,7 +472,8 @@ const MapComponent = () => {
     // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
     const cleanedName = place.namn
       .replace(/förskolan/gi, '') 
-      .replace(/förskola/gi, '') // Tar bort "förskola"
+      .replace(/förskola/gi, '')
+      .replace(/förskolor/gi, '') // Tar bort "förskola"
       .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
       .trim();
   

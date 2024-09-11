@@ -435,7 +435,7 @@ const MapComponent = () => {
       }
     });
   };
-  const createMarker = async (place, originLocation) => {
+  const createMarker = async (place, originLocation, shouldUpdateBounds = false) => {
     let iconUrl;
     if (place.organisationsform === 'Kommunal') {
       iconUrl = schoolIcon;
@@ -446,46 +446,46 @@ const MapComponent = () => {
     } else {
       iconUrl = kooperativ;
     }
-
+  
     // Hämta Malibu-data
     const malibuData = await fetchMalibuByName(place.namn);
     const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
-
+  
     // Funktion för att generera stjärnor och visa rating bredvid
     const getRatingWithIcon = (rating) => {
-        if (rating === null) {
-            return 'Ingen data'; // Om inget betyg finns
-        }
-
-        return `
-          <div style="display: flex; align-items: center;">
-            <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
-            <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
-            <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
-          </div>
-        `;
+      if (rating === null) {
+        return 'Ingen data'; // Om inget betyg finns
+      }
+  
+      return `
+        <div style="display: flex; align-items: center;">
+          <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
+          <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
+          <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
+        </div>
+      `;
     };
-
+  
     // Generera betygsikonen med värde eller visa "Ingen data"
     const ratingContent = getRatingWithIcon(helhetsomdome);
-
+  
     // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
     const cleanedName = place.namn
-        .replace(/förskolan/gi, '') 
-        .replace(/förskola/gi, '')         // Tar bort "förskola"
-        .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
-        .trim();
-
+      .replace(/förskolan/gi, '') 
+      .replace(/förskola/gi, '') // Tar bort "förskola"
+      .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
+      .trim();
+  
     const marker = new google.maps.Marker({
-        position: { lat: place.latitude, lng: place.longitude },
-        title: cleanedName,
-        icon: {
-          url: iconUrl,
-          scaledSize: new google.maps.Size(30, 30),
-          labelOrigin: new google.maps.Point(40, 15),
-        },
+      position: { lat: place.latitude, lng: place.longitude },
+      title: cleanedName,
+      icon: {
+        url: iconUrl,
+        scaledSize: new google.maps.Size(30, 30),
+        labelOrigin: new google.maps.Point(40, 15),
+      },
     });
-
+  
     // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
       content: `
@@ -500,40 +500,44 @@ const MapComponent = () => {
     });
     
     infoWindow.open(map, marker);
-
-    const bounds = new google.maps.LatLngBounds();
-    bounds.extend(marker.position);
-
-    clustererRef.current.addMarker(marker);
-
-    if (originLocation) {
+  
+    // Om kartan ska uppdatera sina gränser
+    if (shouldUpdateBounds) {
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(marker.position);
+  
+      if (originLocation) {
         bounds.extend(originLocation);
+      }
+  
+      map.fitBounds(bounds);
     }
-
-    map.fitBounds(bounds);
-
+  
+    clustererRef.current.addMarker(marker);
+  
     const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
-        lat: place.latitude,
-        lng: place.longitude,
+      lat: place.latitude,
+      lng: place.longitude,
     });
-
+  
     const formattedWalkingTime =
-        walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
-            ? walkingTimeInMinutes.toFixed(2)
-            : 'N/A';
-
+      walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
+        ? walkingTimeInMinutes.toFixed(2)
+        : 'N/A';
+  
     setWalkingTimes((prevTimes) => ({
-        ...prevTimes,
-        [place.id]: formattedWalkingTime,
+      ...prevTimes,
+      [place.id]: formattedWalkingTime,
     }));
-
+  
     marker.addListener('click', () => {
-        selectPlace(place);
-        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+      selectPlace(place);
+      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
     });
-
+  
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
-};
+  };
+  
 
 
   const selectPlace = async (place, changeView = false) => {

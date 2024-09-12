@@ -503,16 +503,19 @@ const MapComponent = () => {
     infoWindow.open(map, marker);
   
     // Om kartan ska uppdatera sina gränser
-    if (shouldUpdateBounds) {
-      const bounds = new google.maps.LatLngBounds();
-      bounds.extend(marker.position);
-  
-      if (originLocation) {
-        bounds.extend(originLocation);
-      }
-  
-      map.fitBounds(bounds);
-    }
+   // Om kartan ska uppdatera sina gränser
+if (shouldUpdateBounds) {
+  const bounds = new google.maps.LatLngBounds();
+  bounds.extend(marker.position);
+
+  if (originLocation) {
+    bounds.extend(originLocation);
+  }
+
+  // Endast kalla fitBounds om du verkligen vill uppdatera gränserna
+  map.fitBounds(bounds);
+}
+
   
     clustererRef.current.addMarker(marker);
   
@@ -533,8 +536,10 @@ const MapComponent = () => {
   
     marker.addListener('click', () => {
       selectPlace(place);
-      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+      // Om createRoute flyttar kartan, kommentera ut det
+      // createRoute(new google.maps.LatLng(place.latitude, place.longitude));
     });
+    
   
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
   };

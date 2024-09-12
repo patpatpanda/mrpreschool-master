@@ -16,13 +16,14 @@ body, html {
 .app-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   height: 100vh;
-  position: relative;
+ position: relative;
   margin: 0;
   background-color: #ffffff;
   padding: 0;
+  
 }
+
 /* Justera knappens position */
 button.MuiButtonBase-root {
   z-index: 20; /* Säkerställer att den visas ovanpå kartan */

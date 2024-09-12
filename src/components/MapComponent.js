@@ -17,7 +17,9 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 import hus from '../images/icons8-start-94.png';
+import customIcon from '../images/icons8-children-48.png';
 
+import CustomButton from './CustomButton';
 /*global google*/
 
 const STOCKHOLM_BOUNDS = {
@@ -60,20 +62,29 @@ const MapComponent = () => {
   const [originMarker, setOriginMarker] = useState(null);
   const [originPosition, setOriginPosition] = useState(null);
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
-  const [view, setView] = useState('list');
+  const [view, setView] = useState('map');
+
   const [walkingTimes, setWalkingTimes] = useState({});
+
+
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchMade, setSearchMade] = useState(false); // Används för att visa knappen efter sökning
   
+  const [selectedButton, setSelectedButton] = useState(null);
+  const handleButtonClick = (view) => {
+    setSelectedButton(view);  // Sätt vilken knapp som är vald
+    setView(view);  // Uppdatera vilken vy som ska visas (karta eller lista)
+  };
+  
+
   const directionsService = useRef(null);
   const directionsRenderer = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const clustererRef = useRef(null); 
   const [isMapVisible, setIsMapVisible] = useState(false);
-  
   
   const filterPedagogiskOmsorg = async () => {
     if (!originPosition) {
@@ -85,18 +96,19 @@ const MapComponent = () => {
       const lat = originPosition.lat();  // Hämta latitud från positionen
       const lng = originPosition.lng();  // Hämta longitud från positionen
   
-      // Hämta förskolor med "Pedagogisk omsorg" som är nära användarens plats
-      const filteredPlaces = await fetchNearbySchools(lat, lng, '', 'Pedagogisk omsorg');
+      // Hämta förskolor med "Dagmamma" som TypAvService
+      const filteredPlaces = await fetchNearbySchools(lat, lng, '', 'pedagogisk omsorg');  // Notera att vi skickar 'Dagmamma' som typAvService
   
-      // Kontrollera om resultatet inte är tomt
+      console.log("Filtered Dagmamma places:", filteredPlaces);  // För felsökning
+  
       if (filteredPlaces && filteredPlaces.length > 0) {
         setNearbyPlaces(filteredPlaces);  // Uppdatera lista med de filtrerade förskolorna
-        clearMarkers();
+        clearMarkers();  // Ta bort gamla markörer
         filteredPlaces.forEach((result) => {
-          createMarker(result, originPosition);
+          createMarkerWithCustomIcon(result, originPosition, false);  // Skapa markör utan att uppdatera kartans gränser
         });
       } else {
-        console.error('Inga förskolor hittades med "Pedagogisk omsorg" i detta område');
+        console.error('Inga förskolor hittades med "Dagmamma" i detta område');
       }
     } catch (error) {
       console.error('Ett fel inträffade vid filtrering av förskolor:', error);
@@ -104,7 +116,73 @@ const MapComponent = () => {
   };
   
   
-  
+  const createMarkerWithCustomIcon = async (place, originLocation, shouldUpdateBounds = false) => {
+    // Hämta Malibu-data för att få helhetsomdömet
+    const malibuData = await fetchMalibuByName(place.namn);
+    
+    const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
+
+    // Ta bort onödiga ord från namnet (t.ex. "förskola")
+    const cleanedName = place.namn
+      .replace(/förskolan/gi, '')
+      .replace(/förskola/gi, '')
+      .replace(/förskolor/gi, '')
+      .replace(/föräldrakooperativet/gi, '')
+      .replace(/dagmamma/gi, '')
+      .replace(/familjedaghem/gi, '')
+      .replace(/familjedaghemmet/gi, '')
+      .trim();
+
+    // Skapa markör med customIcon
+    const marker = new google.maps.Marker({
+      position: { lat: place.latitude, lng: place.longitude },
+      map: map,
+      title: cleanedName,  // Använd cleanedName som titel
+      icon: {
+        url: customIcon,  // Använd den anpassade ikonen för Dagmamma
+        scaledSize: new google.maps.Size(35, 35),  // Anpassad storlek på ikonen
+        labelOrigin: new google.maps.Point(40, 15),
+      },
+    });
+
+    // Skapa InfoWindow med cleanedName och betyget
+    const infoWindow = new google.maps.InfoWindow({
+      content: `
+        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
+          <div style="margin: 0; padding: 0;">${cleanedName}</div>
+          <div style="display: flex; align-items: center; margin: 0; padding: 0;">
+            <span style="margin-right: 2px;">Betyg:</span>
+            ${helhetsomdome ? `${helhetsomdome}% nöjda` : 'Ingen data'}
+          </div>
+        </div>
+      `,
+    });
+
+    // Öppna InfoWindow direkt när markören skapas
+    infoWindow.open(map, marker);
+
+    // Lägg till klicklyssnare för att visa detaljer och öppna InfoWindow igen om den stängs
+    marker.addListener('click', () => {
+      selectPlace(place, true);  // true för att byta till 'map view' om det behövs
+      infoWindow.open(map, marker);  // Öppna InfoWindow på nytt vid klick
+    });
+
+    // Om kartan ska uppdatera sina gränser
+    if (shouldUpdateBounds) {
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(marker.position);
+
+      if (originLocation) {
+        bounds.extend(originLocation);
+      }
+
+      map.fitBounds(bounds);  // Endast kalla fitBounds om `shouldUpdateBounds` är sant
+    }
+
+    // Lägg till markören i listan över aktuella markörer
+    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
+};
+
   
   useEffect(() => {
     // Ställ in body overflow-y baserat på om kartvyn är aktiv eller inte
@@ -602,12 +680,12 @@ if (shouldUpdateBounds) {
       alert('Ange en adress först.');
       return;
     }
-
+  
     const topPlaces = allPlaces
       .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined)
       .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome)
       .slice(0, 5);
-
+  
     setNearbyPlaces(topPlaces);
     clearMarkers();
     topPlaces.forEach((result) => {
@@ -620,7 +698,7 @@ if (shouldUpdateBounds) {
       alert('Ange en adress först.');
       return;
     }
-
+  
     const sortedPlaces = allPlaces.sort((a, b) => {
       const distanceA = calculateDistance(
         originMarker.getPosition(),
@@ -630,18 +708,19 @@ if (shouldUpdateBounds) {
         originMarker.getPosition(),
         new google.maps.LatLng(b.latitude, b.longitude)
       );
-
+  
       return distanceA - distanceB;
     });
-
+  
     const closestPlaces = sortedPlaces.slice(0, 5);
-
+  
     setNearbyPlaces(closestPlaces);
     clearMarkers();
     closestPlaces.forEach((result) => {
       createMarker(result, originMarker.getPosition());
     });
   };
+  
 
   const calculateDistance = (origin, destination) => {
     const R = 6371;
@@ -706,119 +785,41 @@ if (shouldUpdateBounds) {
     paddingBottom: '10px',
   }}
 >
-<Button
-  onClick={() => {
-    setView('map');
-    setIsMapVisible(true);  // Sätt till true när kartan är synlig
 
-    // Lägg till följande för att zooma in när knappen "Karta" klickas
-    if (map) {
-      map.setZoom(14);  // Här väljer du zoomnivån du vill ha när kartan visas
-    }
-  }}
-  variant="contained"
-  sx={{
-    marginTop: '10px',
-    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-    padding: '5px 10px',
-    borderRadius: '25px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-    fontSize: '14px',
-    minWidth: '100px',
-    whiteSpace: 'nowrap',
-    transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
-    '&:hover': {
-      background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
-    },
-    '&.active': {
-      background: '#c0c0c0',  // Markerad färg när knappen är vald
-      border: '2px solid #666',  // Kantlinje för vald knapp
-    },
-  }}
+<CustomButton
+  onClick={() => handleButtonClick('map')}  // Anropa handleButtonClick för kartvy
+  isSelected={selectedButton === 'map'}     // Kontrollera om knappen är vald
 >
   <MapIcon style={{ marginRight: '8px' }} />
   Karta
-</Button>
+</CustomButton>
 
- <Button
-   onClick={() => {
-     setView('list');
-     setIsMapVisible(false);  // Sätt till false när kartan inte är synlig
-   }}
-   variant="contained"
-   sx={{
-    marginTop: '10px',
-    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-    padding: '5px 10px',
-    borderRadius: '25px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-    fontSize: '14px',
-    minWidth: '100px',
-    whiteSpace: 'nowrap',
-    transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
-    '&:hover': {
-      background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
-    },
-    '&.active': {
-      background: '#c0c0c0',  // Markerad färg när knappen är vald
-      border: '2px solid #666',  // Kantlinje för vald knapp
-    },
+<CustomButton
+  onClick={() => handleButtonClick('list')}  // Anropa handleButtonClick för listvy
+  isSelected={selectedButton === 'list'}
+>
+  <ListIcon style={{ marginRight: '8px' }} />
+  Lista
+</CustomButton>
+
+<CustomButton
+  onClick={() => {
+    filterClosestPreschools();     // Kör filtreringen utan att byta vy
   }}
- >
-   <ListIcon style={{ marginRight: '8px' }} />
-   Lista
- </Button>
-  <Button
-    onClick={filterClosestPreschools}
-    variant="contained"
-    color="secondary"
-    sx={{
-      marginTop: '10px',
-      background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-      padding: '5px 10px',
-      borderRadius: '25px',
-      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-      fontSize: '14px',
-      minWidth: '100px',
-      whiteSpace: 'nowrap',
-      transition: 'background-color 0.3s ease, border 0.3s ease',  // Smidig övergång
-      '&:hover': {
-        background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',  // Ljusare färg vid hover
-      },
-      '&.active': {
-        background: '#c0c0c0',  // Markerad färg när knappen är vald
-        border: '2px solid #666',  // Kantlinje för vald knapp
-      },
-    }}
-  >
-    De 5 närmaste
-  </Button>
+  isSelected={selectedButton === 'closest'}  // Kontrollera om knappen är vald
+>
+  De 5 närmaste
+</CustomButton>
 
-  <Button
-    onClick={handleTopRanked}
-    variant="contained"
-    color="secondary"
-    sx={{
-      marginTop: '10px',
-      padding: '5px 10px',
-      borderRadius: '25px',
-      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-      background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-      fontSize: '14px',
-      minWidth: '100px',
-      whiteSpace: 'nowrap',
-      transition: 'background-color 0.3s ease, border 0.3s ease',
-      '&:hover': {
-        background: 'linear-gradient(45deg, #e0e0e0 30%, #c0c0c0 90%)',
-      },
-      '&.active': {
-        background: '#c0c0c0',
-        border: '2px solid #666',
-      },
-    }}
-  >
-    Högst rank
-  </Button>
+<CustomButton
+  onClick={() => {
+    handleTopRanked();    // Kör rankningen utan att byta vy
+  }}
+  isSelected={selectedButton === 'rank'}  // Kontrollera om knappen är vald
+>
+  Högst rank
+</CustomButton>
+
 
   
  <OrganisationFilter

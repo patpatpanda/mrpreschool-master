@@ -763,240 +763,195 @@ if (shouldUpdateBounds) {
 
   return (
     <div className="app-container">
-    
-
-    
-
-
-
       {/* Uppdatera search-container med dynamisk klass baserat på state */}
       <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
         <Container maxWidth="l">
-    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={0}>
-      {showPlaces && (
-  <Box
-  display="flex"
-  justifyContent="flex-start"
-  width="100%"
-  gap={1}
-  sx={{
-    overflowX: 'auto',  // Horisontell scroll
-    whiteSpace: 'nowrap',  // Ingen radbrytning
-    paddingBottom: '10px',
-  }}
->
-
-<CustomButton
-  onClick={() => handleButtonClick('map')}  // Anropa handleButtonClick för kartvy
-  isSelected={selectedButton === 'map'}     // Kontrollera om knappen är vald
->
-  <MapIcon style={{ marginRight: '8px' }} />
-  Karta
-</CustomButton>
-
-<CustomButton
-  onClick={() => handleButtonClick('list')}  // Anropa handleButtonClick för listvy
-  isSelected={selectedButton === 'list'}
->
-  <ListIcon style={{ marginRight: '8px' }} />
-  Lista
-</CustomButton>
-
-<CustomButton
-  onClick={() => {
-    filterClosestPreschools();     // Kör filtreringen utan att byta vy
-  }}
-  isSelected={selectedButton === 'closest'}  // Kontrollera om knappen är vald
->
-  De 5 närmaste
-</CustomButton>
-
-<CustomButton
-  onClick={() => {
-    handleTopRanked();    // Kör rankningen utan att byta vy
-  }}
-  isSelected={selectedButton === 'rank'}  // Kontrollera om knappen är vald
->
-  Högst rank
-</CustomButton>
-
-
+          <Box display="flex" alignItems="center" justifyContent="center" gap={0}>
+            {showPlaces && (
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                width="100%"
+                gap={1}
+                sx={{
+                  overflowX: 'auto', // Horisontell scroll om det inte får plats
+                  whiteSpace: 'nowrap', // Förhindrar radbrytning
+                  paddingBottom: '10px',
+                }}
+              >
+                <CustomButton
+                  onClick={() => handleButtonClick('map')} // Anropa handleButtonClick för kartvy
+                  isSelected={selectedButton === 'map'} // Kontrollera om knappen är vald
+                >
+                  <MapIcon style={{ marginRight: '8px' }} />
+                  Karta
+                </CustomButton>
   
- <OrganisationFilter
-              organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
-              filter={filter}
-              handleFilterChange={handleFilterChange}
-              onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
-            />
-</Box>
-
+                <CustomButton
+                  onClick={() => handleButtonClick('list')} // Anropa handleButtonClick för listvy
+                  isSelected={selectedButton === 'list'}
+                >
+                  <ListIcon style={{ marginRight: '8px' }} />
+                  Lista
+                </CustomButton>
   
-     
+                <CustomButton
+                  onClick={() => filterClosestPreschools()} // Kör filtreringen utan att byta vy
+                  isSelected={selectedButton === 'closest'}
+                >
+                  De 5 närmaste
+                </CustomButton>
+  
+                <CustomButton
+                  onClick={() => handleTopRanked()} // Kör rankningen utan att byta vy
+                  isSelected={selectedButton === 'rank'}
+                >
+                  Högst rank
+                </CustomButton>
+  
+                <OrganisationFilter
+                  organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
+                  filter={filter}
+                  handleFilterChange={handleFilterChange}
+                  onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
+                />
+              </Box>
             )}
-  {searchMade && (
- <ButtonGroup
- aria-label="view toggle button group"
- style={{ borderRadius: '8px', overflow: 'hidden' }}
- sx={{
-   backgroundColor: 'transparent',  // Ingen bakgrund för ButtonGroup
-   boxShadow: 'none',               // Ingen skugga för ButtonGroup
-   border: 'none',                  // Ingen kantlinje för ButtonGroup
- }}
->
-
- 
-</ButtonGroup>
-
- 
-
-)}
-
-
-
-<form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
-<TextField
-  id="address"
-  variant="outlined"
-  placeholder="Skriv din adress för att hitta förskola..."
-  fullWidth
-  sx={{
-    background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-    borderRadius: '12px', // Mer rundade hörn för en modern känsla
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Lätt skugga för djup
-    overflow: 'hidden',
-    transition: 'all 0.3s ease', // Smidig övergång för alla interaktioner
-    '& .MuiOutlinedInput-root': {
-      color: '#333', // Vit textfärg
-      padding: '1px 22px', // Bekväm padding för insidan
-      '& fieldset': {
-        borderColor: 'transparent', // Gör kantlinjen osynlig initialt
-      },
-      '&:hover fieldset': {
-        borderColor: 'rgba(255, 255, 255, 0.8)', // Ljus vit kant vid hover
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'rgba(255, 255, 255, 1)', // Helt vit kant vid fokus
-      },
-    },
-    'input::placeholder': {
-      color: '#333', // Tydligare, nästan helt vit placeholder-text
-      fontSize: '14px', // Större text för bättre läsbarhet
-     
-    },
-  }}
-  inputRef={addressRef}
-  onKeyDown={handleKeyDown}
-  InputProps={{
-    style: { color: '#333' }, // Vit textfärg i input
-    endAdornment: (
-      <InputAdornment position="end">
-        <IconButton
-          onClick={geocodeAddressHandler}
-          edge="end"
-          sx={{
-            backgroundColor: '#ffffff', // Vit bakgrund för knappen
-            color: '#62727b', // Färg som matchar gradienten
-            borderRadius: '50%', // Rund knapp
-            padding: '8px',
-            '&:hover': {
-              backgroundColor: '#a7c0cd', // Ljusare nyans vid hover
-            },
-          }}
-        >
-          <SearchIcon />
-        </IconButton>
-      </InputAdornment>
-    ),
-  }}
-/>
-
-
-</form>
-{!searchMade && view === 'list' && (
-  <Box
-    sx={{
-      marginTop: '20px', // Minskar avståndet för att flytta upp innehållet lite
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '15px',
-      '@media (max-width: 600px)': {
-        marginTop: '10px', // Minskar toppmarginalen ytterligare för små skärmar
-        gap: '10px', // Minskar gap mellan elementen för små skärmar
-      },
-    }}
-  >
-    {/* Information text */}
-    <Typography
-      variant="body1"
-      sx={{
-        maxWidth: '600px',
-        textAlign: 'center',
-        color: '#333',
-        padding: '20px',
-        borderRadius: '12px',
-        marginBottom: '20px',
-        '@media (max-width: 600px)': {
-          fontSize: '14px', // Minskar textstorleken för små skärmar
-          padding: '15px', // Minskar padding för små skärmar
-        },
-      }}
-    >
-      Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning. För närvarande stödjer vi bara förskolor i stockholmsområdet.
-      Ange en adress för att komma igång.
-    </Typography>
-
-    {/* Button to external website */}
-    
-
-    {/* Button to survey page */}
-    
-    {/* New button to navigate to preschool application information */}
-    <Box>
-      {/* Visa direkt komponenten med texten */}
-      <PreschoolApplicationInfo />
-    </Box>
-  </Box>
-)}
-
-
-
-
-
+  
+            {searchMade && (
+              <ButtonGroup
+                aria-label="view toggle button group"
+                style={{ borderRadius: '8px', overflow: 'hidden' }}
+                sx={{
+                  backgroundColor: 'transparent', // Ingen bakgrund för ButtonGroup
+                  boxShadow: 'none', // Ingen skugga för ButtonGroup
+                  border: 'none', // Ingen kantlinje för ButtonGroup
+                }}
+              />
+            )}
           </Box>
+  
+          <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
+            <TextField
+              id="address"
+              variant="outlined"
+              placeholder="Skriv din adress för att hitta förskola..."
+              fullWidth
+              sx={{
+                background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+                borderRadius: '12px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                '& .MuiOutlinedInput-root': {
+                  color: '#333',
+                  padding: '1px 22px',
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                  },
+                },
+                'input::placeholder': {
+                  color: '#333',
+                  fontSize: '14px',
+                },
+              }}
+              inputRef={addressRef}
+              onKeyDown={handleKeyDown}
+              InputProps={{
+                style: { color: '#333' },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={geocodeAddressHandler}
+                      edge="end"
+                      sx={{
+                        backgroundColor: '#ffffff',
+                        color: '#62727b',
+                        borderRadius: '50%',
+                        padding: '8px',
+                        '&:hover': {
+                          backgroundColor: '#a7c0cd',
+                        },
+                      }}
+                    >
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </form>
+  
+          {!searchMade && view === 'list' && (
+            <Box
+              sx={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '15px',
+                '@media (max-width: 600px)': {
+                  marginTop: '10px',
+                  gap: '10px',
+                },
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  maxWidth: '600px',
+                  textAlign: 'center',
+                  color: '#333',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  marginBottom: '20px',
+                  '@media (max-width: 600px)': {
+                    fontSize: '14px',
+                    padding: '15px',
+                  },
+                }}
+              >
+                Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning. För närvarande stödjer vi bara förskolor i stockholmsområdet. Ange en adress för att komma igång.
+              </Typography>
+  
+              <Box>
+                <PreschoolApplicationInfo />
+              </Box>
+            </Box>
+          )}
         </Container>
       </div>
-
+  
       {loading && (
-  <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-    <CircularProgress style={{ color: '#4CAF50' }} /> {/* Använd valfri färgkod */}
-  </div>
-)}
-
-
-<div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
-<div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
-    {showPlaces && nearbyPlaces.length > 0 ? (
-        nearbyPlaces.map((place, index) => (
-            <PreschoolCard
-                key={place.id}
-                preschool={place}
-                onSelect={handleCardSelect}  // För att inte växla till kartvy
-            />
-        ))
-    ) : (
-        <p></p>
-    )}
-</div>
-
-
-      {selectedPlace && (
-       <DetailedCard
-       schoolData={selectedPlace}
-       onClose={() => setSelectedPlace(null)} // Kontrollera att detta inte triggar `setView('map')`
-     />
+        <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+          <CircularProgress style={{ color: '#4CAF50' }} />
+        </div>
       )}
-
+  
+      <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
+      <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
+        {showPlaces && nearbyPlaces.length > 0 ? (
+          nearbyPlaces.map((place, index) => (
+            <PreschoolCard key={place.id} preschool={place} onSelect={handleCardSelect} />
+          ))
+        ) : (
+          <p></p>
+        )}
+      </div>
+  
+      {selectedPlace && (
+        <DetailedCard
+          schoolData={selectedPlace}
+          onClose={() => setSelectedPlace(null)} // Kontrollera att detta inte triggar `setView('map')`
+        />
+      )}
+  
       <Snackbar
         open={Boolean(errorMessage)}
         autoHideDuration={6000}
@@ -1008,9 +963,10 @@ if (shouldUpdateBounds) {
           {errorMessage}
         </Alert>
       </Snackbar>
-
     </div>
   );
+  
+  
 };
 
 export default MapComponent;

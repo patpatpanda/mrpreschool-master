@@ -133,6 +133,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
           try {
             const encodedName = encodeURIComponent(namn);
             const response = await axios.get(`https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`);
+            console.log('API Response:', response.data);
+            
             const responseData = response.data;
 
             if (!responseData || !responseData.$values || responseData.$values.length === 0) {
@@ -199,21 +201,22 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
   useEffect(() => {
     fetchData();
+  
+    // Lägg till denna rad för att se den hämtade datan i konsolen
+    console.log('Chart Data:', chartData);
   }, [fetchData]);
-
+  
   const translateSvarsalternativ = useMemo(() => (svarsalternativ) => {
     const mapping = {
-      "1": "Instämmer inte alls",
-      "2": "Instämmer i liten utsträckning",
-      "3": "Instämmer till viss del",
-      "4": "Instämmer i stor utsträckning",
-      "5": "Instämmer helt",
-      "Vet ej": "Vet ej",
-      "Övrig": "Övrig"
+      "1": "2020",
+      "2": "2021",
+      "3": "2022",
+      "4": "2023"
     };
-
+  
     return mapping[svarsalternativ] || svarsalternativ;
   }, []);
+  
 
   const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/\//i.test(url);
   const imageUrl = bildUrl && isAbsoluteUrl(bildUrl) ? bildUrl : myImage;
@@ -314,14 +317,22 @@ const DetailedCard = ({ schoolData, onClose }) => {
     <Typography variant="h6" sx={{ fontSize: '1.5rem', textAlign: 'center', zIndex: 3000 }}>Jag är som helhet nöjd med mitt barns förskola</Typography>
     <Bar
   data={{
-    labels: chartData[0].data.labels, // Använd etiketter från det första årets data
-    datasets: chartData.map((chart) => ({
-      label: `Resultat för ${chart.year}`,
-      data: chart.data.datasets[0].data, // Data för respektive år
-      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`, // Slumpmässig färg
-      borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+    labels: ['2020', '2021', '2022', '2023'], // År som etiketter
+    datasets: [{
+      label: 'Andel som instämmer helt (%)',
+      data: chartData.map((chart) => {
+        // Hitta datan för "Instämmer helt" eller svarsalternativet 5
+        const index = chart.data.labels.findIndex(label => label === 'Instämmer helt' || label === 5);
+        if (index !== -1) {
+          return chart.data.datasets[0].data[index]; // Hämta procentsatsen för 'Instämmer helt' eller 5
+        } else {
+          return 0; // Om det inte finns data för 'Instämmer helt' eller siffran 5
+        }
+      }),
+      backgroundColor: 'rgba(46, 204, 113, 0.6)', // Sätter samma färg för alla staplar (Grön)
+      borderColor: 'rgba(46, 204, 113, 1)', // Gränsfärg för staplarna
       borderWidth: 1
-    }))
+    }]
   }}
   options={{
     responsive: true,
@@ -337,7 +348,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       },
       title: {
         display: true,
-        text: 'Jämförelse mellan år',
+       
         color: '#333',
         font: {
           size: 18
@@ -370,6 +381,9 @@ const DetailedCard = ({ schoolData, onClose }) => {
     }
   }}
 />
+
+
+
 
   </div>
 )}

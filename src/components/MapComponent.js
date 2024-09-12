@@ -16,7 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-import hus from '../images/icons8-start-94.png';
+import hus from '../images/icons8-house-64.png';
 import customIcon from '../images/icons8-children-48.png';
 
 import CustomButton from './CustomButton';

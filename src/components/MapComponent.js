@@ -16,7 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-import hus from '../images/icons8-house-64.png';
+
 import customIcon from '../images/icons8-children-48.png';
 
 import CustomButton from './CustomButton';
@@ -29,7 +29,10 @@ const STOCKHOLM_BOUNDS = {
   east: 18.400,   // Flyttar den östra gränsen längre österut
 };
 
-
+const SERGELSTORG_COORDINATES = {
+  latitude: 59.33258,
+  longitude: 18.0649,
+};
 const geocodeAddress = async (address) => {
   console.log('Geocoding address:', address);
   try {
@@ -403,7 +406,7 @@ const MapComponent = () => {
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
-  
+    
     if (!address) {
       setErrorMessage('Ange en giltig adress.');
       return;
@@ -415,22 +418,35 @@ const MapComponent = () => {
   
     const relevantAddress = extractRelevantAddress(address);
     console.log('Relevant address extracted:', relevantAddress);
-  
+    
+    // Försök att geokoda adressen
     const coordinates = await geocodeAddress(relevantAddress);
-  
+    
+    // Kontrollera om geokodningen misslyckades eller om ingen plats hittades
     if (!coordinates) {
+      console.log('Geocoding failed or no coordinates found.');
       setErrorMessage('Ogiltig adress, försök igen.');
       setLoading(false);
       return;
     }
   
     const { latitude, longitude } = coordinates;
+  
+    if (
+      latitude === SERGELSTORG_COORDINATES.latitude &&
+      longitude === SERGELSTORG_COORDINATES.longitude
+    ) {
+      console.log('Geocoding returned default coordinates (Sergels Torg).');
+      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
+      setLoading(false);
+      return;
+    }
+  
     const location = new google.maps.LatLng(latitude, longitude);
   
     if (map) {
-      // Sätt kartans center och zoomnivå direkt
       map.setCenter(location);
-      map.setZoom(14); // Här sätter du den zoomnivå du önskar direkt utan att använda fitBounds
+      map.setZoom(14);
   
       if (originMarker) {
         originMarker.setMap(null);
@@ -440,25 +456,25 @@ const MapComponent = () => {
         map: map,
         position: location,
         icon: {
-          url: hus,
-          scaledSize: new google.maps.Size(35, 35),
+          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new google.maps.Size(30, 30),
         },
       });
   
       setOriginMarker(marker);
       setOriginPosition(location);
   
-      // Skapa markörer utan att använda fitBounds om det orsakar problem
       await findNearbyPlaces(location);
-  
       setShowPlaces(true);
-   
-      setSearchMade(true);
+     
+      setSearchMade(true); // Mark that a search has been made
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
   }, [map, originMarker, findNearbyPlaces]);
+  
+  
   
 
   const handleKeyDown = (event) => {
@@ -972,17 +988,25 @@ if (shouldUpdateBounds) {
         />
       )}
   
-      <Snackbar
-        open={Boolean(errorMessage)}
-        autoHideDuration={6000}
-        onClose={() => setErrorMessage('')}
-        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-        className="custom-snackbar"
-      >
-        <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+  <Snackbar
+  open={Boolean(errorMessage)}
+  autoHideDuration={6000}
+  onClose={() => setErrorMessage('')}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Placerar den i mitten, nära toppen
+>
+  <Alert 
+    onClose={() => setErrorMessage('')} 
+    severity="error" 
+    sx={{ 
+      width: '100%', 
+      maxWidth: '400px',  // Begränsar bredden
+      margin: '0 auto',  // Gör den centrerad horisontellt
+    }}
+  >
+    {errorMessage}
+  </Alert>
+</Snackbar>
+
     </div>
   );
   

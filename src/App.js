@@ -6,6 +6,7 @@ import SurveyChart from './components/SurveyChart';
 import Header from './components/Header';
 import theme from './components/theme';
 import SplashScreen from './components/SplashScreen'; // Importera SplashScreen-komponenten
+import FixedButton from './components/FixedButton'; // Importera FixedButton-komponenten
 import './App.css';
 import PreschoolApplicationInfo from './components/PreschoolApplicationInfo';
 import ReactGA from 'react-ga';
@@ -35,14 +36,12 @@ function App() {
       <Router>
         <div className="App-container">
           <Header />
-
           <Analytics />
 
           {/* Visa splash-skärmen om showSplash är true */}
           {showSplash ? (
             <SplashScreen onProceed={handleProceed} />
           ) : (
-            // Visa resten av applikationen när splash-skärmen har dolts
             <main>
               <Routes>
                 <Route path="/" element={<MapComponent />} />
@@ -54,6 +53,9 @@ function App() {
               </Routes>
             </main>
           )}
+
+          {/* Lägg till den fasta knappen i det övre högra hörnet */}
+          <FixedButton />
         </div>
       </Router>
     </ThemeProvider>

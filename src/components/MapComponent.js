@@ -675,23 +675,43 @@ if (shouldUpdateBounds) {
   };
   
 
-  const handleTopRanked = () => {
+  const handleTopRanked = async () => {
     if (!originMarker) {
       alert('Ange en adress först.');
       return;
     }
   
-    const topPlaces = allPlaces
-      .filter(place => place.pdfData && place.pdfData.helhetsomdome !== undefined)
-      .sort((a, b) => b.pdfData.helhetsomdome - a.pdfData.helhetsomdome)
-      .slice(0, 5);
+    try {
+      // Hämta alla platser och deras Malibu-data
+      const detailedPlaces = await Promise.all(
+        allPlaces.map(async (place) => {
+          const malibuData = await fetchMalibuByName(place.namn.trim());
+          return {
+            ...place,
+            malibuData: malibuData ? malibuData.helhetsomdome : null,
+          };
+        })
+      );
   
-    setNearbyPlaces(topPlaces);
-    clearMarkers();
-    topPlaces.forEach((result) => {
-      createMarker(result, originMarker.getPosition());
-    });
+      // Filtrera platser som har Malibu-data och sortera efter helhetsomdöme
+      const topRankedPlaces = detailedPlaces
+        .filter((place) => place.malibuData !== null) // Filtrera bort platser utan Malibu-data
+        .sort((a, b) => b.malibuData - a.malibuData) // Sortera efter helhetsomdöme (högst först)
+        .slice(0, 5); // Hämta topp 5
+  
+      // Uppdatera nearbyPlaces och skapa markörer för de topp 5 rankade platserna
+      setNearbyPlaces(topRankedPlaces);
+      clearMarkers();
+  
+      topRankedPlaces.forEach((result) => {
+        createMarker(result, originMarker.getPosition());
+      });
+  
+    } catch (error) {
+      console.error('Error fetching top ranked places:', error);
+    }
   };
+  
 
   const filterClosestPreschools = () => {
     if (!originMarker) {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';  // Importera PropTypes
 
 const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
   const buttonStyle = {
@@ -37,6 +38,19 @@ const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
       {children}
     </button>
   );
+};
+
+// Lägg till prop-typer för validering
+CustomButton.propTypes = {
+  onClick: PropTypes.func.isRequired,  // onClick måste vara en funktion
+  children: PropTypes.node.isRequired,  // children kan vara allt som kan renderas i React
+  isSelected: PropTypes.bool,  // isSelected är en bool, men inte obligatorisk
+  sx: PropTypes.object,  // sx är ett objekt som innehåller extra stilar
+};
+
+CustomButton.defaultProps = {
+  isSelected: false,  // Standardvärde för isSelected om det inte skickas in
+  sx: {},  // Standardvärde för sx om inga extra stilar skickas in
 };
 
 export default CustomButton;

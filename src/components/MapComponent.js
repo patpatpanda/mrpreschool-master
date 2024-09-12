@@ -4,7 +4,7 @@ import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
 import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
-import { TextField, Typography, Button, Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Typography,  Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
@@ -84,7 +84,7 @@ const MapComponent = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const clustererRef = useRef(null); 
-  const [isMapVisible, setIsMapVisible] = useState(false);
+  const [isMapVisible, ] = useState(false);
   
   const filterPedagogiskOmsorg = async () => {
     if (!originPosition) {

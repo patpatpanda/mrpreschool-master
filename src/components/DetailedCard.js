@@ -283,18 +283,22 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
           {schoolDetails && (
             <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>
-              <Box>
-                <Typography variant="h6" sx={{ }}>Skoldetaljer</Typography>
-                <Typography variant="body2">Typ av Service: {schoolDetails.typAvService}</Typography>
-                <Typography variant="body2">Verksam i: {schoolDetails.verksamI}</Typography>
-                <Typography variant="body2">Organisationsform: {schoolDetails.organisationsform}</Typography>
-                <Typography variant="body2">Antal Barn: {schoolDetails.antalBarn}</Typography>
-                <Typography variant="body2">Antal Barn per Årsarbetare: {schoolDetails.antalBarnPerArsarbetare}</Typography>
-                <Typography variant="body2">Andel Legitimerade Förskollärare: {schoolDetails.andelLegitimeradeForskollarare}%</Typography>
-                <Typography variant="body2">Inriktning och Profil: {schoolDetails.inriktningOchProfil}</Typography>
-                <Typography variant="body2">Webbplats: <a href={schoolDetails.webbplats} target="_blank" rel="noopener noreferrer">{schoolDetails.webbplats}</a></Typography>
-              </Box>
-            </Grid>
+            <Box>
+              <Typography variant="h6" sx={{ marginBottom: 2 }}>Skoldetaljer</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Typ av Service: {schoolDetails.typAvService}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Verksam i: {schoolDetails.verksamI}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Organisationsform: {schoolDetails.organisationsform}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Antal Barn: {schoolDetails.antalBarn}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Antal Barn per Årsarbetare: {schoolDetails.antalBarnPerArsarbetare}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Andel Legitimerade Förskollärare: {schoolDetails.andelLegitimeradeForskollarare}%</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Inriktning och Profil: {schoolDetails.inriktningOchProfil}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Kost och Måltider: {schoolDetails.kostOchMaltider}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Inne och Utemiljö: {schoolDetails.inneOchUtemiljo}</Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1 }}>Mål och Vision: {schoolDetails.malOchVision}</Typography>
+              <Typography variant="body2">Webbplats: <a href={schoolDetails.webbplats} target="_blank" rel="noopener noreferrer">{schoolDetails.webbplats}</a></Typography>
+            </Box>
+          </Grid>
+          
           )}
             {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
             <Grid item xs={12} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}

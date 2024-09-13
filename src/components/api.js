@@ -82,7 +82,16 @@ export const fetchSchoolDetailsByAddress = async (address) => {
     const encodedAddress = encodeURIComponent(address.trim());
     const url = `${backendUrl}/api/Forskolan/address/${encodedAddress}`;
     const response = await axios.get(url);
+    
     const data = response.data?.$values[0] || null;
+
+    // Kontrollera om de nya fälten finns och lägg till dem
+    if (data) {
+      data.InneOchUtemiljo = data.InneOchUtemiljo || 'Ingen information';
+      data.KostOchMaltider = data.KostOchMaltider || 'Ingen information';
+      data.MalOchVision = data.MalOchVision || 'Ingen information';
+    }
+
     schoolDetailsCache.set(address, data);
     return data;
   } catch (error) {
@@ -90,6 +99,7 @@ export const fetchSchoolDetailsByAddress = async (address) => {
     return null;
   }
 };
+
 export const fetchSchoolsByTypAvService = async (typAvService) => {
   try {
     const url = `${backendUrl}/api/Forskolan/filter-by-service?typAvService=${encodeURIComponent(typAvService)}`;

@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
 import { ButtonGroup } from '@mui/material';
-import ListIcon from '@mui/icons-material/List';
+
 import MapIcon from '@mui/icons-material/Map';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
@@ -815,14 +815,7 @@ const findNearbyPlaces = useCallback(async (location) => {
                   Karta
                 </CustomButton>
   
-                <CustomButton
-                  onClick={() => handleButtonClick('list')} // Anropa handleButtonClick för listvy
-                  isSelected={selectedButton === 'list'}
-                >
-                  <ListIcon style={{ marginRight: '8px' }} />
-                  Lista
-                </CustomButton>
-  
+               
                 <CustomButton
                   onClick={() => filterClosestPreschools()} // Kör filtreringen utan att byta vy
                   isSelected={selectedButton === 'closest'}
@@ -976,7 +969,9 @@ const findNearbyPlaces = useCallback(async (location) => {
       />
     ))
   ) : (
-    <p></p>
+    <p>
+
+    </p>
   )}
 </div>
 {/* PreschoolCard visas ovanpå Google Maps baserat på marker-klick */}

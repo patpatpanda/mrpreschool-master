@@ -150,6 +150,7 @@ const handleMarkerClick = (place, walkingTime) => {
     }
   };
   
+  
   const createMarkerWithCustomIcon = async (place, originLocation, shouldUpdateBounds = false) => {
     if (!map) {
       console.error("Map is not initialized yet.");
@@ -158,25 +159,6 @@ const handleMarkerClick = (place, walkingTime) => {
   
     const malibuData = await fetchMalibuByName(place.namn);
     const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
-  
-    // Funktion för att generera stjärnor och visa rating bredvid
-    const getRatingWithIcon = (rating) => {
-      if (rating === null) {
-        return 'Ingen data'; // Om inget betyg finns
-      }
-  
-      return `
-        <div style="display: flex; align-items: center;">
-          <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
-          <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
-          <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
-        </div>
-      `;
-    };
-  
-    // Generera betygsikonen med värde eller visa "Ingen data"
-    const ratingContent = getRatingWithIcon(helhetsomdome);
-  
     const cleanedName = place.namn
       .replace(/förskolan/gi, '')
       .replace(/förskola/gi, '')
@@ -208,14 +190,14 @@ const handleMarkerClick = (place, walkingTime) => {
       },
     });
   
-    // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
+    // Skapa InfoWindow för snabb info om förskolan
     const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
           <div style="margin: 0; padding: 0;">${cleanedName}</div>
           <div style="display: flex; align-items: center; margin: 0; padding: 0;">
             <span style="margin-right: 2px;">Betyg:</span>
-            ${ratingContent}
+            ${helhetsomdome ? `${helhetsomdome}% nöjda` : 'Ingen data'}
           </div>
         </div>
       `,
@@ -225,7 +207,7 @@ const handleMarkerClick = (place, walkingTime) => {
   
     // Hantera klick på markören för att visa PreschoolCard med gångtid
     marker.addListener('click', () => {
-      handleMarkerClick(place, formattedWalkingTime); // Passera gångtiden till PreschoolCard
+      handleMarkerClick(place, formattedWalkingTime);  // Passera gångtiden till PreschoolCard
     });
   
     // Lägg till markören i MarkerClusterer
@@ -582,57 +564,54 @@ const findNearbyPlaces = useCallback(async (location) => {
     } else if (place.organisationsform === 'Föräldrakooperativ') {
       iconUrl = kooperativ;
     } else {
-      iconUrl = kooperativ;
+      iconUrl = customIcon; // Anpassad ikon om det är något annat
     }
   
-    // Hämta Malibu-data
-    const malibuData = await fetchMalibuByName(place.namn);
-    const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
+    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
+      lat: place.latitude,
+      lng: place.longitude,
+    });
   
-    // Funktion för att generera stjärnor och visa rating bredvid
-    const getRatingWithIcon = (rating) => {
-      if (rating === null) {
-        return 'Ingen data'; // Om inget betyg finns
-      }
+    const formattedWalkingTime = walkingTimeInMinutes ? walkingTimeInMinutes.toFixed(2) : 'N/A';
   
-      return `
-        <div style="display: flex; align-items: center;">
-          <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
-          <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
-          <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
-        </div>
-      `;
-    };
+    setWalkingTimes((prevTimes) => ({
+      ...prevTimes,
+      [place.id]: formattedWalkingTime,
+    }));
   
-    // Generera betygsikonen med värde eller visa "Ingen data"
-    const ratingContent = getRatingWithIcon(helhetsomdome);
-  
-    // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
     const cleanedName = place.namn
       .replace(/förskolan/gi, '')
       .replace(/förskola/gi, '')
-      .replace(/förskolor/gi, '')
       .replace(/föräldrakooperativet/gi, '')
+      .replace(/dagmamma/gi, '')
+      .replace(/familjedaghem/gi, '')
       .trim();
   
     const marker = new google.maps.Marker({
       position: { lat: place.latitude, lng: place.longitude },
+      map: map,
       title: cleanedName,
       icon: {
         url: iconUrl,
         scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(40, 15),
       },
     });
   
-    // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
+    marker.addListener('click', () => {
+      // Vid klick på markören, skicka gångtiden korrekt till PreschoolCard
+      handleMarkerClick(place, formattedWalkingTime);
+    });
+  
+    const malibuData = await fetchMalibuByName(place.namn);
+    const helhetsomdome = malibuData ? `${malibuData.helhetsomdome}% nöjda` : 'Ingen data';
+  
     const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
           <div style="margin: 0; padding: 0;">${cleanedName}</div>
           <div style="display: flex; align-items: center; margin: 0; padding: 0;">
             <span style="margin-right: 2px;">Betyg:</span>
-            ${ratingContent}
+            ${helhetsomdome}
           </div>
         </div>
       `,
@@ -640,7 +619,12 @@ const findNearbyPlaces = useCallback(async (location) => {
   
     infoWindow.open(map, marker);
   
-    // Om kartan ska uppdatera sina gränser
+    marker.addListener('click', () => {
+      handleMarkerClick(place, formattedWalkingTime);  // Visa PreschoolCard
+    });
+  
+    clustererRef.current.addMarker(marker);
+  
     if (shouldUpdateBounds) {
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(marker.position);
@@ -649,30 +633,8 @@ const findNearbyPlaces = useCallback(async (location) => {
         bounds.extend(originLocation);
       }
   
-      // Endast kalla fitBounds om du verkligen vill uppdatera gränserna
       map.fitBounds(bounds);
     }
-  
-    clustererRef.current.addMarker(marker);
-  
-    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
-      lat: place.latitude,
-      lng: place.longitude,
-    });
-  
-    const formattedWalkingTime =
-      walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
-        ? walkingTimeInMinutes.toFixed(2)
-        : 'N/A';
-  
-    setWalkingTimes((prevTimes) => ({
-      ...prevTimes,
-      [place.id]: formattedWalkingTime,
-    }));
-  
-    marker.addListener('click', () => {
-      selectPlace(place);
-    });
   
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
   };

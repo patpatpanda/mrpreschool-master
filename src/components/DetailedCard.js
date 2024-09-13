@@ -296,39 +296,6 @@ const DetailedCard = ({ schoolData, onClose }) => {
               </Box>
             </Grid>
           )}
-           {/* Lägg till de nya fälten */}
-        {schoolDetails?.InneOchUtemiljo && (
-          <Box mb={4}>
-            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
-              Inne- och utemiljö
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#555' }}>
-              {schoolDetails.InneOchUtemiljo}
-            </Typography>
-          </Box>
-        )}
-
-        {schoolDetails?.KostOchMaltider && (
-          <Box mb={4}>
-            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
-              Kost och måltider
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#555' }}>
-              {schoolDetails.KostOchMaltider}
-            </Typography>
-          </Box>
-        )}
-
-        {schoolDetails?.MalOchVision && (
-          <Box mb={4}>
-            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
-              Mål och vision
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#555' }}>
-              {schoolDetails.MalOchVision}
-            </Typography>
-          </Box>
-        )}
             {schoolDetails && schoolDetails.kontakter && schoolDetails.kontakter.$values && schoolDetails.kontakter.$values.length > 0 && (
             <Grid item xs={12} sx={{ zIndex: 3000 }}> {/* Sätt z-index här */}
               

@@ -24,6 +24,7 @@ const SplashScreen = ({ onProceed }) => {
           display: 'flex', 
           alignItems: 'center',
           justifyContent: 'center',
+          paddingRight:'40px',
         }}
       >
         <Paper 

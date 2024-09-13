@@ -10,14 +10,14 @@ const FixedButton = () => {
     <Box
       sx={{
         position: 'fixed',
-        top: '10px', // Justera avståndet från toppen
-        right: '10px', // Justera avståndet från höger
+        top: '50px', // Justera avståndet från toppen
+        right: '300px', // Justera avståndet från höger
         zIndex: 1000, // Se till att den alltid är överst
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        '@media (max-width: 600px)': {
-          top: '5px', // Anpassa position för små skärmar
+        '@media (max-width: 1200px)': {
+          top: '30px', // Anpassa position för små skärmar
           right: '5px', // Anpassa position för små skärmar
         },
       }}

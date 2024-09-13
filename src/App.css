@@ -155,13 +155,13 @@ button.MuiButtonBase-root {
 @media (max-width: 42000px) {
   .initial-text {
     top: 0; /* Justera position för mindre skärmar */
-    max-width: 400px; /* Anpassa maximal bredd för mindre skärmar */
+    max-width: 300px; /* Anpassa maximal bredd för mindre skärmar */
     height: 80px; /* Justera höjden för mindre skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1600px) {
   .initial-text {
     top:0; /* Justera position för ännu mindre skärmar */
     max-width: 300px; /* Anpassa maximal bredd för små skärmar */
@@ -172,7 +172,7 @@ button.MuiButtonBase-root {
 @media (max-width: 760px) {
   .initial-text {
     top:0; /* Justera position för ännu mindre skärmar */
-    max-width: 300px; /* Anpassa maximal bredd för små skärmar */
+    max-width: 200px; /* Anpassa maximal bredd för små skärmar */
     height: 60px; /* Justera höjden för små skärmar */
     background-size: contain; /* Gör bakgrundsbilden anpassningsbar */
   }

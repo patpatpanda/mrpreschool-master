@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, CardHeader, Typography, Box, ButtonBase, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faInfoCircle, faClock } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild
 
-const PreschoolCard = ({ preschool, onSelect }) => (
+const PreschoolCard = ({ preschool, walkingTime, onSelect, onDetailsClick }) => (
   <ButtonBase
     onClick={(event) => {
       event.preventDefault(); // Förhindrar att standardbeteende av klick eventuellt triggar något annat
@@ -42,9 +42,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
       {/* Mintgrön sida */}
       <Box
         sx={{
-          
           background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)',
-  
           position: 'absolute',
           left: 0,
           top: 0,
@@ -81,7 +79,7 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         }}
       >
         {/* Textinnehåll */}
-        <Box sx={{ flexGrow: 1, minWidth: 0 }}> {/* minWidth: 0 för att undvika text overflow */}
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
           <Box display="flex" alignItems="center" sx={{ marginBottom: '4px' }}>
             <FontAwesomeIcon
               icon={faMapMarkerAlt}
@@ -116,11 +114,24 @@ const PreschoolCard = ({ preschool, onSelect }) => (
               </Typography>
             </Box>
           )}
+          {/* Gångtiden visas här */}
+          {walkingTime && (
+            <Box display="flex" alignItems="center" sx={{ marginBottom: '10px' }}>
+              <FontAwesomeIcon
+                icon={faClock}
+                style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }}
+              />
+              <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
+                Gångtid: {walkingTime} minuter
+              </Typography>
+            </Box>
+          )}
+
           <Button
             variant="contained"
             onClick={(event) => {
               event.stopPropagation();
-              onSelect(preschool);
+              onDetailsClick(preschool);
             }}
             sx={{
               alignSelf: 'flex-start',
@@ -128,14 +139,13 @@ const PreschoolCard = ({ preschool, onSelect }) => (
               fontSize: '0.75rem',
               marginTop: '4px',
               textTransform: 'none',
-             background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
+              background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
               color: '#333',
               '&:hover': {
                 backgroundColor: '#555',
-                color:'#fff'
+                color: '#fff',
               },
             }}
-            
           >
             Läs mer
           </Button>
@@ -145,18 +155,18 @@ const PreschoolCard = ({ preschool, onSelect }) => (
         <Box
           sx={{
             marginLeft: '16px',
-            maxWidth: { xs: '30%', sm: '25%' },  // Bildens maxbredd responsivt
-            '@media (max-width: 600px)': {  // Media query för mindre skärmar
+            maxWidth: { xs: '30%', sm: '25%' },
+            '@media (max-width: 600px)': {
               marginLeft: '8px',
             },
           }}
         >
           <img
-            src={preschool.bildUrl || myImage}  // Använd bildUrl från props eller standardbild
+            src={preschool.bildUrl || myImage}
             alt={preschool.namn}
             style={{
-              width: '100%',  // Använd hela bredden på sin container
-              height: 'auto',  // Automatisk höjd för att bevara bildförhållandet
+              width: '100%',
+              height: 'auto',
               borderRadius: '8px',
               objectFit: 'cover',
             }}
@@ -172,9 +182,11 @@ PreschoolCard.propTypes = {
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string.isRequired,
     description: PropTypes.string,
-    bildUrl: PropTypes.string,  // Lägg till bildUrl-prop
+    bildUrl: PropTypes.string,
   }).isRequired,
+  walkingTime: PropTypes.string, // Lägg till gångtid som prop
   onSelect: PropTypes.func.isRequired,
+  onDetailsClick: PropTypes.func.isRequired,
 };
 
 export default PreschoolCard;

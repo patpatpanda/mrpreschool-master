@@ -43,6 +43,8 @@ button.MuiButtonBase-root {
   overflow: hidden; /* Förhindra skrollning */
 }
 
+
+
 .spinner {
   animation: spin 1s infinite linear;
 }
@@ -161,7 +163,7 @@ button.MuiButtonBase-root {
   }
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 10px) {
   .initial-text {
     top:0; /* Justera position för ännu mindre skärmar */
     max-width: 300px; /* Anpassa maximal bredd för små skärmar */

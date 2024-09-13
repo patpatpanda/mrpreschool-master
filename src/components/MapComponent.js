@@ -69,7 +69,9 @@ const MapComponent = () => {
 
   const [walkingTimes, setWalkingTimes] = useState({});
 
-
+ 
+  const [isCardVisible, setIsCardVisible] = useState(false);
+  const [isDetailedCardVisible, setIsDetailedCardVisible] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -89,6 +91,36 @@ const MapComponent = () => {
   const clustererRef = useRef(null); 
   const [isMapVisible, ] = useState(false);
   
+  const handleCardClose = () => {
+    // Hantera stängning av PreschoolCard
+    setIsCardVisible(false);
+    setSelectedPlace(null); // Återställ selectedPlace om kortet stängs
+  };
+
+  const handleDetailsClick = async (place) => {
+    // Kontrollera om detaljerad data finns för platsen
+    if (!place.schoolDetails) {
+        // Hämta detaljerad data om den inte finns
+        const schoolDetails = await fetchSchoolDetailsByAddress(place.adress);
+        place.schoolDetails = schoolDetails;
+    }
+    
+    // Uppdatera det valda stället och visa DetailedCard
+    setSelectedPlace(place);
+    setIsDetailedCardVisible(true); // Visa DetailedCard
+};
+const handleMarkerClick = (place, walkingTime) => {
+  const detailedPlace = {
+    ...place,
+    walkingTime: walkingTime || walkingTimes[place.id] || 'N/A',  // Använd walkingTime om tillgänglig, annars hämta från state
+  };
+
+  setSelectedPlace(detailedPlace);
+  setIsCardVisible(true); // Visa PreschoolCard
+};
+
+
+
   const filterPedagogiskOmsorg = async () => {
     if (!originPosition) {
       console.error("Ingen plats vald. Ange en adress.");
@@ -120,35 +152,45 @@ const MapComponent = () => {
   
   
   const createMarkerWithCustomIcon = async (place, originLocation, shouldUpdateBounds = false) => {
-    // Hämta Malibu-data för att få helhetsomdömet
+    if (!map) {
+      console.error("Map is not initialized yet.");
+      return;
+    }
+  
     const malibuData = await fetchMalibuByName(place.namn);
-    
     const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
-
-    // Ta bort onödiga ord från namnet (t.ex. "förskola")
     const cleanedName = place.namn
       .replace(/förskolan/gi, '')
       .replace(/förskola/gi, '')
-      .replace(/förskolor/gi, '')
-      .replace(/föräldrakooperativet/gi, '')
-      .replace(/dagmamma/gi, '')
-      .replace(/familjedaghem/gi, '')
-      .replace(/familjedaghemmet/gi, '')
       .trim();
-
-    // Skapa markör med customIcon
+  
+    // Beräkna gångtiden
+    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
+      lat: place.latitude,
+      lng: place.longitude,
+    });
+  
+    const formattedWalkingTime = walkingTimeInMinutes ? walkingTimeInMinutes.toFixed(2) : 'N/A';
+  
+    // Uppdatera walkingTimes state
+    setWalkingTimes((prevTimes) => ({
+      ...prevTimes,
+      [place.id]: formattedWalkingTime,
+    }));
+  
+    // Skapa en markör
     const marker = new google.maps.Marker({
       position: { lat: place.latitude, lng: place.longitude },
       map: map,
-      title: cleanedName,  // Använd cleanedName som titel
+      title: cleanedName,
       icon: {
-        url: customIcon,  // Använd den anpassade ikonen för Dagmamma
-        scaledSize: new google.maps.Size(35, 35),  // Anpassad storlek på ikonen
+        url: customIcon,
+        scaledSize: new google.maps.Size(35, 35),
         labelOrigin: new google.maps.Point(40, 15),
       },
     });
-
-    // Skapa InfoWindow med cleanedName och betyget
+  
+    // Skapa InfoWindow för snabb info om förskolan
     const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
@@ -160,31 +202,31 @@ const MapComponent = () => {
         </div>
       `,
     });
-
-    // Öppna InfoWindow direkt när markören skapas
+  
     infoWindow.open(map, marker);
-
-    // Lägg till klicklyssnare för att visa detaljer och öppna InfoWindow igen om den stängs
+  
+    // Hantera klick på markören för att visa PreschoolCard med gångtid
     marker.addListener('click', () => {
-      selectPlace(place, true);  // true för att byta till 'map view' om det behövs
-      infoWindow.open(map, marker);  // Öppna InfoWindow på nytt vid klick
+      handleMarkerClick(place, formattedWalkingTime);  // Passera gångtiden till PreschoolCard
     });
-
-    // Om kartan ska uppdatera sina gränser
+  
+    // Lägg till markören i MarkerClusterer
+    clustererRef.current.addMarker(marker);
+  
+    // Uppdatera kartans gränser om det behövs
     if (shouldUpdateBounds) {
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(marker.position);
-
       if (originLocation) {
         bounds.extend(originLocation);
       }
-
-      map.fitBounds(bounds);  // Endast kalla fitBounds om `shouldUpdateBounds` är sant
+      map.fitBounds(bounds);
     }
-
+  
     // Lägg till markören i listan över aktuella markörer
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
-};
+  };
+  
 
   
   useEffect(() => {
@@ -338,58 +380,41 @@ const MapComponent = () => {
 }, [id, map]);
 
 
-  const findNearbyPlaces = useCallback(async (location) => {
-    try {
-      setLoading(true);
-      console.log('Fetching nearby places for location:', location);
-      const places = await fetchNearbySchools(location.lat(), location.lng(), filter.join(','), 'alla');
+const findNearbyPlaces = useCallback(async (location) => {
+  try {
+    setLoading(true);
+    const places = await fetchNearbySchools(location.lat(), location.lng(), filter.join(','), 'alla');
 
-      if (places.length > 0) {
-        const nearestPlace = places[0];
-        const distanceToNearestPlace = calculateDistance(
-          location,
-          new google.maps.LatLng(nearestPlace.latitude, nearestPlace.longitude)
-        );
+    if (places.length > 0) {
+      const detailedResults = await Promise.all(
+        places.map(async (place) => {
+          const cleanName = place.namn.trim();
+          const pdfData = await fetchPdfDataByName(cleanName);
+          return {
+            ...place,
+            pdfData: pdfData || null,
+            address: place.adress,
+            description: place.beskrivning,
+          };
+        })
+      );
 
-        if (distanceToNearestPlace > 3) {
-          setErrorMessage('Ledsen att komma med tråkiga nyheter. För närvarande stöder vi endast Stockholm Stad. Prova igen!');
-          setLoading(false);
-          return;
-        }
-
-        const detailedResults = await Promise.all(
-          places.map(async (place) => {
-            const cleanName = place.namn.trim();
-            const pdfData = await fetchPdfDataByName(cleanName);
-
-            return {
-              ...place,
-              pdfData: pdfData || null,
-              address: place.adress,
-              description: place.beskrivning,
-            };
-          })
-        );
-
-        setNearbyPlaces(detailedResults);
-        setAllPlaces(detailedResults);
-        clearMarkers();
-        detailedResults.forEach((result) => {
-          createMarker(result, location);
-        });
-      } else {
-        setErrorMessage('Inga förskolor hittades på den angivna adressen.');
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error('Error fetching nearby places:', error);
-      setErrorMessage('Ett fel inträffade vid hämtning av närliggande förskolor.');
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      setNearbyPlaces(detailedResults);
+      setAllPlaces(detailedResults);
+      clearMarkers();
+      detailedResults.forEach((result) => {
+        createMarker(result, location);
+      });
+    } else {
+      setErrorMessage('Inga förskolor hittades på den angivna adressen.');
     }
-  }, [map, filter]);
-
+  } catch (error) {
+    console.error('Error fetching nearby places:', error);
+    setErrorMessage('Ett fel inträffade vid hämtning av närliggande förskolor.');
+  } finally {
+    setLoading(false);
+  }
+}, [map, filter]);
   const handleFilterChange = (type) => {
     setFilter((prevFilter) =>
       prevFilter.includes(type)
@@ -508,6 +533,7 @@ const MapComponent = () => {
       return null;
     }
   };
+  
 
   const createRoute = (destination) => {
     if (!originPosition) {
@@ -538,141 +564,113 @@ const MapComponent = () => {
     } else if (place.organisationsform === 'Föräldrakooperativ') {
       iconUrl = kooperativ;
     } else {
-      iconUrl = kooperativ;
+      iconUrl = customIcon; // Anpassad ikon om det är något annat
     }
-  
-    // Hämta Malibu-data
-    const malibuData = await fetchMalibuByName(place.namn);
-    const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
-  
-    // Funktion för att generera stjärnor och visa rating bredvid
-    const getRatingWithIcon = (rating) => {
-      if (rating === null) {
-        return 'Ingen data'; // Om inget betyg finns
-      }
-  
-      return `
-        <div style="display: flex; align-items: center;">
-          <span style="color: gold; font-size: 16px; margin-left: 5px;">★</span> 
-          <span style="font-size: 14px; margin-left: 5px;">${rating}%</span> 
-          <span style="font-size: 12px; color: gray; margin-left: 5px;">nöjda</span>
-        </div>
-      `;
-    };
-  
-    // Generera betygsikonen med värde eller visa "Ingen data"
-    const ratingContent = getRatingWithIcon(helhetsomdome);
-  
-    // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
-    const cleanedName = place.namn
-      .replace(/förskolan/gi, '') 
-      .replace(/förskola/gi, '')
-      .replace(/förskolor/gi, '') // Tar bort "förskola"
-      .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
-      .trim();
-  
-    const marker = new google.maps.Marker({
-      position: { lat: place.latitude, lng: place.longitude },
-      title: cleanedName,
-      icon: {
-        url: iconUrl,
-        scaledSize: new google.maps.Size(30, 30),
-        labelOrigin: new google.maps.Point(40, 15),
-      },
-    });
-  
-    // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
-    const infoWindow = new google.maps.InfoWindow({
-      content: `
-        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
-          <div style="margin: 0; padding: 0;">${cleanedName}</div>
-          <div style="display: flex; align-items: center; margin: 0; padding: 0;">
-            <span style="margin-right: 2px;">Betyg:</span>
-            ${ratingContent}
-          </div>
-        </div>
-      `,
-    });
-    
-    infoWindow.open(map, marker);
-  
-    // Om kartan ska uppdatera sina gränser
-   // Om kartan ska uppdatera sina gränser
-if (shouldUpdateBounds) {
-  const bounds = new google.maps.LatLngBounds();
-  bounds.extend(marker.position);
-
-  if (originLocation) {
-    bounds.extend(originLocation);
-  }
-
-  // Endast kalla fitBounds om du verkligen vill uppdatera gränserna
-  map.fitBounds(bounds);
-}
-
-  
-    clustererRef.current.addMarker(marker);
   
     const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
       lat: place.latitude,
       lng: place.longitude,
     });
   
-    const formattedWalkingTime =
-      walkingTimeInMinutes !== null && !isNaN(walkingTimeInMinutes)
-        ? walkingTimeInMinutes.toFixed(2)
-        : 'N/A';
+    const formattedWalkingTime = walkingTimeInMinutes ? walkingTimeInMinutes.toFixed(2) : 'N/A';
   
     setWalkingTimes((prevTimes) => ({
       ...prevTimes,
       [place.id]: formattedWalkingTime,
     }));
   
-    marker.addListener('click', () => {
-      selectPlace(place);
-      // Om createRoute flyttar kartan, kommentera ut det
-      // createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+    const cleanedName = place.namn
+      .replace(/förskolan/gi, '')
+      .replace(/förskola/gi, '')
+      .replace(/föräldrakooperativet/gi, '')
+      .replace(/dagmamma/gi, '')
+      .replace(/familjedaghem/gi, '')
+      .trim();
+  
+    const marker = new google.maps.Marker({
+      position: { lat: place.latitude, lng: place.longitude },
+      map: map,
+      title: cleanedName,
+      icon: {
+        url: iconUrl,
+        scaledSize: new google.maps.Size(30, 30),
+      },
     });
-    
+  
+    marker.addListener('click', () => {
+      // Vid klick på markören, skicka gångtiden korrekt till PreschoolCard
+      handleMarkerClick(place, formattedWalkingTime);
+    });
+  
+    const malibuData = await fetchMalibuByName(place.namn);
+    const helhetsomdome = malibuData ? `${malibuData.helhetsomdome}% nöjda` : 'Ingen data';
+  
+    const infoWindow = new google.maps.InfoWindow({
+      content: `
+        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
+          <div style="margin: 0; padding: 0;">${cleanedName}</div>
+          <div style="display: flex; align-items: center; margin: 0; padding: 0;">
+            <span style="margin-right: 2px;">Betyg:</span>
+            ${helhetsomdome}
+          </div>
+        </div>
+      `,
+    });
+  
+    infoWindow.open(map, marker);
+  
+    marker.addListener('click', () => {
+      handleMarkerClick(place, formattedWalkingTime);  // Visa PreschoolCard
+    });
+  
+    clustererRef.current.addMarker(marker);
+  
+    if (shouldUpdateBounds) {
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(marker.position);
+  
+      if (originLocation) {
+        bounds.extend(originLocation);
+      }
+  
+      map.fitBounds(bounds);
+    }
   
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
   };
   
-
+  
 
   const selectPlace = async (place, changeView = false) => {
     try {
-        const cleanName = place.namn.trim();
-        const malibuData = await fetchMalibuByName(cleanName);
-        const relevantAddress = extractRelevantAddress(place.adress);
-        const schoolDetails = await fetchSchoolDetailsByAddress(relevantAddress);
+      const cleanName = place.namn.trim();
+      const malibuData = await fetchMalibuByName(cleanName);
+      const relevantAddress = extractRelevantAddress(place.adress);
+      const schoolDetails = await fetchSchoolDetailsByAddress(relevantAddress);
 
-        const walkingTime = walkingTimes[place.id];
+      const walkingTime = walkingTimes[place.id];
 
-        const detailedPlace = {
-            ...place,
-            malibuData: malibuData || null,
-            schoolDetails: schoolDetails ? schoolDetails : null,
-            walkingTime: walkingTime,
-        };
+      const detailedPlace = {
+        ...place,
+        malibuData: malibuData || null,
+        schoolDetails: schoolDetails ? schoolDetails : null,
+        walkingTime: walkingTime,
+      };
 
-        setSelectedPlace(detailedPlace);
-        navigate(`/forskolan/${place.id}`);
+      setSelectedPlace(detailedPlace);
+      navigate(`/forskolan/${place.id}`);
 
-        if (originMarker) {
-            createRoute(new google.maps.LatLng(place.latitude, place.longitude));
-        }
+      if (originMarker) {
+        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+      }
 
-        // Ändra vy till 'map' endast om `changeView` är sant
-        if (changeView) {
-            setView('map');
-        }
-
+      if (changeView) {
+        setView('map');
+      }
     } catch (error) {
-        console.error('Error selecting place:', error);
+      console.error('Error selecting place:', error);
     }
-};
-
+  };
   
   
   const handleCardSelect = (place) => {
@@ -680,16 +678,10 @@ if (shouldUpdateBounds) {
   };
 
   const clearMarkers = () => {
-    // Clear all markers from the map
     currentMarkers.forEach((marker) => marker.setMap(null));
-  
-    // Clear all markers from the clusterer
     clustererRef.current.clearMarkers();
-  
-    // Clear the currentMarkers array
     setCurrentMarkers([]);
   };
-  
 
   const handleTopRanked = async () => {
     if (!originMarker) {
@@ -969,24 +961,62 @@ if (shouldUpdateBounds) {
           <CircularProgress style={{ color: '#4CAF50' }} />
         </div>
       )}
-  
-      <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
-      <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
-        {showPlaces && nearbyPlaces.length > 0 ? (
-          nearbyPlaces.map((place, index) => (
-            <PreschoolCard key={place.id} preschool={place} onSelect={handleCardSelect} />
-          ))
-        ) : (
-          <p></p>
-        )}
-      </div>
-  
-      {selectedPlace && (
-        <DetailedCard
-          schoolData={selectedPlace}
-          onClose={() => setSelectedPlace(null)} // Kontrollera att detta inte triggar `setView('map')`
-        />
-      )}
+{/* Google Maps-kontainern */}
+<div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
+
+{/* Listvy-kontainern, endast synlig när "list view" är aktiv */}
+<div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
+  {showPlaces && nearbyPlaces.length > 0 ? (
+    nearbyPlaces.map((place, index) => (
+      <PreschoolCard 
+        key={place.id} 
+        preschool={place} 
+        onSelect={handleCardSelect} 
+        onDetailsClick={() => handleDetailsClick(place)} // Hantera "Läs mer"-klick
+      />
+    ))
+  ) : (
+    <p></p>
+  )}
+</div>
+{/* PreschoolCard visas ovanpå Google Maps baserat på marker-klick */}
+{selectedPlace && isCardVisible && (
+  <div style={{ position: 'absolute', bottom: '20px', left: '20px', zIndex: 1000, width: '300px' }}>
+    <PreschoolCard
+      preschool={selectedPlace}
+      walkingTime={selectedPlace.walkingTime} // Skicka gångtiden till PreschoolCard
+      onSelect={handleCardSelect}
+      onDetailsClick={() => handleDetailsClick(selectedPlace)}
+      onClose={handleCardClose}
+    />
+    {/* Stängningsknapp för PreschoolCard */}
+    <button 
+      onClick={handleCardClose} 
+      style={{
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        backgroundColor: 'transparent',
+        border: 'none',
+        fontSize: '16px',
+        cursor: 'pointer',
+        zIndex: 1100, // Högre z-index för att vara ovanpå kortet
+      }}
+    >
+      ❌
+    </button>
+  </div>
+)}
+
+
+{/* DetailedCard visas baserat på klick på "Läs mer" */}
+{selectedPlace && isDetailedCardVisible && (
+  <DetailedCard
+    schoolData={selectedPlace}
+    onClose={() => setIsDetailedCardVisible(false)} // Stäng DetailedCard
+  />
+)}
+
   
   <Snackbar
   open={Boolean(errorMessage)}

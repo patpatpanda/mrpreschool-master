@@ -981,7 +981,7 @@ const findNearbyPlaces = useCallback(async (location) => {
 </div>
 {/* PreschoolCard visas ovanpå Google Maps baserat på marker-klick */}
 {selectedPlace && isCardVisible && (
-  <div style={{ position: 'absolute', bottom: '120px', left: '20px', zIndex: 1000, width: '300px' }}>
+  <div style={{ position: 'absolute', bottom: '20%', right: '20%', zIndex: 1000, width: '300px' }}>
     <PreschoolCard
       preschool={selectedPlace}
       walkingTime={selectedPlace.walkingTime} // Skicka gångtiden till PreschoolCard

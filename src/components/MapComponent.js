@@ -6,7 +6,7 @@ import OrganisationFilter from './OrganisationFilter';
 import '../styles/GoogleMap.css';
 import { TextField, Typography,  Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { fetchSchoolById, fetchNearbySchools, fetchPdfDataByName, fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
+import { fetchSchoolById, fetchNearbySchools,  fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
@@ -22,11 +22,12 @@ import customIcon from '../images/icons8-children-48.png';
 import CustomButton from './CustomButton';
 /*global google*/
 
+
 const STOCKHOLM_BOUNDS = {
-  north: 59.485,  // Flyttar den norra gränsen lite högre upp
-  south: 59.200,  // Flyttar den södra gränsen längre ner
-  west: 17.600,   // Flyttar den västra gränsen längre västerut
-  east: 18.400,   // Flyttar den östra gränsen längre österut
+  north: 59.435,
+  south: 59.261,
+  west: 17.757,
+  east: 18.228,
 };
 
 const SERGELSTORG_COORDINATES = {
@@ -389,7 +390,7 @@ const findNearbyPlaces = useCallback(async (location) => {
       const detailedResults = await Promise.all(
         places.map(async (place) => {
           const cleanName = place.namn.trim();
-          const pdfData = await fetchPdfDataByName(cleanName);
+          const pdfData = await fetchMalibuByName(cleanName);
           return {
             ...place,
             pdfData: pdfData || null,

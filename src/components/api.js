@@ -58,6 +58,7 @@ export const fetchSatisfactionSummary = async () => {
     return null;
   }
 };
+
 export const fetchMalibuByName = async (name) => {
   try {
     const encodedName = encodeURIComponent(name.trim());

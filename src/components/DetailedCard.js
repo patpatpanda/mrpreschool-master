@@ -112,7 +112,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
-  const { namn, adress, malibuData, schoolDetails, walkingTime } = schoolData;
+  const { namn, adress,  schoolDetails, walkingTime } = schoolData;
   const bildUrl = schoolData.bildUrl;
 
   const [chartData, setChartData] = useState([]);
@@ -270,16 +270,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         )}
 
         <Grid container spacing={2}>
-          {malibuData && (
-            <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>
-              <Box>
-                <Typography variant="h6" sx={{ }}>Föräldraomdömen</Typography>
-                <Typography variant="body2">Helhetsomdöme: {malibuData.helhetsomdome}%</Typography>
-                <Typography variant="body2">Svarsfrekvens: {malibuData.svarsfrekvens}%</Typography>
-                <Typography variant="body2">Antal Svar: {malibuData.antalSvar}</Typography>
-              </Box>
-            </Grid>
-          )}
+        
 
           {schoolDetails && (
             <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>

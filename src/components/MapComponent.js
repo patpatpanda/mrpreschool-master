@@ -16,9 +16,12 @@ import PreschoolListCard from './PreschoolListCard';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-import OrganisationFilterDropdown from './OrganisationFilterDropdown';
 
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap, faList } from '@fortawesome/free-solid-svg-icons'; // Importera karta och lista ikoner
+
+import OrganisationFilterDropdown from './OrganisationFilterDropdown'; // Din OrganisationFilterDropdown-komponent
 import CustomButton from './CustomButton';
 /*global google*/
 
@@ -718,25 +721,28 @@ const findNearbyPlaces = useCallback(async (location) => {
             },
           }}
         >
-          <CustomButton
-            onClick={() => {
-              setSelectedButton('list'); // Sätt knappen som vald
-              setView('list'); // Byt till listvy
-            }}
-            isSelected={selectedButton === 'list'} // Kontrollera om knappen ska vara vald
-          >
-            Lista
-          </CustomButton>
-  
-          <CustomButton
-            onClick={() => {
-              setSelectedButton('map'); // Sätt knappen som vald
-              setView('map'); // Byt till kartvy
-            }}
-            isSelected={selectedButton === 'map'} // Kontrollera om knappen ska vara vald
-          >
-            Karta
-          </CustomButton>
+           <CustomButton
+          onClick={() => {
+            setSelectedButton('list');
+            setView('list'); 
+          }}
+          isSelected={selectedButton === 'list'}
+        >
+          <FontAwesomeIcon icon={faList} style={{ marginRight: '8px' }} /> {/* Lista ikon */}
+          Lista
+        </CustomButton>
+
+        {/* Karta knapp */}
+        <CustomButton
+          onClick={() => {
+            setSelectedButton('map');
+            setView('map');
+          }}
+          isSelected={selectedButton === 'map'}
+        >
+          <FontAwesomeIcon icon={faMap} style={{ marginRight: '8px' }} /> {/* Karta ikon */}
+          Karta
+        </CustomButton>
   
           <CustomButton
             onClick={() => {

@@ -219,7 +219,7 @@ button.MuiButtonBase-root {
 
 
 /* For mobile devices */
-@media (max-width: 760px) {
+@media (max-width: 1200px) {
 
   
   .custom-snackbar {

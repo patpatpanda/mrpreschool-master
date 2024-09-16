@@ -17,7 +17,7 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 import OrganisationFilterDropdown from './OrganisationFilterDropdown';
-import customIcon from '../images/icons8-children-48.png';
+
 
 import CustomButton from './CustomButton';
 /*global google*/
@@ -69,7 +69,7 @@ const MapComponent = () => {
   const [filter, setFilter] = useState(['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']);
   const [view, setView] = useState('map');
 
-  const [walkingTimes, setWalkingTimes] = useState({});
+  const [walkingTimes, ] = useState({});
 
  
   const [isCardVisible, setIsCardVisible] = useState(false);

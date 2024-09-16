@@ -212,14 +212,28 @@ button.MuiButtonBase-root {
   display: none;
 }
 
+@media (max-width: 1400px) {
+  .cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 15px;
+    
+    position: relative;
+    z-index: 10;
+    padding-top: 450px;
+   
+   
 
+    background-size: cover; /* Adjust the background size */
+}
+}
 /* Detailed Card */
 
 /* Media Queries for Responsiveness */
 
 
 /* For mobile devices */
-@media (max-width: 1200px) {
+@media (max-width: 760px) {
 
   
   .custom-snackbar {
@@ -411,4 +425,80 @@ p {
     display: flex;
     justify-content: space-between;
   }
+}
+.cards-container {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Flexibel grid */
+  padding: 15px;
+  background-color: #ffffff;
+  position: relative;
+  z-index: 10;
+  height: auto; /* Dynamisk höjd */
+}
+
+/* För skärmar större än 1400px */
+@media (min-width: 1400px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 kolumner */
+    padding-top: 450px;
+  }
+}
+
+/* För skärmar mellan 760px och 1400px */
+@media (max-width: 1400px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolumner */
+    padding-top: 450px;
+  }
+}
+
+/* För mobila enheter (mindre än 760px) */
+@media (max-width: 760px) {
+  .cards-container {
+    grid-template-columns: 1fr; /* En kolumn på mobil */
+    padding-top: 450px;
+  }
+  
+  .card {
+    height: 350px; /* Öka höjden för mobilskärmar */
+  }
+}
+
+/* För ännu mindre skärmar */
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr; /* En kolumn på ännu mindre skärmar */
+  }
+  
+  .card {
+    height: 300px; /* Mindre höjd på väldigt små skärmar */
+  }
+}
+
+/* Knapparna ska scrolla horisontellt på små skärmar */
+.button-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.button-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.button-scroll-container {
+  -ms-overflow-style: none; /* För IE och Edge */
+  scrollbar-width: none; /* För Firefox */
+}
+
+.scroll-button {
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px #dd4122eb;
 }

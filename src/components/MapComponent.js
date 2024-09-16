@@ -799,7 +799,7 @@ const findNearbyPlaces = useCallback(async (location) => {
           alignItems="center" 
           justifyContent="center" 
           gap={2} 
-          flexWrap="wrap"  // Gör att knappar och dropdown bryts till ny rad på små skärmar
+          flexWrap="nowrap"  // Gör att knappar och dropdown bryts till ny rad på små skärmar
           sx={{
             '@media (max-width: 600px)': {
               justifyContent: 'center', // Centrera på små skärmar
@@ -825,11 +825,9 @@ const findNearbyPlaces = useCallback(async (location) => {
   isSelected={selectedButton === 'rank'} // Kontrollera om knappen ska vara vald
 >
   Högst rank
+
 </CustomButton>
-
-
-          {/* OrganisationFilterDropdown */}
-          <OrganisationFilterDropdown 
+<OrganisationFilterDropdown 
             organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
             filter={filter}
             handleFilterChange={handleFilterChange}
@@ -841,6 +839,10 @@ const findNearbyPlaces = useCallback(async (location) => {
               },
             }}
           />
+
+
+          {/* OrganisationFilterDropdown */}
+       
         </Box>
           <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
           <TextField

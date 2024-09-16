@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
-import OrganisationFilter from './OrganisationFilter';
+
 import '../styles/GoogleMap.css';
 import { TextField, Typography,  Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,13 +10,12 @@ import { fetchSchoolById, fetchNearbySchools,  fetchMalibuByName, fetchSchoolDet
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
-import { ButtonGroup } from '@mui/material';
 
-import MapIcon from '@mui/icons-material/Map';
+import { ThemeProvider } from '@mui/material/styles';
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
-
+import OrganisationFilterDropdown from './OrganisationFilterDropdown';
 import customIcon from '../images/icons8-children-48.png';
 
 import CustomButton from './CustomButton';
@@ -351,39 +350,39 @@ const handleMarkerClick = (place, walkingTime) => {
   }, []);
   
 
-  useEffect(() => {
-    if (id && map) {
-      // Hämta förskolan baserat på ID från URL:en
-      fetchSchoolById(id).then((school) => {
-        if (school) {
-          // Sätt vald förskola
-          const location = new google.maps.LatLng(school.latitude, school.longitude);
-          selectPlace(school); // Detta uppdaterar också selectedPlace
-  
-          // Centrera kartan på förskolan
-          map.setCenter(location);
-          map.setZoom(12);
-  
-          // Skapa en markör för förskolan
-          const marker = new google.maps.Marker({
-            map: map,
-            position: location,
-            icon: {
-              url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-              scaledSize: new google.maps.Size(1, 1),
-            },
-          });
-  
-          // Visa DetailedCard om vi har en vald plats
-          setIsDetailedCardVisible(true); // Visa DetailedCard
-        } else {
-          // Om förskolan inte hittas, navigera tillbaka till startsidan
-          navigate('/');
-        }
-      });
-    }
-  }, [id, map, navigate]);
-  
+useEffect(() => {
+  if (id && map) {
+    // Hämta förskolan baserat på ID från URL:en
+    fetchSchoolById(id).then((school) => {
+      if (school) {
+        // Sätt vald förskola
+        const location = new google.maps.LatLng(school.latitude, school.longitude);
+        selectPlace(school); // Detta uppdaterar också selectedPlace
+
+        // Centrera kartan på förskolan
+        map.setCenter(location);
+        map.setZoom(12);
+
+        // Skapa en markör för förskolan
+        const marker = new google.maps.Marker({
+          map: map,
+          position: location,
+          icon: {
+            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            scaledSize: new google.maps.Size(1, 1),
+          },
+        });
+
+        // Visa DetailedCard om vi har en vald plats
+        setIsDetailedCardVisible(true); // Visa DetailedCard
+      } else {
+        // Om förskolan inte hittas, navigera tillbaka till startsidan
+        navigate('/');
+      }
+    });
+  }
+}, [id, map, navigate]);
+
 
 const findNearbyPlaces = useCallback(async (location) => {
   try {
@@ -804,64 +803,54 @@ const findNearbyPlaces = useCallback(async (location) => {
       {/* Uppdatera search-container med dynamisk klass baserat på state */}
       <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
         <Container maxWidth="l">
-          <Box display="flex" alignItems="center" justifyContent="center" gap={0}>
-            {showPlaces && (
-              <Box
-                display="flex"
-                justifyContent="flex-start"
-                width="100%"
-                gap={1}
-                sx={{
-                  overflowX: 'auto', // Horisontell scroll om det inte får plats
-                  whiteSpace: 'nowrap', // Förhindrar radbrytning
-                  paddingBottom: '10px',
-                }}
-              >
-                <CustomButton
-                  onClick={() => handleButtonClick('map')} // Anropa handleButtonClick för kartvy
-                  isSelected={selectedButton === 'map'} // Kontrollera om knappen är vald
-                >
-                  <MapIcon style={{ marginRight: '8px' }} />
-                  Karta
-                </CustomButton>
-  
-               
-                <CustomButton
-                  onClick={() => filterClosestPreschools()} // Kör filtreringen utan att byta vy
-                  isSelected={selectedButton === 'closest'}
-                >
-                  De 5 närmaste
-                </CustomButton>
-  
-                <CustomButton
-                  onClick={() => handleTopRanked()} // Kör rankningen utan att byta vy
-                  isSelected={selectedButton === 'rank'}
-                >
-                  Högst rank
-                </CustomButton>
-  
-                <OrganisationFilter
-                  organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
-                  filter={filter}
-                  handleFilterChange={handleFilterChange}
-                  onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
-                />
-              </Box>
-            )}
-  
-            {searchMade && (
-              <ButtonGroup
-                aria-label="view toggle button group"
-                style={{ borderRadius: '8px', overflow: 'hidden' }}
-                sx={{
-                  backgroundColor: 'transparent', // Ingen bakgrund för ButtonGroup
-                  boxShadow: 'none', // Ingen skugga för ButtonGroup
-                  border: 'none', // Ingen kantlinje för ButtonGroup
-                }}
-              />
-            )}
-          </Box>
-  
+        <Box 
+          display="flex" 
+          alignItems="center" 
+          justifyContent="center" 
+          gap={2} 
+          flexWrap="wrap"  // Gör att knappar och dropdown bryts till ny rad på små skärmar
+          sx={{
+            '@media (max-width: 600px)': {
+              justifyContent: 'center', // Centrera på små skärmar
+              gap: '10px', // Mindre gap på små skärmar
+            },
+          }}
+        >
+     <CustomButton
+  onClick={() => {
+    setSelectedButton('closest'); // Sätt knappen som vald
+    filterClosestPreschools(); // Kör funktionen för att filtrera de 5 närmaste
+  }}
+  isSelected={selectedButton === 'closest'} // Kontrollera om knappen ska vara vald
+>
+  De 5 närmaste
+</CustomButton>
+
+<CustomButton
+  onClick={() => {
+    setSelectedButton('rank'); // Sätt knappen som vald
+    handleTopRanked(); // Kör funktionen för att visa högst rankade förskolor
+  }}
+  isSelected={selectedButton === 'rank'} // Kontrollera om knappen ska vara vald
+>
+  Högst rank
+</CustomButton>
+
+
+          {/* OrganisationFilterDropdown */}
+          <OrganisationFilterDropdown 
+            organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
+            filter={filter}
+            handleFilterChange={handleFilterChange}
+            onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
+            sx={{
+              minWidth: '200px', // Gör dropdown bredare
+              '@media (max-width: 600px)': {
+                minWidth: '100%', // Gör dropdown 100% bredd på små skärmar
+              },
+            }}
+          />
+        </Box>
           <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
             <TextField
               id="address"
@@ -1008,7 +997,7 @@ const findNearbyPlaces = useCallback(async (location) => {
         zIndex: 1100, // Högre z-index för att vara ovanpå kortet
       }}
     >
-      ❌
+     
     </button>
   </div>
 )}

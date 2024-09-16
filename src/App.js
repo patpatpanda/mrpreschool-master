@@ -35,6 +35,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App-container">
+          
           <Header />
           <Analytics />
 

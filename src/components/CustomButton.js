@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';  // Importera PropTypes
+import PropTypes from 'prop-types';
+import { useTheme } from '@mui/material/styles';  // Importera useTheme för att använda temat
 
 const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
+  const theme = useTheme();  // Hämta temat från MUI
+
   const buttonStyle = {
-    backgroundColor: isSelected ? '#4CAF50' : 'white',  // Grön om vald, annars vit
-    color: isSelected ? '#fff' : '#333',  // Vit text om vald, annars svart
-    border: isSelected ? 'none' : '2px solid #ccc',  // Border när ej vald
+    backgroundColor: isSelected ? theme.palette.primary.main : theme.palette.background.paper,  // Använd primary färg om vald, annars bakgrundsfärg
+    color: isSelected ? theme.palette.primary.contrastText : theme.palette.text.primary,  // Använd kontrastfärgen om vald, annars vanlig textfärg
+    border: isSelected ? 'none' : `2px solid ${theme.palette.divider}`,  // Divider-färgen från temat för border
     padding: '5px 10px',
     fontSize: '14px',  // Lite mindre textstorlek
     borderRadius: '25px',  // Rundade hörn
     minWidth: '120px',  // Minimum bredd
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',  // Lätt skugga
+    boxShadow: theme.shadows[1],  // Lätt skugga från temat
     display: 'flex',  // Flexbox för att centrera innehåll
     alignItems: 'center',  // Vertikal centrering
     justifyContent: 'center',  // Horisontell centrering
@@ -21,8 +24,8 @@ const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
   };
 
   const hoverStyle = {
-    backgroundColor: isSelected ? '#45a045' : '#f5f5f5',  // Mörkare grön om vald vid hover
-    border: isSelected ? 'none' : '2px solid #ccc',  // Border vid hover
+    backgroundColor: isSelected ? theme.palette.primary.dark : theme.palette.action.hover,  // Mörkare primary färg om vald vid hover
+    border: isSelected ? 'none' : `2px solid ${theme.palette.divider}`,  // Divider vid hover
   };
 
   const [hover, setHover] = useState(false);
@@ -42,15 +45,15 @@ const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
 
 // Lägg till prop-typer för validering
 CustomButton.propTypes = {
-  onClick: PropTypes.func.isRequired,  // onClick måste vara en funktion
-  children: PropTypes.node.isRequired,  // children kan vara allt som kan renderas i React
-  isSelected: PropTypes.bool,  // isSelected är en bool, men inte obligatorisk
-  sx: PropTypes.object,  // sx är ett objekt som innehåller extra stilar
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  isSelected: PropTypes.bool,
+  sx: PropTypes.object,
 };
 
 CustomButton.defaultProps = {
-  isSelected: false,  // Standardvärde för isSelected om det inte skickas in
-  sx: {},  // Standardvärde för sx om inga extra stilar skickas in
+  isSelected: false,
+  sx: {},
 };
 
 export default CustomButton;

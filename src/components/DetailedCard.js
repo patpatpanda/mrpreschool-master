@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { styled, keyframes } from '@mui/material/styles';
+import { styled, keyframes, useTheme } from '@mui/material/styles'; // Inkludera useTheme för att få tillgång till temat
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -24,14 +24,12 @@ const slideIn = keyframes`
   }
 `;
 
-// Keyframes för zoom in/zoom out
-
-// Stil för titeln med en lättare animering och mer iögonfallande färg
+// Stil för titeln med en lättare animering och temafärger
 const AnimatedTitle = styled(Typography)(({ theme }) => ({
   animation: `${slideIn} 0.7s ease-in-out`,
   fontSize: '2rem',
   fontWeight: 'bold',
-  color: '#4A90E2', // En ljusare och mer tilltalande färg
+  color: theme.palette.primary.main,  // Använd primärfärgen från temat
   textAlign: 'center',
   marginTop: theme.spacing(3),
   [theme.breakpoints.down('sm')]: {
@@ -50,7 +48,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(3),
   marginBottom: theme.spacing(3),
   borderRadius: '15px',
-  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Lägg till en lätt skugga
+  boxShadow: theme.shadows[4], // Använd skugga från temat
 
   '& img': {
     width: '100%',
@@ -72,17 +70,17 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-// Dialogstil med förbättrad layout och färgsättning
+// Dialogstil med förbättrad layout och färgsättning från temat
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '25px',
     overflow: 'hidden',
-    backgroundColor: '#F5F5F5', // Lättare bakgrundsfärg
+    backgroundColor: theme.palette.background.paper, // Använd bakgrundsfärg från temat
     width: '100%',
     height: '100%',
     margin: 0,
-    color: '#333',
-    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+    color: theme.palette.text.primary,
+    boxShadow: theme.shadows[10],
 
     [theme.breakpoints.up('sm')]: {
       width: '75%', // Lite bredare layout för större skärmar
@@ -90,18 +88,18 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// Stil för dialogens rubrik med en gradient och centrerad layout
+// Stil för dialogens rubrik med en gradient och tematiserad layout
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  color: '#fff',
+  color: theme.palette.common.white,
   textAlign: 'center',
   padding: theme.spacing(2),
   position: 'relative',
-  background: 'linear-gradient(135deg, #56CCF2 30%, #2F80ED 90%)', // Modern gradient
+  background: `linear-gradient(135deg, ${theme.palette.primary.light} 30%, ${theme.palette.primary.dark} 90%)`, // Gradient baserad på temafärger
 }));
 
-// Stil för dialogens innehåll med bättre padding
+// Stil för dialogens innehåll med bättre padding och temafärger
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  backgroundColor: '#F5F5F5',
+  backgroundColor: theme.palette.background.default,  // Använd bakgrund från temat
   padding: theme.spacing(3),
   height: 'calc(100% - 64px)',
   overflowY: 'auto',
@@ -109,6 +107,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 
 
 const DetailedCard = ({ schoolData, onClose }) => {
+  const theme = useTheme();
   if (!schoolData) {
     // Om ingen data har skickats, visa en fallback.
     return <div>Ingen data tillgänglig för denna förskola.</div>;

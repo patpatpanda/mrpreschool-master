@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { fetchSchoolById, fetchNearbySchools,  fetchMalibuByName, fetchSchoolDetailsByAddress } from './api';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
+
 import PreschoolListCard from './PreschoolListCard';
 
 import schoolIcon from '../images/icons8-school-48.png';

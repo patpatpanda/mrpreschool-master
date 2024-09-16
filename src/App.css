@@ -441,12 +441,12 @@ p {
 @media (min-width: 1400px) {
   .cards-container {
     grid-template-columns: repeat(3, 1fr); /* 3 kolumner */
-    padding-top: 450px;
+    padding-top: 650px;
   }
 }
 
 /* För skärmar mellan 760px och 1400px */
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   .cards-container {
     grid-template-columns: repeat(2, 1fr); /* 2 kolumner */
     padding-top: 450px;

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Box, Button, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild
+import CustomButton from './CustomButton';
 
 const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
   <Card
@@ -110,7 +111,7 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
       </Typography>
 
       {/* Läs mer knapp */}
-     <Button
+     <CustomButton 
   variant="contained"
   onClick={(event) => {
     event.stopPropagation();
@@ -118,7 +119,7 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
     onClose();  // Stäng PreschoolCard
   }}
   sx={{
-    backgroundColor: '#3498db',
+    backgroundColor: '#2196f3',
     color: '#fff',
     fontSize: '0.875rem',
     padding: '8px 16px',
@@ -129,7 +130,7 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
   }}
 >
   Läs mer
-</Button>
+</CustomButton >
 
     </CardContent>
   </Card>

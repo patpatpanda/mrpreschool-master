@@ -4,6 +4,7 @@ import { Card, CardContent, Typography, Box, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild
+import CustomButton from './CustomButton';
 
 const PreschoolListCard = ({ preschool, onDetailsClick }) => (
   <Card
@@ -18,7 +19,7 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
       padding: '16px',
       width: '100%',
       maxWidth: '600px',
-      minHeight: { xs: '400px', sm: '400px' }, // Öka höjden för både mobil och större skärmar
+      minHeight: { xs: '400px', sm: '00px' }, // Öka höjden för både mobil och större skärmar
       '&:hover': {
         transform: 'translateY(-4px)',
         boxShadow: '0 10px 15px rgba(0, 0, 0, 0.2)',
@@ -87,25 +88,17 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
         )}
       </Box>
 
-      <Button
+      <CustomButton 
         variant="contained"
         onClick={(event) => {
           event.stopPropagation();
           onDetailsClick(preschool);
         }}
-        sx={{
-          backgroundColor: '#3498db',
-          color: '#fff',
-          fontSize: '0.875rem',
-          textTransform: 'none',
-          padding: '8px 16px',
-          '&:hover': {
-            backgroundColor: '#2980b9',
-          },
-        }}
+       
+        
       >
         Läs mer
-      </Button>
+      </CustomButton >
     </CardContent>
   </Card>
 );

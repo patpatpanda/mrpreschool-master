@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Box, Button } from '@mui/material';
+import { Card, CardContent, Typography, Box, } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild

@@ -109,7 +109,11 @@ const MapComponent = () => {
     // Uppdatera det valda stället och visa DetailedCard
     setSelectedPlace(place);
     setIsDetailedCardVisible(true); // Visa DetailedCard
+
+    // Navigera till URL med förskolans ID
+    navigate(`/forskolan/${place.id}`);
 };
+
 const handleMarkerClick = (place, walkingTime) => {
   const detailedPlace = {
     ...place,
@@ -346,7 +350,6 @@ const handleMarkerClick = (place, walkingTime) => {
     }
   }, []);
   
-
   useEffect(() => {
     if (id && map) {
         fetchSchoolById(id).then((school) => {
@@ -368,13 +371,9 @@ const handleMarkerClick = (place, walkingTime) => {
                 setOriginMarker(marker);
                 createMarker(school, location);
                 setShowPlaces(true);
-               
 
-                // Lägg till en kontroll för när `setView('map')` ska anropas
-                if (window.location.pathname.includes('map')) {
-                    setView('map');
-                }
-                // Alternativt, kontrollera om det finns en specifik anledning att byta till map view
+                // Se till att 'map' view är aktiv
+                setView('map');
             }
         });
     }
@@ -1004,7 +1003,7 @@ const findNearbyPlaces = useCallback(async (location) => {
         zIndex: 1100, // Högre z-index för att vara ovanpå kortet
       }}
     >
-      ❌
+      
     </button>
   </div>
 )}

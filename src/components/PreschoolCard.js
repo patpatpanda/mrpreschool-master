@@ -1,164 +1,136 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardHeader, Typography, Box, Button } from '@mui/material';
+import { Card, CardContent, Typography, Box, Button, IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild
 
-const PreschoolCard = ({ preschool,  onDetailsClick, onClose }) => (
+const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
   <Card
     sx={{
       backgroundColor: '#ffffff',
-      borderRadius: '8px',
+      borderRadius: '12px',
       margin: 'auto',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       transition: 'transform 0.3s, box-shadow 0.3s',
       width: '100%',
-      maxWidth: { xs: '100%', sm: '400px', md: '500px' }, // Responsiva maxWidth-värden
-      position: 'relative', // Behövs för den mintgröna sidan
+      maxWidth: { xs: '100%', sm: '450px', md: '600px' }, // Responsiva maxWidth-värden
+      position: 'relative',
       '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
-      },
-      '@media (max-width: 400px)': {
-        padding: '6px',
+        transform: 'translateY(-4px)',
+        boxShadow: '0 10px 15px rgba(0, 0, 0, 0.2)',
       },
     }}
   >
-    {/* Mintgrön sida */}
-    <Box
+    {/* Stängningsknapp */}
+    <IconButton
+      onClick={(event) => {
+        event.stopPropagation();
+        onClose();
+      }}
       sx={{
-        background: 'linear-gradient(45deg, #62727b 30%, #a7c0cd 90%)',
         position: 'absolute',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        width: '4px',  // Bredden på den färgade sidan
-        borderTopLeftRadius: '8px',
-        borderBottomLeftRadius: '8px',
-      }}
-    />
-
-    <CardHeader
-      title={
-        <Typography variant="subtitle1" sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '0.75rem', md: '0.85rem' } }}>
-          {preschool.namn}
-        </Typography>
-      }
-      sx={{
-        paddingBottom: '4px',
-        paddingTop: '4px',
-        paddingLeft: '8px',
-        paddingRight: '8px',
-      }}
-    />
-    <CardContent
-      sx={{
-        padding: '8px',
-        '&:last-child': {
-          paddingBottom: '8px',
+        top: '12px',
+        right: '12px',
+        zIndex: 10,
+        backgroundColor: '#fff', // Halvgenomskinlig bakgrund för bättre synlighet
+        color: 'red', // Vit ikon för bättre kontrast
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
         },
-        display: 'flex',
-        flexDirection: 'row', // Rada upp innehållet horisontellt
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        fontSize: '1.5rem', // Större storlek på ikonen
+        padding: '8px', // Större klickbar yta
       }}
     >
-      {/* Textinnehåll */}
-      <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-        <Box display="flex" alignItems="center" sx={{ marginBottom: '4px' }}>
+      <FontAwesomeIcon icon={faTimes} />
+    </IconButton>
+
+    {/* Bild i fokus */}
+    <Box
+      sx={{
+        position: 'relative',
+        height: { xs: '200px', sm: '300px', md: '400px' }, // Gör bilden högre på större skärmar
+        overflow: 'hidden',
+        borderTopLeftRadius: '12px',
+        borderTopRightRadius: '12px',
+      }}
+    >
+      <img
+        src={preschool.bildUrl || myImage}
+        alt={preschool.namn}
+        style={{
+          width: '100%',
+          height: '80%',
+          objectFit: 'cover',
+        }}
+      />
+    </Box>
+
+    {/* Innehåll under bilden */}
+    <CardContent
+      sx={{
+        padding: '16px',
+        '&:last-child': {
+          paddingBottom: '16px',
+        },
+      }}
+    >
+      {/* Rubrik */}
+      <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+        {preschool.namn}
+      </Typography>
+
+      {/* Adress */}
+      <Box display="flex" alignItems="center" sx={{ marginBottom: '8px' }}>
+        <FontAwesomeIcon
+          icon={faMapMarkerAlt}
+          style={{ color: '#4CAF50', marginRight: '8px', fontSize: '1rem' }}
+        />
+        <Typography variant="body2" sx={{ color: '#666', fontSize: '0.875rem' }}>
+          {preschool.adress}
+        </Typography>
+      </Box>
+
+      {/* Beskrivning */}
+      {preschool.description && (
+        <Box display="flex" alignItems="center" sx={{ marginBottom: '8px' }}>
           <FontAwesomeIcon
-            icon={faMapMarkerAlt}
-            style={{ color: '#4CAF50', marginRight: '6px', fontSize: '0.9rem' }}
+            icon={faInfoCircle}
+            style={{ color: '#FF9800', marginRight: '8px', fontSize: '1rem' }}
           />
-          <Typography
-            variant="body2"
-            sx={{
-              color: '#666',
-              fontSize: '0.75rem',
-              wordWrap: 'break-word',
-            }}
-          >
-            {preschool.adress}
+          <Typography variant="body2" sx={{ color: '#666', fontSize: '0.875rem' }}>
+            {preschool.description}
           </Typography>
         </Box>
-        {preschool.description && (
-          <Box display="flex" alignItems="center" sx={{ marginBottom: '10px' }}>
-            <FontAwesomeIcon
-              icon={faInfoCircle}
-              style={{ color: '#FF9800', marginRight: '6px', fontSize: '0.9rem' }}
-            />
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#666',
-                fontSize: '0.75rem',
-                wordWrap: 'break-word',
-              }}
-            >
-              {preschool.description}
-            </Typography>
-          </Box>
-        )}
-        <Typography
-          variant="body2"
-          sx={{
-            color: '#333',
-            fontSize: '0.75rem',
-            marginBottom: '8px',
-          }}
-        >
-          Gångtid: {preschool.walkingTime || 'Ingen data'} minuter
-        </Typography>
+      )}
 
-        {/* Knappar */}
-        <Button
-          variant="contained"
-          onClick={(event) => {
-            event.stopPropagation();
-            onDetailsClick(preschool);
-          }}
-          sx={{
-            alignSelf: 'flex-start',
-            padding: '4px 8px',
-            fontSize: '0.75rem',
-            marginTop: '4px',
-            textTransform: 'none',
-            background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-            color: '#333',
-            '&:hover': {
-              backgroundColor: '#555',
-              color: '#fff',
-            },
-          }}
-        >
-          Läs mer
-        </Button>
+      {/* Gångtid */}
+      <Typography variant="body2" sx={{ color: '#333', fontSize: '0.875rem', marginBottom: '8px' }}>
+        Gångtid: {preschool.walkingTime || 'Ingen data'} minuter
+      </Typography>
 
+      {/* Läs mer knapp */}
+      <Button
+  variant="contained"
+  onClick={(event) => {
+    event.stopPropagation();
+    onDetailsClick(preschool);  // Visa DetailedCard
+    onClose();  // Stäng PreschoolCard
+  }}
+  sx={{
+    backgroundColor: '#3498db',
+    color: '#fff',
+    fontSize: '0.875rem',
+    padding: '8px 16px',
+    textTransform: 'none',
+    '&:hover': {
+      backgroundColor: '#2980b9',
+    },
+  }}
+>
+  Läs mer
+</Button>
 
-      </Box>
-
-      {/* Bild */}
-      <Box
-        sx={{
-          marginLeft: '16px',
-          maxWidth: { xs: '30%', sm: '25%' },
-          '@media (max-width: 600px)': {
-            marginLeft: '8px',
-          },
-        }}
-      >
-        <img
-          src={preschool.bildUrl || myImage}
-          alt={preschool.namn}
-          style={{
-            width: '100%',
-            height: 'auto',
-            borderRadius: '8px',
-            objectFit: 'cover',
-          }}
-        />
-      </Box>
     </CardContent>
   </Card>
 );

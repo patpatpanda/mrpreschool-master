@@ -78,18 +78,20 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 }));
 
 
-
-// Stil för dialogfönstret
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '20px',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.default,
-    width: '100%',
+    width: '100%',  // För mobiler, standard är 100%
     height: '100%',
     margin: 0,
     color: '#333',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+
+    [theme.breakpoints.up('sm')]: {  // För större skärmar (sm = small breakpoint)
+      width: '70%',  // Bredden sätts till 70% för skärmar som är större än små enheter
+    },
   },
 }));
 

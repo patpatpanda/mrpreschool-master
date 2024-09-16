@@ -109,6 +109,10 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 
 
 const DetailedCard = ({ schoolData, onClose }) => {
+  if (!schoolData) {
+    // Om ingen data har skickats, visa en fallback.
+    return <div>Ingen data tillgänglig för denna förskola.</div>;
+  }
   const { namn, adress,  schoolDetails, walkingTime } = schoolData;
   const bildUrl = schoolData.bildUrl;
 

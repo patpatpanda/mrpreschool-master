@@ -101,19 +101,19 @@ const MapComponent = () => {
   const handleDetailsClick = async (place) => {
     // Kontrollera om detaljerad data finns för platsen
     if (!place.schoolDetails) {
-        // Hämta detaljerad data om den inte finns
-        const schoolDetails = await fetchSchoolDetailsByAddress(place.adress);
-        place.schoolDetails = schoolDetails;
+      // Hämta detaljerad data om den inte finns
+      const schoolDetails = await fetchSchoolDetailsByAddress(place.adress);
+      place.schoolDetails = schoolDetails;
     }
-    
+  
     // Uppdatera det valda stället och visa DetailedCard
     setSelectedPlace(place);
     setIsDetailedCardVisible(true); // Visa DetailedCard
-
-    // Navigera till URL med förskolans ID
+  
+    // Navigera till URL med förskolans ID för att uppdatera URL:en korrekt
     navigate(`/forskolan/${place.id}`);
-};
-
+  };
+  
 const handleMarkerClick = (place, walkingTime) => {
   const detailedPlace = {
     ...place,
@@ -350,35 +350,40 @@ const handleMarkerClick = (place, walkingTime) => {
     }
   }, []);
   
+
   useEffect(() => {
     if (id && map) {
-        fetchSchoolById(id).then((school) => {
-            if (school) {
-                const location = new google.maps.LatLng(school.latitude, school.longitude);
-                selectPlace(school);
-                map.setCenter(location);
-                map.setZoom(12);
-
-                const marker = new google.maps.Marker({
-                    map: map,
-                    position: location,
-                    icon: {
-                        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                        scaledSize: new google.maps.Size(1, 1),
-                    },
-                });
-
-                setOriginMarker(marker);
-                createMarker(school, location);
-                setShowPlaces(true);
-
-                // Se till att 'map' view är aktiv
-                setView('map');
-            }
-        });
+      // Hämta förskolan baserat på ID från URL:en
+      fetchSchoolById(id).then((school) => {
+        if (school) {
+          // Sätt vald förskola
+          const location = new google.maps.LatLng(school.latitude, school.longitude);
+          selectPlace(school); // Detta uppdaterar också selectedPlace
+  
+          // Centrera kartan på förskolan
+          map.setCenter(location);
+          map.setZoom(12);
+  
+          // Skapa en markör för förskolan
+          const marker = new google.maps.Marker({
+            map: map,
+            position: location,
+            icon: {
+              url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+              scaledSize: new google.maps.Size(1, 1),
+            },
+          });
+  
+          // Visa DetailedCard om vi har en vald plats
+          setIsDetailedCardVisible(true); // Visa DetailedCard
+        } else {
+          // Om förskolan inte hittas, navigera tillbaka till startsidan
+          navigate('/');
+        }
+      });
     }
-}, [id, map]);
-
+  }, [id, map, navigate]);
+  
 
 const findNearbyPlaces = useCallback(async (location) => {
   try {
@@ -1003,14 +1008,13 @@ const findNearbyPlaces = useCallback(async (location) => {
         zIndex: 1100, // Högre z-index för att vara ovanpå kortet
       }}
     >
-      
+      ❌
     </button>
   </div>
 )}
 
 
-{/* DetailedCard visas baserat på klick på "Läs mer" */}
-{selectedPlace && isDetailedCardVisible && (
+{selectedPlace && isDetailedCardVisible && selectedPlace.schoolDetails && (
   <DetailedCard
     schoolData={selectedPlace}
     onClose={() => setIsDetailedCardVisible(false)} // Stäng DetailedCard

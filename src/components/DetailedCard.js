@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { styled, keyframes, useTheme } from '@mui/material/styles'; // Inkludera useTheme för att få tillgång till temat
+import { styled, keyframes } from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -24,20 +24,23 @@ const slideIn = keyframes`
   }
 `;
 
-// Stil för titeln med en lättare animering och temafärger
+// Keyframes för zoom in/zoom out
+
+
+// Stil för titeln med animation
 const AnimatedTitle = styled(Typography)(({ theme }) => ({
-  animation: `${slideIn} 0.7s ease-in-out`,
-  fontSize: '2rem',
-  fontWeight: 'bold',
-  color: theme.palette.primary.main,  // Använd primärfärgen från temat
+  animation: `${slideIn} 1s ease-in-out`,
+  fontSize: '1.5rem',
+  
+  color: '#333',
   textAlign: 'center',
-  marginTop: theme.spacing(3),
+  marginTop: theme.spacing(2),
   [theme.breakpoints.down('sm')]: {
-    fontSize: '1.75rem',
+    fontSize: '1.5',
   },
 }));
 
-// Stil för bildcontainern med en snyggare övergångseffekt och lite skuggning
+// Stil för bildcontainern med zoom-effekt
 const ImageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
@@ -47,72 +50,69 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   width: '100%',
   marginTop: theme.spacing(3),
   marginBottom: theme.spacing(3),
-  borderRadius: '15px',
-  boxShadow: theme.shadows[4], // Använd skugga från temat
+  borderRadius: theme.shape.borderRadius,
 
   '& img': {
     width: '100%',
     height: 'auto',
     objectFit: 'cover',
-    transition: 'transform 0.4s ease-in-out', // Smidig zoom-effekt
+    transition: 'none', // Ingen transitionseffekt längre
   },
 
-  '&:hover img': {
-    transform: 'scale(1.05)', // Zooma in bilden vid hover
-  },
+  // Standardhöjd för mobila enheter
+  maxHeight: '300px',
 
-  maxHeight: '500px', // Höjd för större skärmar
+  // Anpassa höjden för större skärmar med breakpoints
   [theme.breakpoints.up('sm')]: {
     maxHeight: '400px',
   },
   [theme.breakpoints.up('md')]: {
     maxHeight: '500px',
   },
-}));
-
-// Dialogstil med förbättrad layout och färgsättning från temat
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: '25px',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper, // Använd bakgrundsfärg från temat
-    width: '100%',
-    height: '100%',
-    margin: 0,
-    color: theme.palette.text.primary,
-    boxShadow: theme.shadows[10],
-
-    [theme.breakpoints.up('sm')]: {
-      width: '75%', // Lite bredare layout för större skärmar
-    },
+  [theme.breakpoints.up('lg')]: {
+    maxHeight: '600px',
+  },
+  [theme.breakpoints.up('xl')]: {
+    maxHeight: '800px',
   },
 }));
 
-// Stil för dialogens rubrik med en gradient och tematiserad layout
-const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  color: theme.palette.common.white,
-  textAlign: 'center',
-  padding: theme.spacing(2),
-  position: 'relative',
-  background: `linear-gradient(135deg, ${theme.palette.primary.light} 30%, ${theme.palette.primary.dark} 90%)`, // Gradient baserad på temafärger
+
+
+// Stil för dialogfönstret
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: '20px',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.default,
+    width: '100%',
+    height: '100%',
+    margin: 0,
+    color: '#333',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+  },
 }));
 
-// Stil för dialogens innehåll med bättre padding och temafärger
-const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,  // Använd bakgrund från temat
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+  textAlign: 'center',
   padding: theme.spacing(3),
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'center',
+  background: theme.palette.primary.main
+}));
+
+const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  padding: theme.spacing(2.5),
   height: 'calc(100% - 64px)',
   overflowY: 'auto',
 }));
 
-
 const DetailedCard = ({ schoolData, onClose }) => {
-  const theme = useTheme();
-  if (!schoolData) {
-    // Om ingen data har skickats, visa en fallback.
-    return <div>Ingen data tillgänglig för denna förskola.</div>;
-  }
-  const { namn, adress,  schoolDetails, walkingTime } = schoolData;
+  const { namn, adress, schoolDetails, walkingTime } = schoolData;
   const bildUrl = schoolData.bildUrl;
 
   const [chartData, setChartData] = useState([]);
@@ -228,8 +228,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
           onClick={onClose}
           sx={{
             position: 'absolute',
-            right: 8,
-            top: 8,
+            right: { xs: 8, sm: 8 },
+            top: { xs: 8, sm: 8 },
             color: '#fff',
           }}
         >
@@ -238,39 +238,40 @@ const DetailedCard = ({ schoolData, onClose }) => {
       </StyledDialogTitle>
 
       <StyledDialogContent>
-        {/* Kreativ titel med animering */}
+        {/* Kreativ titel med animation */}
         <AnimatedTitle>{namn}</AnimatedTitle>
 
-        {/* Bild med subtil zoom-effekt */}
+        {/* Bild med zoom-effekt vid hover */}
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
 
-        {/* Visa skolbeskrivning och detaljer med bättre struktur */}
         {schoolDetails.beskrivning && (
           <Box mb={4}>
-            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px', fontWeight: 'bold' }}>
-              Om förskolan
+            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
+              Beskrivning
             </Typography>
-            <Typography variant="body1" sx={{ color: '#555' }}>
+            <Typography variant="body2" sx={{ color: '#555' }}>
               {schoolDetails.beskrivning}
             </Typography>
           </Box>
         )}
 
         {walkingTime && (
-          <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555' }}>
-            <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} /> Gångtid: {walkingTime} minuter
+          <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555', zIndex: 3000 }}>
+            <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} /> Beräknad gångtid: {walkingTime} minuter
           </Typography>
         )}
 
         {adress && (
-          <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', color: '#333' }}>
+          <Typography variant="body2" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333', zIndex: 3000 }}>
             <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} /> {adress}
           </Typography>
         )}
+
         <Grid container spacing={2}>
-        
+         
+          
 
           {schoolDetails && (
             <Grid item xs={12} md={6} sx={{ zIndex: 3000 }}>

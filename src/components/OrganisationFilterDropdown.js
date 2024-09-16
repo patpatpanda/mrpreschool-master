@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';  // Importera PropTypes för validering
 import { Checkbox, MenuItem, Select, InputLabel, FormControl, ListItemText, Box } from '@mui/material';
 import kommunalIcon from '../images/icons8-school-48.png';
 import fristaendeIcon from '../images/icons8-school-64.png';
@@ -69,6 +70,13 @@ const styles = {
     height: '20px',
     marginRight: '8px',
   },
+};
+
+// Lägg till PropTypes för att validera props
+OrganisationFilterDropdown.propTypes = {
+  organisationTypes: PropTypes.arrayOf(PropTypes.string).isRequired,  // Array av strängar
+  filter: PropTypes.arrayOf(PropTypes.string).isRequired,  // Array av strängar
+  handleFilterChange: PropTypes.func.isRequired,  // Funktion som anropas vid ändring
 };
 
 export default OrganisationFilterDropdown;

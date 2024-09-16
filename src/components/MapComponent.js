@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
 
-import { ThemeProvider } from '@mui/material/styles';
+
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
@@ -78,10 +78,6 @@ const MapComponent = () => {
   const [searchMade, setSearchMade] = useState(false); // Används för att visa knappen efter sökning
   
   const [selectedButton, setSelectedButton] = useState(null);
-  const handleButtonClick = (view) => {
-    setSelectedButton(view);  // Sätt vilken knapp som är vald
-    setView(view);  // Uppdatera vilken vy som ska visas (karta eller lista)
-  };
   
 
   const directionsService = useRef(null);
@@ -364,14 +360,7 @@ useEffect(() => {
         map.setZoom(12);
 
         // Skapa en markör för förskolan
-        const marker = new google.maps.Marker({
-          map: map,
-          position: location,
-          icon: {
-            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            scaledSize: new google.maps.Size(1, 1),
-          },
-        });
+        
 
         // Visa DetailedCard om vi har en vald plats
         setIsDetailedCardVisible(true); // Visa DetailedCard

@@ -23,7 +23,15 @@ const OrganisationFilterDropdown = ({ organisationTypes, filter, handleFilterCha
 
   return (
     <FormControl sx={{ m: 1, minWidth: 200 }}>
-      <InputLabel id="organisation-filter-label">Organisationstyp</InputLabel>
+     <InputLabel 
+  id="organisation-filter-label"
+  sx={{
+    marginTop: '8px' // Flytta ner etiketten med 8px
+  }}
+>
+  Organisationstyp
+</InputLabel>
+
       <Select
         labelId="organisation-filter-label"
         id="organisation-filter"

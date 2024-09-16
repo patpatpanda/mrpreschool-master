@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import PreschoolCard from './PreschoolCard';
 import DetailedCard from './DetailedCard';
+import { useTheme } from '@mui/material/styles';
 
 import '../styles/GoogleMap.css';
 import { TextField, Typography,  Container, Box, CircularProgress, Snackbar, Alert, InputAdornment, IconButton } from '@mui/material';
@@ -54,6 +55,7 @@ const geocodeAddress = async (address) => {
 
 
 const MapComponent = () => {
+  const theme = useTheme();
   const mapRef = useRef(null);
   const addressRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -841,60 +843,60 @@ const findNearbyPlaces = useCallback(async (location) => {
           />
         </Box>
           <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
-            <TextField
-              id="address"
-              variant="outlined"
-              placeholder="Skriv din adress för att hitta förskola..."
-              fullWidth
-              sx={{
-                background: 'linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)',
-                borderRadius: '12px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                overflow: 'hidden',
-                transition: 'all 0.3s ease',
-                '& .MuiOutlinedInput-root': {
-                  color: '#333',
-                  padding: '1px 22px',
-                  '& fieldset': {
-                    borderColor: 'transparent',
+          <TextField
+        id="address"
+        variant="outlined"
+        placeholder="Skriv din adress för att hitta förskola..."
+        fullWidth
+        sx={{
+          background: `linear-gradient(45deg, ${theme.palette.background.default} 30%, ${theme.palette.background.paper} 90%)`, // Använd temafärger
+          borderRadius: '12px',
+          boxShadow: theme.shadows[2], // Använd skuggor från temat
+          overflow: 'hidden',
+          transition: 'all 0.3s ease',
+          '& .MuiOutlinedInput-root': {
+            color: theme.palette.text.primary,
+            padding: '1px 22px',
+            '& fieldset': {
+              borderColor: 'transparent',
+            },
+            '&:hover fieldset': {
+              borderColor: `${theme.palette.action.hover}`, // Använd hover-färg från temat
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: `${theme.palette.primary.main}`, // Använd primärfärg när den är fokuserad
+            },
+          },
+          'input::placeholder': {
+            color: theme.palette.text.secondary, // Använd text-färg från temat
+            fontSize: '14px',
+          },
+        }}
+        inputRef={addressRef}
+        onKeyDown={handleKeyDown}
+        InputProps={{
+          style: { color: theme.palette.text.primary },
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={geocodeAddressHandler}
+                edge="end"
+                sx={{
+                  backgroundColor: theme.palette.background.paper, // Använd bakgrund från temat
+                  color: theme.palette.text.secondary, // Använd sekundär textfärg
+                  borderRadius: '50%',
+                  padding: '8px',
+                  '&:hover': {
+                    backgroundColor: theme.palette.action.hover, // Använd hover-färg från temat
                   },
-                  '&:hover fieldset': {
-                    borderColor: 'rgba(255, 255, 255, 0.8)',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'rgba(255, 255, 255, 1)',
-                  },
-                },
-                'input::placeholder': {
-                  color: '#333',
-                  fontSize: '14px',
-                },
-              }}
-              inputRef={addressRef}
-              onKeyDown={handleKeyDown}
-              InputProps={{
-                style: { color: '#333' },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={geocodeAddressHandler}
-                      edge="end"
-                      sx={{
-                        backgroundColor: '#ffffff',
-                        color: '#62727b',
-                        borderRadius: '50%',
-                        padding: '8px',
-                        '&:hover': {
-                          backgroundColor: '#a7c0cd',
-                        },
-                      }}
-                    >
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+                }}
+              >
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
           </form>
   
           {!searchMade && view === 'list' && (

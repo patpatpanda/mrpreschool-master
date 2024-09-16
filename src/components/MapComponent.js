@@ -11,7 +11,7 @@ import { fetchSchoolById, fetchNearbySchools,  fetchMalibuByName, fetchSchoolDet
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PreschoolApplicationInfo from './PreschoolApplicationInfo'; // Importera din komponent här
-
+import PreschoolListCard from './PreschoolListCard';
 
 import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
@@ -123,112 +123,6 @@ const handleMarkerClick = (place, walkingTime) => {
 
 
 
-  const filterPedagogiskOmsorg = async () => {
-    if (!originPosition) {
-      console.error("Ingen plats vald. Ange en adress.");
-      return;
-    }
-  
-    try {
-      const lat = originPosition.lat();  // Hämta latitud från positionen
-      const lng = originPosition.lng();  // Hämta longitud från positionen
-  
-      // Hämta förskolor med "Dagmamma" som TypAvService
-      const filteredPlaces = await fetchNearbySchools(lat, lng, '', 'pedagogisk omsorg');  // Notera att vi skickar 'Dagmamma' som typAvService
-  
-      console.log("Filtered Dagmamma places:", filteredPlaces);  // För felsökning
-  
-      if (filteredPlaces && filteredPlaces.length > 0) {
-        setNearbyPlaces(filteredPlaces);  // Uppdatera lista med de filtrerade förskolorna
-        clearMarkers();  // Ta bort gamla markörer
-        filteredPlaces.forEach((result) => {
-          createMarkerWithCustomIcon(result, originPosition, false);  // Skapa markör utan att uppdatera kartans gränser
-        });
-      } else {
-        console.error('Inga förskolor hittades med "Dagmamma" i detta område');
-      }
-    } catch (error) {
-      console.error('Ett fel inträffade vid filtrering av förskolor:', error);
-    }
-  };
-  
-  
-  const createMarkerWithCustomIcon = async (place, originLocation, shouldUpdateBounds = false) => {
-    if (!map) {
-      console.error("Map is not initialized yet.");
-      return;
-    }
-  
-    const malibuData = await fetchMalibuByName(place.namn);
-    const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
-    const cleanedName = place.namn
-      .replace(/förskolan/gi, '')
-      .replace(/förskola/gi, '')
-      .trim();
-  
-    // Beräkna gångtiden
-    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, {
-      lat: place.latitude,
-      lng: place.longitude,
-    });
-  
-    const formattedWalkingTime = walkingTimeInMinutes ? walkingTimeInMinutes.toFixed(2) : 'N/A';
-  
-    // Uppdatera walkingTimes state
-    setWalkingTimes((prevTimes) => ({
-      ...prevTimes,
-      [place.id]: formattedWalkingTime,
-    }));
-  
-    // Skapa en markör
-    const marker = new google.maps.Marker({
-      position: { lat: place.latitude, lng: place.longitude },
-      map: map,
-      title: cleanedName,
-      icon: {
-        url: customIcon,
-        scaledSize: new google.maps.Size(35, 35),
-        labelOrigin: new google.maps.Point(40, 15),
-      },
-    });
-  
-    // Skapa InfoWindow för snabb info om förskolan
-    const infoWindow = new google.maps.InfoWindow({
-      content: `
-        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
-          <div style="margin: 0; padding: 0;">${cleanedName}</div>
-          <div style="display: flex; align-items: center; margin: 0; padding: 0;">
-            <span style="margin-right: 2px;">Betyg:</span>
-            ${helhetsomdome ? `${helhetsomdome}% nöjda` : 'Ingen data'}
-          </div>
-        </div>
-      `,
-    });
-  
-    infoWindow.open(map, marker);
-  
-    // Hantera klick på markören för att visa PreschoolCard med gångtid
-    marker.addListener('click', () => {
-      handleMarkerClick(place, formattedWalkingTime);  // Passera gångtiden till PreschoolCard
-    });
-  
-    // Lägg till markören i MarkerClusterer
-    clustererRef.current.addMarker(marker);
-  
-    // Uppdatera kartans gränser om det behövs
-    if (shouldUpdateBounds) {
-      const bounds = new google.maps.LatLngBounds();
-      bounds.extend(marker.position);
-      if (originLocation) {
-        bounds.extend(originLocation);
-      }
-      map.fitBounds(bounds);
-    }
-  
-    // Lägg till markören i listan över aktuella markörer
-    setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
-  };
-  
 
   
   useEffect(() => {
@@ -791,59 +685,96 @@ const findNearbyPlaces = useCallback(async (location) => {
 
   return (
     <div className="app-container">
-      {/* Uppdatera search-container med dynamisk klass baserat på state */}
-      <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
-        <Container maxWidth="l">
+    {/* Uppdatera search-container med dynamisk klass baserat på state */}
+    <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
+      <Container maxWidth="l">
         <Box 
           display="flex" 
           alignItems="center" 
           justifyContent="center" 
           gap={2} 
-          flexWrap="nowrap"  // Gör att knappar och dropdown bryts till ny rad på små skärmar
+          flexWrap="nowrap"  // Gör att knappar och dropdown inte bryts till ny rad
           sx={{
+            overflowX: 'auto',  // Möjliggör horisontell scrollning
+            whiteSpace: 'nowrap', // Förhindra att knappar bryts till ny rad
+            '&::-webkit-scrollbar': {
+              display: 'none', // Göm horisontell scrollbar (valfritt)
+            },
+            '-ms-overflow-style': 'none',  // Internet Explorer 10+
+            'scrollbar-width': 'none',  // Firefox
+            
+            // Justera layouten för olika skärmstorlekar
             '@media (max-width: 600px)': {
-              justifyContent: 'center', // Centrera på små skärmar
-              gap: '3px', // Mindre gap på små skärmar
+              justifyContent: 'flex-start',  // Justera innehållet för små skärmar
+              gap: '10px', // Mindre gap på små skärmar
+            },
+            '@media (min-width: 601px) and (max-width: 960px)': {
+              justifyContent: 'space-around',  // Mer utrymme på mellanstora skärmar som iPad
+              gap: '20px',  // Lite större mellanrum på surfplattor
+            },
+            '@media (min-width: 961px)': {
+              justifyContent: 'center',  // Centrera innehållet på större skärmar
+              gap: '30px', // Större gap på större skärmar
             },
           }}
         >
-     <CustomButton
-  onClick={() => {
-    setSelectedButton('closest'); // Sätt knappen som vald
-    filterClosestPreschools(); // Kör funktionen för att filtrera de 5 närmaste
-  }}
-  isSelected={selectedButton === 'closest'} // Kontrollera om knappen ska vara vald
->
-  De 5 närmaste
-</CustomButton>
-
-<CustomButton
-  onClick={() => {
-    setSelectedButton('rank'); // Sätt knappen som vald
-    handleTopRanked(); // Kör funktionen för att visa högst rankade förskolor
-  }}
-  isSelected={selectedButton === 'rank'} // Kontrollera om knappen ska vara vald
->
-  Högst rank
-
-</CustomButton>
-<OrganisationFilterDropdown 
+          <CustomButton
+            onClick={() => {
+              setSelectedButton('list'); // Sätt knappen som vald
+              setView('list'); // Byt till listvy
+            }}
+            isSelected={selectedButton === 'list'} // Kontrollera om knappen ska vara vald
+          >
+            Lista
+          </CustomButton>
+  
+          <CustomButton
+            onClick={() => {
+              setSelectedButton('map'); // Sätt knappen som vald
+              setView('map'); // Byt till kartvy
+            }}
+            isSelected={selectedButton === 'map'} // Kontrollera om knappen ska vara vald
+          >
+            Karta
+          </CustomButton>
+  
+          <CustomButton
+            onClick={() => {
+              setSelectedButton('closest'); // Sätt knappen som vald
+              filterClosestPreschools(); // Kör funktionen för att filtrera de 5 närmaste
+            }}
+            isSelected={selectedButton === 'closest'} // Kontrollera om knappen ska vara vald
+          >
+            De 5 närmaste
+          </CustomButton>
+  
+          <CustomButton
+            onClick={() => {
+              setSelectedButton('rank'); // Sätt knappen som vald
+              handleTopRanked(); // Kör funktionen för att visa högst rankade förskolor
+            }}
+            isSelected={selectedButton === 'rank'} // Kontrollera om knappen ska vara vald
+          >
+            Högst rank
+          </CustomButton>
+  
+          <OrganisationFilterDropdown 
             organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
             filter={filter}
             handleFilterChange={handleFilterChange}
-            onFilterPedagogiskOmsorg={filterPedagogiskOmsorg}
             sx={{
               minWidth: '200px', // Gör dropdown bredare
               '@media (max-width: 600px)': {
                 minWidth: '100%', // Gör dropdown 100% bredd på små skärmar
               },
+              '@media (min-width: 601px) and (max-width: 960px)': {
+                minWidth: '300px', // Anpassa bredd för iPad-storlek
+              },
             }}
           />
-
-
-          {/* OrganisationFilterDropdown */}
-       
         </Box>
+     
+  
           <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
           <TextField
         id="address"
@@ -930,7 +861,7 @@ const findNearbyPlaces = useCallback(async (location) => {
                   },
                 }}
               >
-                Välkommen till Förskolekollen! Vi hjälper dig att hitta och jämföra förskolor i ditt område. Lär dig mer om regler och riktlinjer samt se enkätsvar och statistik för att göra ett informerat val för ditt barns utbildning. För närvarande stödjer vi bara förskolor i stockholmsområdet. Ange en adress för att komma igång.
+          
               </Typography>
   
               <Box>
@@ -953,19 +884,17 @@ const findNearbyPlaces = useCallback(async (location) => {
 <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
   {showPlaces && nearbyPlaces.length > 0 ? (
     nearbyPlaces.map((place, index) => (
-      <PreschoolCard 
-        key={place.id} 
-        preschool={place} 
-        onSelect={handleCardSelect} 
+      <PreschoolListCard
+        key={place.id}
+        preschool={place}
         onDetailsClick={() => handleDetailsClick(place)} // Hantera "Läs mer"-klick
       />
     ))
   ) : (
-    <p>
-
-    </p>
+    <p>Inga förskolor hittades</p>
   )}
 </div>
+
 {/* PreschoolCard visas ovanpå Google Maps baserat på marker-klick */}
 {selectedPlace && isCardVisible && (
   <div style={{ position: 'absolute', bottom: '20%', right: '20%', zIndex: 1000, width: '300px' }}>

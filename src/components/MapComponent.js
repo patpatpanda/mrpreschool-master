@@ -870,9 +870,6 @@ const findNearbyPlaces = useCallback(async (location) => {
           
               </Typography>
   
-              <Box>
-                <PreschoolApplicationInfo />
-              </Box>
             </Box>
           )}
         </Container>

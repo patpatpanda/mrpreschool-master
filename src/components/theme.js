@@ -7,7 +7,7 @@ const theme = createTheme({
       contrastText: '#ffffff',  // Vit text för att kontrastera mot den röda färgen
     },
     secondary: {
-      main: '#ff9800',  // Orange som en kontrastfärg om det behövs
+      main: '#dd4122',  // Orange som en kontrastfärg om det behövs
       contrastText: '#ffffff',
     },
   },

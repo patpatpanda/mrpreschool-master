@@ -111,26 +111,17 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
       </Typography>
 
       {/* Läs mer knapp */}
-     <CustomButton 
-  variant="contained"
-  onClick={(event) => {
-    event.stopPropagation();
-    onDetailsClick(preschool);  // Visa DetailedCard
-    onClose();  // Stäng PreschoolCard
-  }}
-  sx={{
-    backgroundColor: '#2196f3',
-    color: '#fff',
-    fontSize: '0.875rem',
-    padding: '8px 16px',
-    textTransform: 'none',
-    '&:hover': {
-      backgroundColor: '#2980b9',
-    },
-  }}
->
-  Läs mer
-</CustomButton >
+    
+      <CustomButton 
+        variant="contained"
+        onClick={(event) => {
+          event.stopPropagation();
+          onDetailsClick(preschool);
+        }}
+      >
+        Läs mer
+      </CustomButton >
+
 
     </CardContent>
   </Card>

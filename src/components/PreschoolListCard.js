@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Box, } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import myImage from '../images/seri.webp'; // Standardbild
@@ -15,11 +15,11 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       transition: 'transform 0.3s, box-shadow 0.3s',
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column', // Ändra flex-direction till kolumn för att få bilden ovanför innehållet
       padding: '16px',
       width: '100%',
       maxWidth: '600px',
-      minHeight: { xs: '400px', sm: '00px' }, // Öka höjden för både mobil och större skärmar
+      height: { xs: '400px', sm: 'auto' }, // Öka höjden för både mobil och större skärmar
       '&:hover': {
         transform: 'translateY(-4px)',
         boxShadow: '0 10px 15px rgba(0, 0, 0, 0.2)',
@@ -29,10 +29,10 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
     <Box
       sx={{
         position: 'relative',
-        height: { xs: '180px', sm: '250px' }, // Öka höjden för bilder på både mobil och desktop
-        width: '150px', // Bredd för bildsektionen
+        height: { xs: '50%', sm: '300px' }, // Bilden tar halva höjden på mobil och fast höjd på större skärmar
+        width: '100%', // Gör att bilden tar hela bredden
         overflow: 'hidden',
-        borderRadius: '12px',
+        borderRadius: '12px 12px 0 0', // Rundade hörn för toppen
       }}
     >
       <img
@@ -41,7 +41,7 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'cover', // Bilden täcker hela boxen utan att förvrängas
         }}
       />
     </Box>
@@ -51,8 +51,7 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        marginLeft: '16px',
-        width: 'calc(100% - 150px)', // Justera bredden för innehållsdelen
+        marginTop: '16px',
       }}
     >
       <Box>
@@ -67,7 +66,6 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
           </Typography>
         </Box>
 
-        {/* Lägg till beskrivning om den finns */}
         {preschool.description && (
           <Box display="flex" alignItems="center" sx={{ marginBottom: '8px' }}>
             <FontAwesomeIcon
@@ -80,7 +78,6 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
           </Box>
         )}
 
-        {/* Lägg till gångtid om den finns */}
         {preschool.walkingTime && (
           <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px' }}>
             Gångtid: {preschool.walkingTime} minuter
@@ -94,8 +91,6 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
           event.stopPropagation();
           onDetailsClick(preschool);
         }}
-       
-        
       >
         Läs mer
       </CustomButton >
@@ -108,8 +103,8 @@ PreschoolListCard.propTypes = {
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string.isRequired,
     bildUrl: PropTypes.string,
-    description: PropTypes.string,  // Lägg till beskrivning som optional prop
-    walkingTime: PropTypes.string,  // Lägg till gångtid som optional prop
+    description: PropTypes.string,
+    walkingTime: PropTypes.string,
   }).isRequired,
   onDetailsClick: PropTypes.func.isRequired,
 };

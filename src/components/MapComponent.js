@@ -803,7 +803,7 @@ const findNearbyPlaces = useCallback(async (location) => {
           sx={{
             '@media (max-width: 600px)': {
               justifyContent: 'center', // Centrera på små skärmar
-              gap: '10px', // Mindre gap på små skärmar
+              gap: '3px', // Mindre gap på små skärmar
             },
           }}
         >

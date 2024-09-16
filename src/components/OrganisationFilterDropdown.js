@@ -30,7 +30,7 @@ const OrganisationFilterDropdown = ({ organisationTypes, filter, handleFilterCha
   const handleClose = () => setOpen(false);
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 200 }}>
+    <FormControl sx={{ m: 1, minWidth: 100 }}>
       {/* Använd CustomButton istället för vanlig Button */}
       <CustomButton onClick={handleOpen} isSelected={open}>
         Organisationstyp

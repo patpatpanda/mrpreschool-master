@@ -8,6 +8,7 @@ import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import myImage from '../images/seri.webp';
+import { useNavigate } from 'react-router-dom';
 
 // Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -79,7 +80,6 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 
 
 
-// Stil för dialogfönstret
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '20px',
@@ -90,6 +90,9 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     margin: 0,
     color: '#333',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+    [theme.breakpoints.up('xl')]: {
+      width: '70%', // Använd 70% bredd för skärmar som är över 1400px breda
+    },
   },
 }));
 
@@ -119,7 +122,13 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
+  // Skapa en ny funktion för att hantera stängning och URL-ändring
+  const handleClose = () => {
+    onClose(); // Kalla på onClose för att stänga kortet
+    navigate('/'); // Navigera tillbaka till URL utan ID (anpassa sökvägen om du behöver)
+  };
   const years = [2023, 2022, 2021, 2020];
 
   const fetchData = useCallback(async () => {
@@ -225,7 +234,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
     <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
         <IconButton
-          onClick={onClose}
+          onClick={handleClose} // Uppdatera till handleClose
           sx={{
             position: 'absolute',
             right: { xs: 8, sm: 8 },

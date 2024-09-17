@@ -51,7 +51,7 @@ const OrganisationFilterDropdown = ({ organisationTypes, filter, handleFilterCha
         <Box
           sx={{
             backgroundColor: 'white',
-            padding: '16px',
+            padding: '30px',
             borderRadius: '8px',
             boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
             minWidth: '300px',  // Bredd på boxen

@@ -80,6 +80,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
 
 
 
+// Stil för dialogfönstret
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: '20px',
@@ -90,9 +91,6 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     margin: 0,
     color: '#333',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-    [theme.breakpoints.up('xl')]: {
-      width: '70%', // Använd 70% bredd för skärmar som är över 1400px breda
-    },
   },
 }));
 
@@ -244,7 +242,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
-      </StyledDialogTitle>
+      </StyledDialogTitle>  
 
       <StyledDialogContent>
         {/* Kreativ titel med animation */}

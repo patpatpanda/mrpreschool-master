@@ -91,45 +91,64 @@ const MapComponent = () => {
   const { id } = useParams();
   const clustererRef = useRef(null); 
   const [isMapVisible, ] = useState(false);
-  
+  const [isMarkerClick, setIsMarkerClick] = useState(false); // Ny flagga
+
   const handleCardClose = () => {
     // Hantera stängning av PreschoolCard
     setIsCardVisible(false);
     setSelectedPlace(null); // Återställ selectedPlace om kortet stängs
   };
+  const handleDirectionClick = (place) => {
+    console.log('Vägbeskrivning klickad:', place);
+  
+    // Kontrollera att originPosition är satt och skapa vägbeskrivning
+    if (originPosition) {
+      const destination = new google.maps.LatLng(place.latitude, place.longitude);
+      createRoute(destination); // Skapar rutt till vald plats
+    } else {
+      console.error("Origin position är inte satt, kan inte skapa rutt.");
+    }
+  };
 
   const handleDetailsClick = async (place) => {
-    // Kontrollera om detaljerad data finns för platsen
     if (!place.schoolDetails) {
-      // Hämta detaljerad data om den inte finns
       const schoolDetails = await fetchSchoolDetailsByAddress(place.adress);
       place.schoolDetails = schoolDetails;
     }
   
-    // Uppdatera det valda stället och visa DetailedCard
     setSelectedPlace(place);
     setIsDetailedCardVisible(true); // Visa DetailedCard
   
-    // Navigera till URL med förskolans ID för att uppdatera URL:en korrekt
+    // Ingen rutt ska ritas ut här, så vi sätter inte isMarkerClick till true
     navigate(`/forskolan/${place.id}`);
   };
   
+  
   const handleMarkerClick = (place, walkingTime) => {
+    console.log("Markör klickad:", place);
+  
     const detailedPlace = {
       ...place,
-      walkingTime: walkingTime || walkingTimes[place.id] || 'N/A',  // Använd walkingTime om tillgänglig, annars hämta från state
+      walkingTime: walkingTime || walkingTimes[place.id] || 'N/A',
     };
   
     setSelectedPlace(detailedPlace);
-    setIsCardVisible(true); // Visa PreschoolCard
+    setIsCardVisible(true);
   
-    // Skapa gångvägen till den valda platsen
-    if (originPosition) {
-      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
-    } else {
-      console.error("Origin position is not set, can't create route");
-    }
+    // Vänta en kort stund för att säkerställa att originPosition har hunnit sättas
+    setTimeout(() => {
+      if (originPosition) {
+        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+        console.log("Ritar ut vägbeskrivning från:", originPosition);
+      } else {
+        console.error("Origin position är inte satt, kan inte skapa rutt.");
+      }
+    }, 500); // Vänta 500ms innan du försöker skapa en rutt
   };
+  
+  
+  
+  
   
 
 
@@ -281,6 +300,8 @@ useEffect(() => {
 const findNearbyPlaces = useCallback(async (location) => {
   try {
     setLoading(true);
+    console.log("Söker efter närliggande platser för position:", location);
+
     const places = await fetchNearbySchools(location.lat(), location.lng(), filter.join(','), 'alla');
 
     if (places.length > 0) {
@@ -301,18 +322,19 @@ const findNearbyPlaces = useCallback(async (location) => {
       setAllPlaces(detailedResults);
       clearMarkers();
       detailedResults.forEach((result) => {
-        createMarker(result, location);
+        createMarker(result, location); // Använd origin position här
       });
     } else {
       setErrorMessage('Inga förskolor hittades på den angivna adressen.');
     }
   } catch (error) {
-    console.error('Error fetching nearby places:', error);
+    console.error('Fel vid hämtning av närliggande förskolor:', error);
     setErrorMessage('Ett fel inträffade vid hämtning av närliggande förskolor.');
   } finally {
     setLoading(false);
   }
 }, [map, filter]);
+
   const handleFilterChange = (type) => {
     setFilter((prevFilter) =>
       prevFilter.includes(type)
@@ -329,7 +351,7 @@ const findNearbyPlaces = useCallback(async (location) => {
   const geocodeAddressHandler = useCallback(async (event) => {
     event.preventDefault();
     const address = document.getElementById('address').value.trim();
-    
+  
     if (!address) {
       setErrorMessage('Ange en giltig adress.');
       return;
@@ -340,31 +362,15 @@ const findNearbyPlaces = useCallback(async (location) => {
     setNearbyPlaces([]);
   
     const relevantAddress = extractRelevantAddress(address);
-    console.log('Relevant address extracted:', relevantAddress);
-    
-    // Försök att geokoda adressen
     const coordinates = await geocodeAddress(relevantAddress);
-    
-    // Kontrollera om geokodningen misslyckades eller om ingen plats hittades
+  
     if (!coordinates) {
-      console.log('Geocoding failed or no coordinates found.');
       setErrorMessage('Ogiltig adress, försök igen.');
       setLoading(false);
       return;
     }
   
     const { latitude, longitude } = coordinates;
-  
-    if (
-      latitude === SERGELSTORG_COORDINATES.latitude &&
-      longitude === SERGELSTORG_COORDINATES.longitude
-    ) {
-      console.log('Geocoding returned default coordinates (Sergels Torg).');
-      setErrorMessage('För närvarande stödjer vi bara stockholmsområdet. Prova igen.');
-      setLoading(false);
-      return;
-    }
-  
     const location = new google.maps.LatLng(latitude, longitude);
   
     if (map) {
@@ -372,9 +378,10 @@ const findNearbyPlaces = useCallback(async (location) => {
       map.setZoom(14);
   
       if (originMarker) {
-        originMarker.setMap(null);
+        originMarker.setMap(null); // Ta bort tidigare origin marker om det finns
       }
   
+      // Sätt den nya origin marker och position
       const marker = new google.maps.Marker({
         map: map,
         position: location,
@@ -385,17 +392,18 @@ const findNearbyPlaces = useCallback(async (location) => {
       });
   
       setOriginMarker(marker);
-      setOriginPosition(location);
+      setOriginPosition(location); // Här sätts originPosition korrekt
+      console.log("Origin position satt:", location);
   
-      await findNearbyPlaces(location);
+      await findNearbyPlaces(location); // Hämta närliggande platser
       setShowPlaces(true);
-     
-      setSearchMade(true); // Mark that a search has been made
+      setSearchMade(true);
     } else {
       setErrorMessage('Map is not initialized.');
       setLoading(false);
     }
   }, [map, originMarker, findNearbyPlaces]);
+  
   
   
   
@@ -432,27 +440,32 @@ const findNearbyPlaces = useCallback(async (location) => {
     }
   };
   
-
   const createRoute = (destination) => {
     if (!originPosition) {
-      console.error('Origin position is not set');
+      console.error('Origin position är inte satt');
       return;
     }
-
+  
+    console.log("Skapar rutt från:", originPosition, "till:", destination); // Lägg till logg här
+  
     const request = {
       origin: originPosition,
       destination: destination,
-      travelMode: google.maps.TravelMode.WALKING,
+      travelMode: google.maps.TravelMode.WALKING,  // Vägbeskrivning för gångtrafik
     };
-
+  
     directionsService.current.route(request, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
         directionsRenderer.current.setDirections(result);
+        console.log('Vägbeskrivning ritas ut:', result);
       } else {
-        console.error('Directions request failed due to ' + status);
+        console.error('Vägbeskrivningsbegäran misslyckades: ' + status);
       }
     });
   };
+  
+  
+  
   const createMarker = async (place, originLocation, shouldUpdateBounds = false) => {
     let iconUrl;
     if (place.organisationsform === 'Kommunal') {
@@ -550,23 +563,28 @@ const findNearbyPlaces = useCallback(async (location) => {
       const malibuData = await fetchMalibuByName(cleanName);
       const relevantAddress = extractRelevantAddress(place.adress);
       const schoolDetails = await fetchSchoolDetailsByAddress(relevantAddress);
-
+  
       const walkingTime = walkingTimes[place.id];
-
+  
       const detailedPlace = {
         ...place,
         malibuData: malibuData || null,
         schoolDetails: schoolDetails ? schoolDetails : null,
         walkingTime: walkingTime,
       };
-
-      setSelectedPlace(detailedPlace);
-      navigate(`/forskolan/${place.id}`);
-
-      if (originMarker) {
-        createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+  
+      setSelectedPlace(detailedPlace); // Sätter det valda stället
+      navigate(`/forskolan/${place.id}`); // Navigerar till korrekt URL
+  
+      // Kontrollera om originPosition är satt och skapa en rutt
+      if (originPosition) {
+        const destination = new google.maps.LatLng(place.latitude, place.longitude);
+        createRoute(destination); // Skapar rutt till vald plats
+        console.log("Vägbeskrivning skapad från:", originPosition, "till:", destination);
+      } else {
+        console.error("Origin position är inte satt, kan inte skapa rutt.");
       }
-
+  
       if (changeView) {
         setView('map');
       }
@@ -574,6 +592,7 @@ const findNearbyPlaces = useCallback(async (location) => {
       console.error('Error selecting place:', error);
     }
   };
+  
   
   
   const handleCardSelect = (place) => {
@@ -622,7 +641,34 @@ const findNearbyPlaces = useCallback(async (location) => {
       console.error('Error fetching top ranked places:', error);
     }
   };
-  
+  const filterTop15Preschools = () => {
+  if (!originMarker) {
+    alert('Ange en adress först.');
+    return;
+  }
+
+  const sortedPlaces = allPlaces.sort((a, b) => {
+    const distanceA = calculateDistance(
+      originMarker.getPosition(),
+      new google.maps.LatLng(a.latitude, a.longitude)
+    );
+    const distanceB = calculateDistance(
+      originMarker.getPosition(),
+      new google.maps.LatLng(b.latitude, b.longitude)
+    );
+
+    return distanceA - distanceB;
+  });
+
+  const closestPlaces = sortedPlaces.slice(0, 15); // Visa de 15 närmaste förskolorna
+
+  setNearbyPlaces(closestPlaces);
+  clearMarkers();
+  closestPlaces.forEach((result) => {
+    createMarker(result, originMarker.getPosition());
+  });
+};
+
 
   const filterClosestPreschools = () => {
     if (!originMarker) {
@@ -907,13 +953,13 @@ const findNearbyPlaces = useCallback(async (location) => {
 {/* PreschoolCard visas ovanpå Google Maps baserat på marker-klick */}
 {selectedPlace && isCardVisible && (
   <div style={{ position: 'absolute', bottom: '20%', right: '20%', zIndex: 1000, width: '300px' }}>
-    <PreschoolCard
-      preschool={selectedPlace}
-      walkingTime={selectedPlace.walkingTime} // Skicka gångtiden till PreschoolCard
-      onSelect={handleCardSelect}
-      onDetailsClick={() => handleDetailsClick(selectedPlace)}
-      onClose={handleCardClose}
-    />
+  <PreschoolCard
+  preschool={selectedPlace}
+  onDetailsClick={() => handleDetailsClick(selectedPlace)} // Detta triggar INTE vägbeskrivning
+  onDirectionClick={() => handleDirectionClick(selectedPlace)} // Detta triggar vägbeskrivning
+  onClose={handleCardClose}
+/>
+
     {/* Stängningsknapp för PreschoolCard */}
     <button 
       onClick={handleCardClose} 

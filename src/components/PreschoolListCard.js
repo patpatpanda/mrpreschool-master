@@ -84,16 +84,16 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
           </Typography>
         )}
       </Box>
-
       <CustomButton 
         variant="contained"
         onClick={(event) => {
           event.stopPropagation();
-          onDetailsClick(preschool);
+          onDetailsClick(preschool); // Detta triggar bara att visa detaljer, inte rita ut vägbeskrivningen
         }}
       >
         Läs mer
-      </CustomButton >
+      </CustomButton>
+
     </CardContent>
   </Card>
 );

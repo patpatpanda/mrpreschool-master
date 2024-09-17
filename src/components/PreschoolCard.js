@@ -27,30 +27,30 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
     <IconButton
       onClick={(event) => {
         event.stopPropagation();
-        onClose();
+        onClose();  // Stäng kortet men trigga inget mer
       }}
       sx={{
         position: 'absolute',
         top: '12px',
         right: '12px',
         zIndex: 10,
-        backgroundColor: '#fff', // Halvgenomskinlig bakgrund för bättre synlighet
-        color: 'red', // Vit ikon för bättre kontrast
+        backgroundColor: '#fff',
+        color: 'red',
         '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+         
         },
-        fontSize: '1.5rem', // Större storlek på ikonen
-        padding: '8px', // Större klickbar yta
+        fontSize: '1.5rem',
+        padding: '8px',
       }}
     >
       <FontAwesomeIcon icon={faTimes} />
     </IconButton>
 
-    {/* Bild i fokus */}
+    {/* Bild */}
     <Box
       sx={{
         position: 'relative',
-        height: { xs: '200px', sm: '300px', md: '400px' }, // Gör bilden högre på större skärmar
+        height: { xs: '200px', sm: '300px', md: '400px' },
         overflow: 'hidden',
         borderTopLeftRadius: '12px',
         borderTopRightRadius: '12px',
@@ -67,63 +67,42 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
       />
     </Box>
 
-    {/* Innehåll under bilden */}
-    <CardContent
-      sx={{
-        padding: '16px',
-        '&:last-child': {
-          paddingBottom: '16px',
-        },
-      }}
-    >
-      {/* Rubrik */}
+    <CardContent sx={{ padding: '16px', '&:last-child': { paddingBottom: '16px' } }}>
       <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
         {preschool.namn}
       </Typography>
 
-      {/* Adress */}
       <Box display="flex" alignItems="center" sx={{ marginBottom: '8px' }}>
-        <FontAwesomeIcon
-          icon={faMapMarkerAlt}
-          style={{ color: '#4CAF50', marginRight: '8px', fontSize: '1rem' }}
-        />
+        <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#4CAF50', marginRight: '8px', fontSize: '1rem' }} />
         <Typography variant="body2" sx={{ color: '#666', fontSize: '0.875rem' }}>
           {preschool.adress}
         </Typography>
       </Box>
 
-      {/* Beskrivning */}
       {preschool.description && (
         <Box display="flex" alignItems="center" sx={{ marginBottom: '8px' }}>
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            style={{ color: '#FF9800', marginRight: '8px', fontSize: '1rem' }}
-          />
+          <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#FF9800', marginRight: '8px', fontSize: '1rem' }} />
           <Typography variant="body2" sx={{ color: '#666', fontSize: '0.875rem' }}>
             {preschool.description}
           </Typography>
         </Box>
       )}
 
-      {/* Gångtid */}
       <Typography variant="body2" sx={{ color: '#333', fontSize: '0.875rem', marginBottom: '8px' }}>
         Gångtid: {preschool.walkingTime || 'Ingen data'} minuter
       </Typography>
 
       {/* Läs mer knapp */}
-    
-      <CustomButton 
-  variant="contained"
-  onClick={(event) => {
-    event.stopPropagation();
-    onDetailsClick(preschool);
-    onClose(); // Stänger kortet när användaren klickar på "Läs mer"
-  }}
->
-  Läs mer
-</CustomButton>
-
-
+      <CustomButton
+        variant="contained"
+        onClick={(event) => {
+          event.stopPropagation();
+          onDetailsClick(preschool);  // Trigger DetailedCard utan att skapa vägbeskrivning
+          onClose(); // Stänger kortet när användaren klickar på "Läs mer"
+        }}
+      >
+        Läs mer
+      </CustomButton>
     </CardContent>
   </Card>
 );

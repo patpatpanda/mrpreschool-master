@@ -113,14 +113,15 @@ const PreschoolCard = ({ preschool, onDetailsClick, onClose }) => (
       {/* Läs mer knapp */}
     
       <CustomButton 
-        variant="contained"
-        onClick={(event) => {
-          event.stopPropagation();
-          onDetailsClick(preschool);
-        }}
-      >
-        Läs mer
-      </CustomButton >
+  variant="contained"
+  onClick={(event) => {
+    event.stopPropagation();
+    onDetailsClick(preschool);
+    onClose(); // Stänger kortet när användaren klickar på "Läs mer"
+  }}
+>
+  Läs mer
+</CustomButton>
 
 
     </CardContent>

@@ -114,17 +114,23 @@ const MapComponent = () => {
     navigate(`/forskolan/${place.id}`);
   };
   
-const handleMarkerClick = (place, walkingTime) => {
-  const detailedPlace = {
-    ...place,
-    walkingTime: walkingTime || walkingTimes[place.id] || 'N/A',  // Använd walkingTime om tillgänglig, annars hämta från state
+  const handleMarkerClick = (place, walkingTime) => {
+    const detailedPlace = {
+      ...place,
+      walkingTime: walkingTime || walkingTimes[place.id] || 'N/A',  // Använd walkingTime om tillgänglig, annars hämta från state
+    };
+  
+    setSelectedPlace(detailedPlace);
+    setIsCardVisible(true); // Visa PreschoolCard
+  
+    // Skapa gångvägen till den valda platsen
+    if (originPosition) {
+      createRoute(new google.maps.LatLng(place.latitude, place.longitude));
+    } else {
+      console.error("Origin position is not set, can't create route");
+    }
   };
-
-  setSelectedPlace(detailedPlace);
-  setIsCardVisible(true); // Visa PreschoolCard
-};
-
-
+  
 
 
   

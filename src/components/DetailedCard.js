@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -106,8 +106,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const bildUrl = schoolData.bildUrl;
  
   const [chartData, setChartData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [dataFetched, setDataFetched] = useState(false);
+  const [loading] = useState(false);
+  const [dataFetched] = useState(false);
   const [error, setError] = useState('');
 
   const years = [2023, 2022, 2021, 2020];

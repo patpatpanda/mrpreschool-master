@@ -8,17 +8,21 @@ const nearbySchoolsCache = new Map();
 
 const normalizeName = (name) => {
   let normalizedName = name
-    .replace(/^(Förskola\s+|Förskolan\s+|Föräldrakooperativet\s+|Föräldrakooperativ\s+|Föräldrarkoperativet\s+|Föräldrarkoperativ\s+|Daghemmet\s+|Daghem\s+|Barnstugan\s+|Barnstugan\s+)/i, '')
-    .replace(/(\s+Förskola|\s+Förskolan|\s+Föräldrakooperativet|\s+Föräldrakooperativ|\s+Föräldrarkoperativet|\s+Föräldrarkoperativ|\s+Daghemmet|\s+Daghem|\s+Barnstugan|\s+Barnstugan)$/i, '')
+    // Ta bort vanliga prefix som "Förskolan"
+    .replace(/^(Förskola\s+|Förskolan\s+|Föräldrakooperativet\s+|Föräldrakooperativ\s+|Föräldrarkoperativet\s+|Föräldrarkoperativ\s+|Daghemmet\s+|Daghem\s+|Barnstugan\s+)/i, '')
+    // Ta bort allt efter ett komma (vanligtvis en adress)
+    .replace(/,.*/, '')
     .trim();
-  
-  normalizedName = normalizedName.replace(/[^\w\s\-åäöÅÄÖ]/gi, '').toLowerCase();
-  normalizedName = normalizedName.replace(/\s+/g, ' ');
-  normalizedName = normalizedName.replace(/\s*-\s*/g, '-');
-  normalizedName = normalizedName.split(' ')[0];
 
+  // Ta bort specialtecken och normalisera till gemener
+  normalizedName = normalizedName.replace(/[^\w\s\-åäöÅÄÖ]/gi, '').toLowerCase();
+
+  // Ersätt flera mellanslag med ett mellanslag
+  normalizedName = normalizedName.replace(/\s+/g, ' ');
+  
   return normalizedName;
 };
+
 
 export const fetchSurveyResponsesByName = async (name) => {
   try {
@@ -61,19 +65,25 @@ export const fetchSatisfactionSummary = async () => {
 
 export const fetchMalibuByName = async (name) => {
   try {
-    const encodedName = encodeURIComponent(name.trim());
+    // Dela namnet vid kommatecken och ta den första delen
+    const mainName = name.split(',')[0].trim();
+    const normalizedName = normalizeName(mainName);
+    const encodedName = encodeURIComponent(normalizedName);
+
     const url = `${backendUrl}/api/Malibu/name/${encodedName}`;
-    console.log(`Fetching Malibu data with URL: ${url}`);
+    console.log(`Fetching Malibu data with normalized name: ${normalizedName} and URL: ${url}`);
+    
     const response = await axios.get(url);
     const data = response.data?.$values[0] || null;
-    console.log(`Fetched Malibu data for ${name}:`, data);
-    pdfDataCache.set(name.trim(), data);
+
+    pdfDataCache.set(normalizedName, data);
     return data;
   } catch (error) {
     console.error(`Error fetching Malibu data by name (${name}):`, error.response?.data || error.message);
     return null;
   }
 };
+
 
 export const fetchSchoolDetailsByAddress = async (address) => {
   try {

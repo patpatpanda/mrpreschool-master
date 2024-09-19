@@ -162,6 +162,20 @@ const DetailedCard = ({ schoolData, onClose }) => {
         return 0;
       });
 
+      const personalData = years.map((year, index) => {
+        const dataForYear = dataByYear[index].find(item => item.fragetext === 'Jag upplever att personalen på förskolan bemöter mig på ett respektfullt sätt');
+        if (dataForYear) {
+          const procentSvar = dataForYear.procentSvarAlternativ?.$values || [];
+          console.log(`ProcentSvar for "Jag upplever" in year ${year}:`, procentSvar);
+          // Vi hämtar procenten för svarsalternativ 5 (de positiva svaren)
+          const positivtSvar = procentSvar.find(svar => svar.svarsalternativ === 5);
+          return positivtSvar ? positivtSvar.procent : 0;
+        }
+        return 0;
+      });
+
+
+
       console.log('nojdData:', nojdData);
       console.log('rekommenderaData:', rekommenderaData);
 
@@ -169,19 +183,28 @@ const DetailedCard = ({ schoolData, onClose }) => {
         labels: years,
         datasets: [
           {
-            label: 'Jag är som helhet nöjd med mitt barns förskola',
+            label: 'Jag är nöjd med mitt barns förskola som helhet',
             data: nojdData,
             backgroundColor: 'rgba(46, 204, 113, 0.6)',
             borderColor: 'rgba(46, 204, 113, 1)',
             borderWidth: 1,
           },
           {
-            label: 'Jag kan rekommendera mitt barns förskola',
+            label: 'Jag kan varmt rekommendera mitt barns förskola',
             data: rekommenderaData,
             backgroundColor: 'rgba(54, 162, 235, 0.6)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
           },
+          {
+            label: 'Personalen bemöter mig alltid på ett respektfullt sätt',
+            data: personalData,
+            backgroundColor: 'rgba(255, 159, 64, 0.6)', // Orange färg med 60% opacitet
+            borderColor: 'rgba(255, 159, 64, 1)',       // Fullt opak orange färg för kantlinjen
+            borderWidth: 1,
+          }
+          
+          
         ],
       });
     } catch (error) {
@@ -325,7 +348,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
     />
   </Box>
 ) : (
-  <Typography variant="body2">{error || 'Laddar...'}</Typography>
+  <Typography variant="body2">{error || 'Laddar enkätsvar...'}</Typography>
 )}
 
         {error && <Typography variant="body2" sx={{ color: 'red', marginTop: '50px', zIndex: 3000 }}>{error}</Typography>}

@@ -882,10 +882,19 @@ const findNearbyPlaces = useCallback(async (location) => {
       </div>
   
       {loading && (
-        <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-          <CircularProgress style={{ color: '#4CAF50' }} />
-        </div>
-      )}
+  <div
+    className="loading-spinner"
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: '20px',
+    }}
+  >
+    <CircularProgress style={{ color: '#dd4122' }} size={70} />
+  </div>
+)}
+
 {/* Google Maps-kontainern */}
 <div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
 

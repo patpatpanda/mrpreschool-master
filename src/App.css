@@ -57,7 +57,7 @@ button.MuiButtonBase-root {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  width: 50%;
+  width: 100%;
   
   font-size: 16px;
   transition: top 0.3s ease-in-out, margin-top 0.3s ease-in-out;
@@ -501,4 +501,39 @@ p {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px #dd4122eb;
+}
+.search-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  max-width: 1200px; /* Anpassa efter din layout */
+  margin: 0 auto; /* Centrera container */
+  overflow-x: auto; /* Tillåt horisontell scroll */
+  white-space: nowrap; /* Förhindra radbrytning */
+}
+
+.search-container::-webkit-scrollbar {
+  display: none; /* Göm scrollbar */
+}
+
+.search-container {
+  -ms-overflow-style: none; /* För IE och Edge */
+  scrollbar-width: none; /* För Firefox */
+}
+
+.scroll-button {
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  margin-right: 10px; /* Lägger till mellanrum mellan knappar */
+  border-radius: 25px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px #dd4122eb;
+}
+
+@media (max-width: 600px) {
+  .search-container {
+    justify-content: flex-start; /* Knapparna justeras för mindre skärmar */
+  }
 }

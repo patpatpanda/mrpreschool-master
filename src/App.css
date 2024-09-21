@@ -183,10 +183,10 @@ button.MuiButtonBase-root {
   display: grid;
   flex-wrap: wrap;
   justify-content: center;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   background-color: #ffffff;
   padding: 15px;
-
+gap:10px;
   background-size: cover; /* Se till att bilden täcker hela containern */
   position: relative;
   z-index: 10;
@@ -194,39 +194,13 @@ button.MuiButtonBase-root {
   padding-top: 600px;
 }
 
-/* Keyframes for the background animation */
-.cards-container-2 {
- 
-  overflow-y: auto;
-  overflow-x: hidden; /* Förhindra att cards-container scrollar horisontellt */
-  padding: 15px;
-  background: #fff;
-  background-size: cover; /* Se till att bilden täcker hela containern */
-  position: relative;
-  z-index: 100;
-  height: 100vh;
-  padding-top: 500px;
-}
 
 .cards-container.hidden {
   display: none;
 }
 
-@media (max-width: 1400px) {
-  .cards-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 15px;
-    
-    position: relative;
-    z-index: 10;
-    padding-top: 450px;
-   
-   
 
-    background-size: cover; /* Adjust the background size */
-}
-}
+
 /* Detailed Card */
 
 /* Media Queries for Responsiveness */
@@ -427,31 +401,19 @@ p {
   }
 }
 .cards-container {
+  padding-top: 450px;
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Flexibel grid */
+  grid-template-columns: 1fr 1fr;
   padding: 15px;
   background-color: #ffffff;
   position: relative;
   z-index: 10;
   height: auto; /* Dynamisk höjd */
+  top:450px
 }
 
-/* För skärmar större än 1400px */
-@media (min-width: 1400px) {
-  .cards-container {
-    grid-template-columns: repeat(3, 1fr); /* 3 kolumner */
-    padding-top: 650px;
-  }
-}
 
-/* För skärmar mellan 760px och 1400px */
-@media (max-width: 1600px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 2 kolumner */
-    padding-top: 450px;
-  }
-}
 
 /* För mobila enheter (mindre än 760px) */
 @media (max-width: 760px) {

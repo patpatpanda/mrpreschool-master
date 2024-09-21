@@ -52,6 +52,7 @@ const PreschoolListCard = ({ preschool, onDetailsClick }) => (
         flexDirection: 'column',
         justifyContent: 'space-between',
         marginTop: '16px',
+        
       }}
     >
       <Box>

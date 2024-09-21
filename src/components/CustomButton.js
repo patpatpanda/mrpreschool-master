@@ -18,14 +18,17 @@ const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
     alignItems: 'center',  // Vertikal centrering
     justifyContent: 'center',  // Horisontell centrering
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease, border 0.3s ease',
+    transition: 'background-color 0.3s ease, border 0.3s ease, transform 0.2s ease, color 0.3s ease',  // Transition för hover-effekter
     marginTop: '10px',  // Marginal uppåt
     ...sx,  // Eventuella extra stilar från props
   };
 
   const hoverStyle = {
-    backgroundColor: isSelected ? theme.palette.primary.dark : theme.palette.action.hover,  // Mörkare primary färg om vald vid hover
-    border: isSelected ? 'none' : `2px solid ${theme.palette.divider}`,  // Divider vid hover
+    backgroundImage: 'linear-gradient(45deg, #dd4122, #c23b1d)',  // Lägg till en gradient på hover
+    transform: 'scale(1.05)',  // Skalning vid hover
+    boxShadow: theme.shadows[4],  // Större skugga vid hover
+    border: isSelected ? 'none' : `2px solid ${theme.palette.primary.main}`,  // Mer framträdande border
+    color: theme.palette.common.white,  // Gör texten vit för bättre kontrast
   };
 
   const [hover, setHover] = useState(false);

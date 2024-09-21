@@ -369,7 +369,7 @@ const findNearbyPlaces = useCallback(async (location) => {
   
     if (map) {
       map.setCenter(location);
-      map.setZoom(14);
+      map.setZoom(16);
   
       if (originMarker) {
         originMarker.setMap(null);
@@ -510,7 +510,7 @@ const findNearbyPlaces = useCallback(async (location) => {
     // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
       content: `
-        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 120px; margin: 0;">
+        <div style="color: black; padding: 1px 3px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 150px; margin: 0;">
           <div style="margin: 0; padding: 0;">${cleanedName}</div>
           <div style="display: flex; align-items: center; margin: 0; padding: 0;">
             <span style="margin-right: 2px;">Betyg:</span>

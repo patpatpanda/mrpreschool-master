@@ -10,6 +10,7 @@ import FixedButton from './components/FixedButton'; // Importera FixedButton-kom
 import './App.css';
 import PreschoolApplicationInfo from './components/PreschoolApplicationInfo';
 import ReactGA from 'react-ga';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Importera QueryClientProvider
 
 function Analytics() {
   const location = useLocation();
@@ -31,34 +32,40 @@ function App() {
     setShowSplash(false); // Dölj splash-skärmen när användaren klickar
   };
 
+  // Skapa en instans av QueryClient
+  const queryClient = new QueryClient();
+
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <div className="App-container">
-          
-          <Header />
-          <Analytics />
+      {/* Omslut applikationen med QueryClientProvider */}
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <div className="App-container">
+            
+            <Header />
+            <Analytics />
 
-          {/* Visa splash-skärmen om showSplash är true */}
-          {showSplash ? (
-            <SplashScreen onProceed={handleProceed} />
-          ) : (
-            <main>
-              <Routes>
-                <Route path="/" element={<MapComponent />} />
-                <Route path="/forskolan/:id" element={<MapComponent />} />
-                <Route path="/survey" element={<SurveyChart />} />
-                <Route path="/PreschoolApplicationInfo" element={<PreschoolApplicationInfo />} />
-                {/* Lägg till en dynamisk route för adresser */}
-                <Route path="/:address" element={<MapComponent />} />
-              </Routes>
-            </main>
-          )}
+            {/* Visa splash-skärmen om showSplash är true */}
+            {showSplash ? (
+              <SplashScreen onProceed={handleProceed} />
+            ) : (
+              <main>
+                <Routes>
+                  <Route path="/" element={<MapComponent />} />
+                  <Route path="/forskolan/:id" element={<MapComponent />} />
+                  <Route path="/survey" element={<SurveyChart />} />
+                  <Route path="/PreschoolApplicationInfo" element={<PreschoolApplicationInfo />} />
+                  {/* Lägg till en dynamisk route för adresser */}
+                  <Route path="/:address" element={<MapComponent />} />
+                </Routes>
+              </main>
+            )}
 
-          {/* Lägg till den fasta knappen i det övre högra hörnet */}
-          <FixedButton />
-        </div>
-      </Router>
+            {/* Lägg till den fasta knappen i det övre högra hörnet */}
+            <FixedButton />
+          </div>
+        </Router>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

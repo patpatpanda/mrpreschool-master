@@ -230,7 +230,7 @@ gap:10px;
     
     position: relative;
     z-index: 10;
-    padding-top: 450px;
+   
    
    
 
@@ -416,10 +416,10 @@ p {
 
 
 /* För mobila enheter (mindre än 760px) */
-@media (max-width: 760px) {
+@media (max-width: 1260px) {
   .cards-container {
     grid-template-columns: 1fr; /* En kolumn på mobil */
-    padding-top: 450px;
+   
   }
   
   .card {

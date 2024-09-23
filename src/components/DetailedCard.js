@@ -368,7 +368,12 @@ const DetailedCard = ({ schoolData, onClose }) => {
                       y: {
                         beginAtZero: true,
                         max: 100,
+                        ticks: {
+                          callback: function(value) {
+                            return value + '%'; // Visar värden som procent
+                          },
                       },
+                    },
                     },
                   }}
                   height={400}
@@ -387,29 +392,34 @@ const DetailedCard = ({ schoolData, onClose }) => {
         {showMore && remainingQuestions.length > 0 && (
           remainingQuestions.map((chartData, index) => (
             <Box key={index} sx={{ width: '100%', maxWidth: '800px', margin: '40px auto' }}>
-              <Bar
-                data={chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      display: false, // Döljer legenden helt
-                    },
-                    title: {
-                      display: true,
-                      text: chartData.datasets[0].label,
-                    },
-                  },
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      max: 100,
-                    },
-                  },
-                }}
-                height={400}
-              />
+             <Bar
+  data={chartData}
+  options={{
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false, // Döljer legenden helt
+      },
+      title: {
+        display: true,
+        text: chartData.datasets[0].label, // Endast visa här
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          callback: function(value) {
+            return value + '%'; // Visar värden som procent
+          },
+        },
+      },
+    },
+  }}
+  height={400}
+/>
             </Box>
           ))
         )}

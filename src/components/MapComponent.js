@@ -17,7 +17,7 @@ import schoolIcon from '../images/icons8-school-48.png';
 import school from '../images/icons8-school-64.png';
 import kooperativ from '../images/icons8-school-building-48.png';
 
-
+import house from '../images/icons8-house-94.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap, faList } from '@fortawesome/free-solid-svg-icons'; // Importera karta och lista ikoner
 
@@ -379,10 +379,11 @@ const findNearbyPlaces = useCallback(async (location) => {
         map: map,
         position: location,
         icon: {
-          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-          scaledSize: new google.maps.Size(30, 30),
+          url: house, // Länken till din ikon
+          scaledSize: new google.maps.Size(30, 30), // Justera storlek
         },
       });
+      
   
       setOriginMarker(marker);
       setOriginPosition(location);

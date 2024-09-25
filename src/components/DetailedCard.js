@@ -81,8 +81,14 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     margin: 0,
     color: '#333',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+
+    // Media query för skärmar över 1200px
+    '@media (min-width: 1200px)': {
+      width: '70%',
+    },
   },
 }));
+
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   color: theme.palette.primary.contrastText,

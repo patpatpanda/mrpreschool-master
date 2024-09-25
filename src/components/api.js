@@ -36,23 +36,7 @@ export const fetchSurveyResponsesByName = async (name) => {
     return [];
   }
 };
-export const fetchPdfDataByName = async (name) => {
-  try {
-    const normalizedName = normalizeName(name.trim());
-    if (pdfDataCache.has(normalizedName)) {
-      return pdfDataCache.get(normalizedName);
-    }
-    const encodedName = encodeURIComponent(normalizedName);
-    const url = `${backendUrl}/api/PdfData/name/${encodedName}`;
-    const response = await axios.get(url);
-    const data = response.data?.$values[0] || null;
-    pdfDataCache.set(normalizedName, data);
-    return data;
-  } catch (error) {
-    console.error(`Error fetching PdfData by name (${name}):`, error);
-    return null;
-  }
-};
+
 export const fetchSatisfactionSummary = async () => {
   try {
     const response = await axios.get('https://https://masterkinder20240523125154.azurewebsites.net//api/Survey/satisfaction-summary');
@@ -111,18 +95,7 @@ export const fetchSchoolDetailsByAddress = async (address) => {
   }
 };
 
-export const fetchSchoolsByTypAvService = async (typAvService) => {
-  try {
-    const url = `${backendUrl}/api/Forskolan/filter-by-service?typAvService=${encodeURIComponent(typAvService)}`;
-    const response = await axios.get(url);
-    
-    // Se till att hämta rätt värde från responsen
-    return response.data?.$values || [];  // Om svaret innehåller $values, använd det
-  } catch (error) {
-    console.error('Error fetching schools by TypAvService:', error);
-    return [];
-  }
-};
+
 
 
 export const fetchNearbySchools = async (lat, lng, organisationsform, typAvService) => {

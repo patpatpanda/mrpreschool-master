@@ -54,7 +54,7 @@ const CornerButtons = () => {
               sx={{ 
                 textDecoration: 'underline', 
                 cursor: 'pointer', 
-                marginTop: '60px' // Lägger till margin-top
+                marginTop: '10px' // Lägger till margin-top
               }}
             >
               Min Förskola

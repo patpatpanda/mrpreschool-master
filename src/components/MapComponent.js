@@ -111,7 +111,7 @@ const MapComponent = () => {
     setIsDetailedCardVisible(true); // Visa DetailedCard
   
     // Navigera till URL med förskolans ID för att uppdatera URL:en korrekt
-    navigate(`/forskolan/${place.id}`);
+    navigate(`/forskolan/${place.id}`); // Kontrollera att place.id är korrekt
   };
   
 const handleMarkerClick = (place, walkingTime) => {
@@ -251,32 +251,29 @@ const handleMarkerClick = (place, walkingTime) => {
   }, []);
   
 
-useEffect(() => {
-  if (id && map) {
-    // Hämta förskolan baserat på ID från URL:en
-    fetchSchoolById(id).then((school) => {
-      if (school) {
-        // Sätt vald förskola
-        const location = new google.maps.LatLng(school.latitude, school.longitude);
-        selectPlace(school); // Detta uppdaterar också selectedPlace
-
-        // Centrera kartan på förskolan
-        map.setCenter(location);
-        map.setZoom(12);
-
-        // Skapa en markör för förskolan
-        
-
-        // Visa DetailedCard om vi har en vald plats
-        setIsDetailedCardVisible(true); // Visa DetailedCard
-      } else {
-        // Om förskolan inte hittas, navigera tillbaka till startsidan
-        navigate('/');
-      }
-    });
-  }
-}, [id, map, navigate]);
-
+  useEffect(() => {
+    if (id && map) {
+      // Hämta förskolan baserat på ID från URL:en
+      fetchSchoolById(id).then((school) => {
+        if (school) {
+          // Sätt vald förskola
+          const location = new google.maps.LatLng(school.latitude, school.longitude);
+          selectPlace(school); // Detta uppdaterar också selectedPlace
+  
+          // Centrera kartan på förskolan
+          map.setCenter(location);
+          map.setZoom(12);
+  
+          // Visa DetailedCard om vi har en vald plats
+          setIsDetailedCardVisible(true); // Visa DetailedCard
+        } else {
+          // Om förskolan inte hittas, navigera tillbaka till startsidan
+          navigate('/');
+        }
+      });
+    }
+  }, [id, map, navigate]);
+  
 
 const findNearbyPlaces = useCallback(async (location) => {
   try {

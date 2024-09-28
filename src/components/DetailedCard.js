@@ -11,10 +11,8 @@ import myImage from '../images/seri.webp';
 import UpdateSchool from './UpdateSchool';
 import { jwtDecode } from 'jwt-decode';
 
-
 // Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
 
 // Keyframes för titelanimation
 const slideIn = keyframes`
@@ -27,19 +25,21 @@ const slideIn = keyframes`
     opacity: 1;
   }
 `;
+
+// Funktion för autentisering
 const isAuthenticated = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  
+
   if (!user || !user.token) {
     return false; // Ingen användare eller token hittad
   }
 
   try {
     const decodedToken = jwtDecode(user.token);
-    const currentTime = Date.now() / 1000;  // Tid i sekunder
+    const currentTime = Date.now() / 1000; // Tid i sekunder
     if (decodedToken.exp < currentTime) {
       // Token har gått ut
-      localStorage.removeItem('user');  // Rensa utgången token
+      localStorage.removeItem('user'); // Rensa utgången token
       return false;
     }
     return true;
@@ -49,6 +49,7 @@ const isAuthenticated = () => {
     return false;
   }
 };
+
 // Stil för titeln med animation
 const AnimatedTitle = styled(Typography)(({ theme }) => ({
   animation: `${slideIn} 1s ease-in-out`,
@@ -57,7 +58,7 @@ const AnimatedTitle = styled(Typography)(({ theme }) => ({
   textAlign: 'center',
   marginTop: theme.spacing(2),
   [theme.breakpoints.down('sm')]: {
-    fontSize: '1.5',
+    fontSize: '1.5rem',
   },
 }));
 
@@ -107,13 +108,11 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     color: '#333',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
 
-    // Media query för skärmar över 1200px
     '@media (min-width: 1200px)': {
       width: '70%',
     },
   },
 }));
-
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
@@ -133,7 +132,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
-  const { namn, adress, schoolDetails, walkingTime, bildUrl } = schoolData;
+  const { id, namn, adress, schoolDetails, walkingTime, bildUrl } = schoolData; // Korrigerade variabelnamn
   const [description, setDescription] = useState(schoolDetails?.beskrivning || ''); // Local state for description
   const [editing, setEditing] = useState(false); // Toggle for edit mode
   const [chartDataArray, setChartDataArray] = useState([]);
@@ -143,15 +142,17 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [loading, setLoading] = useState(false); // Laddning för fler frågor
   const [error, setError] = useState('');
   const [noData, setNoData] = useState(false); // Ny flagga för att hantera när det inte finns data
+
   const handleEditClick = () => {
-    console.log("Editing school with ID:", schoolData.id);  // Logga det ID du skickar
+    console.log('Editing school with ID:', id); // Logga rätt ID
     setEditing(true);
   };
-  const years = [2023, 2022, 2021];
+
   const handleUpdateSuccess = (newDescription) => {
     setDescription(newDescription); // Uppdatera beskrivningen i DetailedCard när den ändras
     setEditing(false); // Stäng redigeringsläget
   };
+
   const fetchDataForYear = async (year, encodedName) => {
     const url = `https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`;
     const response = await axios.get(url);
@@ -194,10 +195,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
       setChartDataArray([chartData]);
 
-     
-
       const allDataChart = {
-        labels: years,
+        labels: [2023, 2022, 2021],
         datasets: [
           {
             label: question.label,
@@ -224,11 +223,10 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
   const fetchRemainingQuestions = useCallback(async () => {
     setLoading(true);
+    setError('');
     try {
       const encodedName = encodeURIComponent(namn);
-      const dataByYear = await Promise.all(
-        years.map(async (year) => fetchDataForYear(year, encodedName))
-      );
+      const dataByYear = await Promise.all([2023, 2022, 2021].map(async (year) => fetchDataForYear(year, encodedName)));
 
       const remainingQuestions = [
         {
@@ -252,7 +250,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       ];
 
       const chartDataArray = remainingQuestions.map((question) => {
-        const data = years.map((year, index) => {
+        const data = [2023, 2022, 2021].map((year, index) => {
           const dataForYear = dataByYear[index].find(
             (item) => item.fragetext === question.questionText
           );
@@ -264,10 +262,10 @@ const DetailedCard = ({ schoolData, onClose }) => {
           return 0;
         });
         return {
-          labels: years,
+          labels: [2023, 2022, 2021],
           datasets: [
             {
-              label: question.label, // Text visas endast här
+              label: question.label,
               data: data,
               backgroundColor: question.backgroundColor,
               borderColor: question.borderColor,
@@ -297,7 +295,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
   return (
     <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
-      <IconButton
+        <IconButton
           onClick={onClose}
           sx={{
             position: 'absolute',
@@ -319,29 +317,24 @@ const DetailedCard = ({ schoolData, onClose }) => {
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
 
-        {/* Beskrivning */}
         {editing ? (
-       <UpdateSchool
-       schoolToUpdateId={schoolData.id}  // ID:t för den specifika förskolan som ska uppdateras
-       currentDescription={description}
-       onUpdateSuccess={handleUpdateSuccess}
-     />
-     
-       
-        ) : (
-          <Box mb={4}>
-            <Typography variant="h6">Beskrivning</Typography>
-            <Typography variant="body2">{description}</Typography>
-            
-            {/* Visa redigera-knappen bara om användaren är inloggad */}
-            {isAuthenticated() && (
-  <Button variant="outlined" onClick={handleEditClick} sx={{ marginTop: 2 }}>
-    Redigera Beskrivning
-  </Button>
+  <UpdateSchool
+    schoolToUpdateId={schoolData.id} // Använd schoolData.id här istället för school?.Id
+    currentDescription={description} // Skicka aktuell beskrivning
+    onUpdateSuccess={handleUpdateSuccess} // Uppdateringshantering
+  />
+) : (
+  <Box mb={4}>
+    <Typography variant="h6">Beskrivning</Typography>
+    <Typography variant="body2">{description}</Typography>
+    {/* Visa redigera-knappen bara om användaren är inloggad */}
+    {isAuthenticated() && (
+      <Button variant="outlined" onClick={handleEditClick} sx={{ marginTop: 2 }}>
+        Redigera Beskrivning
+      </Button>
+    )}
+  </Box>
 )}
-
-          </Box>
-        )}
 
         {/* Visa gångtid */}
         {walkingTime && (
@@ -359,7 +352,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
           </Typography>
         )}
 
-
+        {/* Skoldetaljer och kontaktinformation */}
         <Grid container spacing={2}>
           {schoolDetails && (
             <Grid item xs={12} md={6}>
@@ -395,93 +388,94 @@ const DetailedCard = ({ schoolData, onClose }) => {
           )}
         </Grid>
 
+        {/* Diagram och laddningsindikatorer */}
         {loadingFirstChart ? (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '20px' }}>
-        <CircularProgress />
-        <Typography sx={{ marginTop: '10px', color: '#555' }}>Hämtar statistik...</Typography>
-      </Box>
-      
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '20px' }}>
+            <CircularProgress />
+            <Typography sx={{ marginTop: '10px', color: '#555' }}>Hämtar statistik...</Typography>
+          </Box>
         ) : noData ? (
           <Typography variant="body2" sx={{ color: '#555', textAlign: 'center', marginTop: '20px' }}>
             Ingen data tillgänglig från undersökningen för denna förskola.
           </Typography>
         ) : (
-          chartDataArray.length > 0 && (
-            chartDataArray.map((chartData, index) => (
-              <Box key={index} sx={{ width: '100%', maxWidth: '800px', margin: '40px auto' }}>
-                <Bar
-                  data={chartData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        display: false, // Döljer legenden helt
-                      },
-                      title: {
-                        display: true,
-                        text: chartData.datasets[0].label, // Endast visa här
+          chartDataArray.length > 0 &&
+          chartDataArray.map((chartData, index) => (
+            <Box key={index} sx={{ width: '100%', maxWidth: '800px', margin: '40px auto' }}>
+              <Bar
+                data={chartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false, // Döljer legenden helt
+                    },
+                    title: {
+                      display: true,
+                      text: chartData.datasets[0].label, // Endast visa här
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      max: 100,
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%'; // Visar värden som procent
+                        },
                       },
                     },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                          callback: function(value) {
-                            return value + '%'; // Visar värden som procent
-                          },
-                      },
-                    },
-                    },
-                  }}
-                  height={400}
-                />
-              </Box>
-            ))
-          )
+                  },
+                }}
+                height={400}
+              />
+            </Box>
+          ))
         )}
 
+        {/* Fler svar-knapp */}
         {!loadingFirstChart && !noData && !showMore && (
           <Button variant="contained" color="primary" onClick={fetchRemainingQuestions} disabled={loading}>
             {loading ? 'Laddar...' : 'Fler svar'}
           </Button>
         )}
 
-        {showMore && remainingQuestions.length > 0 && (
+        {/* Ytterligare diagram om fler svar visas */}
+        {showMore && remainingQuestions.length > 0 &&
           remainingQuestions.map((chartData, index) => (
             <Box key={index} sx={{ width: '100%', maxWidth: '800px', margin: '40px auto' }}>
-             <Bar
-  data={chartData}
-  options={{
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false, // Döljer legenden helt
-      },
-      title: {
-        display: true,
-        text: chartData.datasets[0].label, // Endast visa här
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-        ticks: {
-          callback: function(value) {
-            return value + '%'; // Visar värden som procent
-          },
-        },
-      },
-    },
-  }}
-  height={400}
-/>
+              <Bar
+                data={chartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: true,
+                      text: chartData.datasets[0].label,
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      max: 100,
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%';
+                        },
+                      },
+                    },
+                  },
+                }}
+                height={400}
+              />
             </Box>
           ))
-        )}
+        }
 
         {error && <Typography variant="body2" sx={{ color: 'red' }}>{error}</Typography>}
       </StyledDialogContent>
@@ -491,7 +485,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
 DetailedCard.propTypes = {
   schoolData: PropTypes.shape({
-    id: PropTypes.number.isRequired, // Se till att id finns och är ett nummer
+    id: PropTypes.number.isRequired, // Korrigerade PropTypes
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string,
     schoolDetails: PropTypes.object,

@@ -499,3 +499,27 @@ p {
     justify-content: flex-start; /* Knapparna justeras för mindre skärmar */
   }
 }
+.corner-buttons {
+  position: fixed;
+  bottom: 10px; /* Du kan justera detta värde för att placera knappen närmare toppen eller botten */
+  left: 10px; /* Placering i det vänstra hörnet */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Utrymme mellan knapparna */
+  z-index: 10000;
+}
+
+.corner-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+  z-index: 10000;
+}
+
+.corner-button:hover {
+  background-color: #0056b3;
+}

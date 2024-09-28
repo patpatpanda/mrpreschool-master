@@ -8,9 +8,13 @@ import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import myImage from '../images/seri.webp';
+import UpdateSchool from './UpdateSchool';
+import { jwtDecode } from 'jwt-decode';
+
 
 // Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 
 // Keyframes för titelanimation
 const slideIn = keyframes`
@@ -23,7 +27,28 @@ const slideIn = keyframes`
     opacity: 1;
   }
 `;
+const isAuthenticated = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  if (!user || !user.token) {
+    return false; // Ingen användare eller token hittad
+  }
 
+  try {
+    const decodedToken = jwtDecode(user.token);
+    const currentTime = Date.now() / 1000;  // Tid i sekunder
+    if (decodedToken.exp < currentTime) {
+      // Token har gått ut
+      localStorage.removeItem('user');  // Rensa utgången token
+      return false;
+    }
+    return true;
+  } catch (error) {
+    // Om token är felaktig eller något går fel med dekodning, logga ut användaren
+    localStorage.removeItem('user');
+    return false;
+  }
+};
 // Stil för titeln med animation
 const AnimatedTitle = styled(Typography)(({ theme }) => ({
   animation: `${slideIn} 1s ease-in-out`,
@@ -109,6 +134,8 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 
 const DetailedCard = ({ schoolData, onClose }) => {
   const { namn, adress, schoolDetails, walkingTime, bildUrl } = schoolData;
+  const [description, setDescription] = useState(schoolDetails?.beskrivning || ''); // Local state for description
+  const [editing, setEditing] = useState(false); // Toggle for edit mode
   const [chartDataArray, setChartDataArray] = useState([]);
   const [remainingQuestions, setRemainingQuestions] = useState([]); // För resterande frågor
   const [showMore, setShowMore] = useState(false); // För att styra om knappen "Fler svar" visas
@@ -116,9 +143,15 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [loading, setLoading] = useState(false); // Laddning för fler frågor
   const [error, setError] = useState('');
   const [noData, setNoData] = useState(false); // Ny flagga för att hantera när det inte finns data
-
+  const handleEditClick = () => {
+    console.log("Editing school with ID:", schoolData.id);  // Logga det ID du skickar
+    setEditing(true);
+  };
   const years = [2023, 2022, 2021];
-
+  const handleUpdateSuccess = (newDescription) => {
+    setDescription(newDescription); // Uppdatera beskrivningen i DetailedCard när den ändras
+    setEditing(false); // Stäng redigeringsläget
+  };
   const fetchDataForYear = async (year, encodedName) => {
     const url = `https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`;
     const response = await axios.get(url);
@@ -264,7 +297,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
   return (
     <StyledDialog open onClose={onClose} fullWidth fullScreen maxWidth="md">
       <StyledDialogTitle>
-        <IconButton
+      <IconButton
           onClick={onClose}
           sx={{
             position: 'absolute',
@@ -275,37 +308,57 @@ const DetailedCard = ({ schoolData, onClose }) => {
         >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
+        <Typography variant="h5">{namn}</Typography>
       </StyledDialogTitle>
 
       <StyledDialogContent>
         <AnimatedTitle>{namn}</AnimatedTitle>
 
+        {/* Bilden */}
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
 
-        {schoolDetails?.beskrivning && (
+        {/* Beskrivning */}
+        {editing ? (
+       <UpdateSchool
+       schoolToUpdateId={schoolData.id}  // ID:t för den specifika förskolan som ska uppdateras
+       currentDescription={description}
+       onUpdateSuccess={handleUpdateSuccess}
+     />
+     
+       
+        ) : (
           <Box mb={4}>
-            <Typography variant="h6" sx={{ color: '#333', marginBottom: '8px' }}>
-              Beskrivning
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#555' }}>
-              {schoolDetails.beskrivning}
-            </Typography>
+            <Typography variant="h6">Beskrivning</Typography>
+            <Typography variant="body2">{description}</Typography>
+            
+            {/* Visa redigera-knappen bara om användaren är inloggad */}
+            {isAuthenticated() && (
+  <Button variant="outlined" onClick={handleEditClick} sx={{ marginTop: 2 }}>
+    Redigera Beskrivning
+  </Button>
+)}
+
           </Box>
         )}
 
+        {/* Visa gångtid */}
         {walkingTime && (
-          <Typography variant="body2" sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', color: '#555' }}>
-            <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} /> Beräknad gångtid: {walkingTime} minuter
+          <Typography variant="body2" sx={{ marginBottom: 2 }}>
+            <FontAwesomeIcon icon={faClock} style={{ marginRight: '8px', color: '#4CAF50' }} />
+            Beräknad gångtid: {walkingTime} minuter
           </Typography>
         )}
 
+        {/* Visa adress */}
         {adress && (
-          <Typography variant="body2" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: '#333' }}>
-            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} /> {adress}
+          <Typography variant="body2" sx={{ marginBottom: 2 }}>
+            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px', color: '#4CAF50' }} />
+            {adress}
           </Typography>
         )}
+
 
         <Grid container spacing={2}>
           {schoolDetails && (
@@ -438,6 +491,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
 DetailedCard.propTypes = {
   schoolData: PropTypes.shape({
+    id: PropTypes.number.isRequired, // Se till att id finns och är ett nummer
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string,
     schoolDetails: PropTypes.object,

@@ -306,7 +306,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
-        <Typography variant="h5">{namn}</Typography>
+        
       </StyledDialogTitle>
 
       <StyledDialogContent>

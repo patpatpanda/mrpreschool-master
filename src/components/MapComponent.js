@@ -250,24 +250,30 @@ const handleMarkerClick = (place, walkingTime) => {
     }
   }, []);
   
-
   useEffect(() => {
     if (id && map) {
+      // Rensa den tidigare valda förskolan för att undvika cache-problem
+      setSelectedPlace(null);
+      setIsCardVisible(false);
+      setIsDetailedCardVisible(false);
+  
       // Hämta förskolan baserat på ID från URL:en
       fetchSchoolById(id).then((school) => {
         if (school) {
           // Sätt vald förskola
           const location = new google.maps.LatLng(school.latitude, school.longitude);
-          selectPlace(school); // Detta uppdaterar också selectedPlace
-  
-          // Centrera kartan på förskolan
+          
+          // Uppdatera kartans centrum och zooma in
           map.setCenter(location);
           map.setZoom(12);
+          
+          // Uppdatera `selectedPlace` med den hämtade förskolan
+          selectPlace(school);
   
-          // Visa DetailedCard om vi har en vald plats
-          setIsDetailedCardVisible(true); // Visa DetailedCard
+          // Visa detaljerad information om förskolan
+          setIsDetailedCardVisible(true);
         } else {
-          // Om förskolan inte hittas, navigera tillbaka till startsidan
+          // Om förskolan inte hittas, navigera tillbaka till startsidan eller visa fel
           navigate('/');
         }
       });

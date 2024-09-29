@@ -9,9 +9,9 @@ import FixedButton from './components/FixedButton';
 import './App.css';
 import ReactGA from 'react-ga';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-
-
+import Login from './components/Login';
+import Register from './components/Register';
+import CornerButtons from './components/CornerButtons';
 
 function Analytics() {
   const location = useLocation();
@@ -46,7 +46,8 @@ function App() {
             ) : (
               <main>
                 <Routes>
-                 
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
                   <Route path="/" element={<MapComponent />} />
                   <Route path="/forskolan/:id" element={<MapComponent />} />
                   <Route path="/:address" element={<MapComponent />} />
@@ -54,7 +55,7 @@ function App() {
               </main>
             )}
 
-            
+            <CornerButtons />
 
             <FixedButton />
           </div>

@@ -1,91 +1,112 @@
-import React from 'react';
-import { Button, Box, Link } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Box,  IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import AuthService from './AuthService'; // Se till att AuthService är korrekt
 import { useMediaQuery } from '@mui/material';
 
 const CornerButtons = () => {
   const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
   
   // Hämta den inloggade användaren (om det finns någon)
   const user = AuthService.getCurrentUser();
 
   // Kontrollera om skärmen är mindre än 600px
-  const isSmallScreen = useMediaQuery('(max-width:600px)');
+  const isSmallScreen = useMediaQuery('(max-width:1200px)');
 
   const handleLogout = () => {
     AuthService.logout();
     navigate('/login'); // Omdirigera till inloggningssidan efter utloggning
   };
 
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const renderDrawerContent = () => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        {user ? (
+          <>
+            <ListItem button onClick={() => navigate(`/forskolan/${user.schoolId}`)}>
+              <ListItemText primary="Min Förskola" />
+            </ListItem>
+            <ListItem button onClick={handleLogout}>
+              <ListItemText primary="Logga ut" />
+            </ListItem>
+          </>
+        ) : (
+          <>
+            <ListItem button onClick={() => navigate('/login')}>
+              <ListItemText primary="Logga in" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/register')}>
+              <ListItemText primary="Registrera" />
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
+
   return (
     <Box
       sx={{
         position: 'fixed',
-        top: { xs: 16, sm: 32 }, // Placering för mobiler och större skärmar
-        left: { xs: 16, sm: 32 }, // Flytta till vänstra hörnet för mobil
-        display: 'flex',
-        flexDirection: 'column', // Vertikal layout
-        gap: 2,
+        top: { xs: 16, sm: 32 },
+        left: { xs: 16, sm: 32 },
         zIndex: 1000,
-        '@media (max-width: 600px)': {
-          left: 16, // Vänster position för mobil
-        },
       }}
     >
-      {user ? (
+      {isSmallScreen ? (
         <>
-          {!isSmallScreen ? (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(`/forskolan/${user.schoolId}`)}
-              sx={{
-                display: { xs: 'none', sm: 'block' }, // Dölj på små skärmar (xs)
-              }}
-            >
-              Min Förskola
-            </Button>
-          ) : (
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => navigate(`/forskolan/${user.schoolId}`)}
-              sx={{ 
-                textDecoration: 'underline', 
-                cursor: 'pointer', 
-                marginTop: '10px' // Lägger till margin-top
-              }}
-            >
-              Min Förskola
-            </Link>
-          )}
-          {!isSmallScreen ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleLogout}
-            >
-              Logga ut
-            </Button>
-          ) : (
-            <Link
-              component="button"
-              variant="body2"
-              onClick={handleLogout}
-              sx={{ 
-                textDecoration: 'underline', 
-                cursor: 'pointer', 
-                marginTop: '1px' // Lägger till margin-top
-              }}
-            >
-              Logga ut
-            </Link>
-          )}
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+            {renderDrawerContent()}
+          </Drawer>
         </>
       ) : (
-        <>
-          {!isSmallScreen ? (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {user ? (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(`/forskolan/${user.schoolId}`)}
+              >
+                Min Förskola
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleLogout}
+              >
+                Logga ut
+              </Button>
+            </>
+          ) : (
             <>
               <Button
                 variant="contained"
@@ -102,35 +123,8 @@ const CornerButtons = () => {
                 Registrera
               </Button>
             </>
-          ) : (
-            <>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={() => navigate('/login')}
-                sx={{ 
-                  textDecoration: 'underline', 
-                  cursor: 'pointer', 
-                  marginTop: '20px' // Lägger till margin-top
-                }}
-              >
-                Logga in
-              </Link>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={() => navigate('/register')}
-                sx={{ 
-                  textDecoration: 'underline', 
-                  cursor: 'pointer', 
-                  marginTop: '20px' // Lägger till margin-top
-                }}
-              >
-                Registrera
-              </Link>
-            </>
           )}
-        </>
+        </Box>
       )}
     </Box>
   );

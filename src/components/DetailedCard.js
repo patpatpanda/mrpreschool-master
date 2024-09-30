@@ -261,7 +261,8 @@ const DetailedCard = ({ schoolData, onClose }) => {
         {
           label: 'Jag känner att förskolan är trygg',
           questionText: 'Jag upplever att förskolan i sin helhet är trygg och säker för mitt barn',
-          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',  // En blå färg med samma transparensnivå
+
           borderColor: 'rgba(255, 99, 132, 1)',
         },
       ];

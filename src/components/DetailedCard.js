@@ -176,6 +176,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       const dataFor2023 = await fetchDataForYear(2023, encodedName);
       const dataFor2022 = await fetchDataForYear(2022, encodedName);
       const dataFor2021 = await fetchDataForYear(2021, encodedName);
+      const dataFor2020 = await fetchDataForYear(2020, encodedName);
       if (!dataFor2023 || dataFor2023.length === 0) {
         setNoData(true);
         setLoadingFirstChart(false);
@@ -205,7 +206,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       setChartDataArray([chartData]);
 
       const allDataChart = {
-        labels: [2023, 2022, 2021],
+        labels: [2023, 2022, 2021,2020],
         datasets: [
           {
             label: question.label,
@@ -213,6 +214,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
               dataFor2023.find((item) => item.fragetext === question.questionText)?.procentSvarAlternativ?.$values.find((svar) => svar.svarsalternativ === 5)?.procent || 0,
               dataFor2022.find((item) => item.fragetext === question.questionText)?.procentSvarAlternativ?.$values.find((svar) => svar.svarsalternativ === 5)?.procent || 0,
               dataFor2021.find((item) => item.fragetext === question.questionText)?.procentSvarAlternativ?.$values.find((svar) => svar.svarsalternativ === 5)?.procent || 0,
+              dataFor2020.find((item) => item.fragetext === question.questionText)?.procentSvarAlternativ?.$values.find((svar) => svar.svarsalternativ === 5)?.procent || 0,
             ],
             backgroundColor: question.backgroundColor,
             borderColor: question.borderColor,
@@ -235,7 +237,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
     setError('');
     try {
       const encodedName = encodeURIComponent(namn);
-      const dataByYear = await Promise.all([2023, 2022, 2021].map(async (year) => fetchDataForYear(year, encodedName)));
+      const dataByYear = await Promise.all([2023, 2022, 2021,2020].map(async (year) => fetchDataForYear(year, encodedName)));
 
       const remainingQuestions = [
         {
@@ -256,10 +258,16 @@ const DetailedCard = ({ schoolData, onClose }) => {
           backgroundColor: 'rgba(255, 99, 132, 0.6)',
           borderColor: 'rgba(255, 99, 132, 1)',
         },
+        {
+          label: 'Jag känner att förskolan är trygg',
+          questionText: 'Jag upplever att förskolan i sin helhet är trygg och säker för mitt barn',
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+        },
       ];
 
       const chartDataArray = remainingQuestions.map((question) => {
-        const data = [2023, 2022, 2021].map((year, index) => {
+        const data = [2023, 2022, 2021,2020].map((year, index) => {
           const dataForYear = dataByYear[index].find(
             (item) => item.fragetext === question.questionText
           );
@@ -271,7 +279,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
           return 0;
         });
         return {
-          labels: [2023, 2022, 2021],
+          labels: [2023, 2022, 2021,2020],
           datasets: [
             {
               label: question.label,

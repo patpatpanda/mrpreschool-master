@@ -6,7 +6,7 @@ import AuthService from './AuthService';
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [schoolId, setSchoolId] = useState(''); // Nytt state för SchoolId
+  const [schoolId, setSchoolId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -24,12 +24,16 @@ const Register = () => {
 
       if (response.status === 200) {
         setSuccess('Registrering lyckades! Du kan nu logga in.');
-        navigate('/login'); // Omdirigera användaren till inloggningssidan efter lyckad registrering
+        navigate('/login');
       } else {
         setError('Registreringen misslyckades. Försök igen.');
       }
     } catch (error) {
-      setError('Fel vid registrering. Kontrollera dina uppgifter.');
+      if (error.response && error.response.status === 400) {
+        setError('Ogiltigt skollId.');
+      } else {
+        setError('Fel vid registrering. Kontrollera dina uppgifter.');
+      }
     } finally {
       setLoading(false);
     }
@@ -63,12 +67,12 @@ const Register = () => {
             required
           />
           <TextField
-            label="School ID"
+            label="Skol-id"
             variant="outlined"
             fullWidth
             margin="normal"
             value={schoolId}
-            onChange={(e) => setSchoolId(e.target.value)} // Uppdaterar SchoolId
+            onChange={(e) => setSchoolId(e.target.value)}
             required
           />
           <Button

@@ -10,7 +10,6 @@ const register = (email, password, schoolId) => {
   });
 };
 
-
 const login = (email, password) => {
   return axios.post(API_URL + "login", {
     email,
@@ -23,11 +22,14 @@ const login = (email, password) => {
     return response.data;
   });
 };
+
 const logout = () => {
+  // Ta bort användarens data från localStorage vid utloggning
   localStorage.removeItem('user');
 };
 
 const getCurrentUser = () => {
+  // Hämta den nuvarande användaren från localStorage
   return JSON.parse(localStorage.getItem("user"));
 };
 
@@ -35,7 +37,7 @@ const AuthService = {
   register,
   login,
   getCurrentUser,
-  logout, // Lägg till denna
+  logout,
 };
 
 export default AuthService;

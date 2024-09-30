@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';  // Importera useTheme för att använda temat
 
-const CustomButton = ({ onClick, children, isSelected, sx, ...props }) => {
+const CustomButton = ({ onClick, children, isSelected = false, sx = {}, ...props }) => {  // Använd standardvärden direkt här
   const theme = useTheme();  // Hämta temat från MUI
 
   const buttonStyle = {
@@ -52,11 +52,6 @@ CustomButton.propTypes = {
   children: PropTypes.node.isRequired,  // children kan vara allt som kan renderas i React
   isSelected: PropTypes.bool,  // isSelected är en bool, men inte obligatorisk
   sx: PropTypes.object,  // sx är ett objekt som innehåller extra stilar
-};
-
-CustomButton.defaultProps = {
-  isSelected: false,  // Standardvärde för isSelected om det inte skickas in
-  sx: {},  // Standardvärde för sx om inga extra stilar skickas in
 };
 
 export default CustomButton;

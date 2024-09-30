@@ -133,7 +133,8 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 
 const DetailedCard = ({ schoolData, onClose }) => {
   const { id, namn, adress, schoolDetails, walkingTime, bildUrl } = schoolData; // Korrigerade variabelnamn
-  const [description, setDescription] = useState(schoolDetails?.beskrivning || ''); // Local state for description
+  const [ setSchoolData] = useState({});  // Ändra namn för state
+  
   const [editing, setEditing] = useState(false); // Toggle for edit mode
   const [chartDataArray, setChartDataArray] = useState([]);
   const [remainingQuestions, setRemainingQuestions] = useState([]); // För resterande frågor
@@ -148,10 +149,18 @@ const DetailedCard = ({ schoolData, onClose }) => {
     setEditing(true);
   };
 
-  const handleUpdateSuccess = (newDescription) => {
-    setDescription(newDescription); // Uppdatera beskrivningen i DetailedCard när den ändras
+  const handleUpdateSuccess = (updatedData) => {
+    // Uppdatera state för att visa den uppdaterade informationen direkt utan att ladda om sidan
+    setSchoolData(prevData => ({
+      ...prevData,
+      ...updatedData  // Uppdatera de fält som har ändrats
+    }));
     setEditing(false); // Stäng redigeringsläget
+  
+    // Här kan du också stänga modalen eller visa en bekräftelse om så önskas
   };
+  
+  
 
   const fetchDataForYear = async (year, encodedName) => {
     const url = `https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`;
@@ -306,7 +315,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
         >
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
-        
+        <Typography variant="h5">{namn}</Typography>
       </StyledDialogTitle>
 
       <StyledDialogContent>
@@ -316,25 +325,42 @@ const DetailedCard = ({ schoolData, onClose }) => {
         <ImageContainer>
           <img src={imageUrl} alt={`${namn}`} />
         </ImageContainer>
-
         {editing ? (
-  <UpdateSchool
-    schoolToUpdateId={schoolData.id} // Använd schoolData.id här istället för school?.Id
-    currentDescription={description} // Skicka aktuell beskrivning
-    onUpdateSuccess={handleUpdateSuccess} // Uppdateringshantering
-  />
+ <UpdateSchool
+ schoolToUpdateId={schoolData.id}  // Skicka ID för att identifiera skolan
+ currentData={{
+   namn: schoolData.namn,
+   adress: schoolData.adress,
+   beskrivning: schoolData.beskrivning,
+   antalBarn: schoolData.antalBarn,
+   typAvService: schoolData.typAvService,
+   // Lägg till fler fält här om det behövs
+ }}
+ onUpdateSuccess={handleUpdateSuccess}  // Hantera uppdateringen
+/>
+
 ) : (
   <Box mb={4}>
-    <Typography variant="h6">Beskrivning</Typography>
-    <Typography variant="body2">{description}</Typography>
-    {/* Visa redigera-knappen bara om användaren är inloggad */}
+    <Typography variant="h6">Skolinformation</Typography>
+ {schoolData.beskrivning && (
+    <Typography variant="body2"> {schoolData.beskrivning}</Typography>
+    
+  )}
+    {/* Visa inte dessa fält, men de kan redigeras */}
+    {/* Om du inte vill visa dem, ta bort följande kod */}
+    {/* <Typography variant="body2">Namn: {schoolData?.namn}</Typography> */}
+    {/* <Typography variant="body2">Adress: {schoolData?.adress}</Typography> */}
+    {/* <Typography variant="body2">Beskrivning: {schoolData?.beskrivning}</Typography> */}
+    
     {isAuthenticated() && (
       <Button variant="outlined" onClick={handleEditClick} sx={{ marginTop: 2 }}>
-        Redigera Beskrivning
+        Redigera Skolinformation
       </Button>
     )}
   </Box>
 )}
+
+
 
         {/* Visa gångtid */}
         {walkingTime && (
@@ -485,14 +511,39 @@ const DetailedCard = ({ schoolData, onClose }) => {
 
 DetailedCard.propTypes = {
   schoolData: PropTypes.shape({
-    id: PropTypes.number.isRequired, // Korrigerade PropTypes
+    id: PropTypes.number.isRequired,
+    typAvService: PropTypes.string,
+    antalBarn: PropTypes.number,
     namn: PropTypes.string.isRequired,
     adress: PropTypes.string,
-    schoolDetails: PropTypes.object,
-    walkingTime: PropTypes.string,
-    bildUrl: PropTypes.string,
+    beskrivning: PropTypes.string,
+    bildUrl: PropTypes.string, // Validera bildUrl
+    walkingTime: PropTypes.string, // Validera walkingTime
+    schoolDetails: PropTypes.shape({
+      beskrivning: PropTypes.string,
+      typAvService: PropTypes.string, // Validera typAvService
+      verksamI: PropTypes.string, // Validera verksamI
+      organisationsform: PropTypes.string, // Validera organisationsform
+      antalBarn: PropTypes.number, // Validera antalBarn
+      antalBarnPerArsarbetare: PropTypes.number, // Validera antalBarnPerArsarbetare
+      andelLegitimeradeForskollarare: PropTypes.number, // Validera andelLegitimeradeForskollarare
+      inriktningOchProfil: PropTypes.string, // Validera inriktningOchProfil
+      kostOchMaltider: PropTypes.string, // Validera kostOchMaltider
+      inneOchUtemiljo: PropTypes.string, // Validera inneOchUtemiljo
+      malOchVision: PropTypes.string, // Validera malOchVision
+      webbplats: PropTypes.string, // Validera webbplats
+      kontakter: PropTypes.shape({
+        $values: PropTypes.arrayOf(PropTypes.shape({
+          namn: PropTypes.string,
+          roll: PropTypes.string,
+          epost: PropTypes.string,
+          telefon: PropTypes.string
+        })),
+      }), // Validera kontakter och dess $values
+    }),
   }).isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
 
 export default DetailedCard;

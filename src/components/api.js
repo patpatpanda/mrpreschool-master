@@ -115,6 +115,16 @@ export const fetchNearbySchools = async (lat, lng, organisationsform, typAvServi
     return [];
   }
 };
+// Uppdatera skoldetaljer, fokusera på beskrivning och kontakter
+export const updateSchoolDetails = async (schoolId, updatedDetails) => {
+  try {
+    const response = await axios.put(`https://masterkinder20240523125154.azurewebsites.net/api/schools/${schoolId}`, updatedDetails);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating school details:', error);
+    throw error;
+  }
+};
 
 export const fetchSchoolById = async (id) => {
   try {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box,  IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { Button, Box, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import AuthService from './AuthService'; // Se till att AuthService är korrekt
@@ -47,10 +47,10 @@ const CornerButtons = () => {
         ) : (
           <>
             <ListItem button onClick={() => navigate('/login')}>
-              <ListItemText primary="Logga in" />
+              <ListItemText primary="Logga in (Endast för förskolor)" />
             </ListItem>
             <ListItem button onClick={() => navigate('/register')}>
-              <ListItemText primary="Registrera" />
+              <ListItemText primary="Registrera dig (Endast för förskolor)" />
             </ListItem>
           </>
         )}
@@ -113,15 +113,9 @@ const CornerButtons = () => {
                 color="primary"
                 onClick={() => navigate('/login')}
               >
-                Logga in
+                Logga in (Endast för förskolor)
               </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => navigate('/register')}
-              >
-                Registrera
-              </Button>
+             
             </>
           )}
         </Box>

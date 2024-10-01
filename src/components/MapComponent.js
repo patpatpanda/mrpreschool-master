@@ -795,7 +795,7 @@ const findNearbyPlaces = useCallback(async (location) => {
           <TextField
         id="address"
         variant="outlined"
-        placeholder="Skriv din adress för att hitta förskola..."
+        placeholder="Skriv din adress i Stockholm.."
         fullWidth
         sx={{
           background: `linear-gradient(45deg, ${theme.palette.background.default} 30%, ${theme.palette.background.paper} 90%)`, // Använd temafärger

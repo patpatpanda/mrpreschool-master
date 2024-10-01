@@ -43,14 +43,14 @@ const SplashScreen = ({ onProceed }) => {
           }}
         >
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '1.5rem', md: '2rem' } }}>
-            Välkommen!
+            Välkkommen!
           </Typography>
           <Typography variant="body1" paragraph sx={{ mb: { xs: 2, md: 3 }, fontSize: { xs: '1rem', md: '1.25rem' } }}>
-            Utforska närliggande förskolor och hitta detaljerad information. För närvarande stödjer vi bara förskolor inom stockholmsområdet.
+         
+Utforska förskolor nära dig och få insikter om hur du väljer rätt. Just nu listar vi förskolor i Stockholmsområdet, men vår guide hjälper alla föräldrar att fatta informerade beslut, oavsett var du bor.
+
           </Typography>
-          <Typography variant="body1" paragraph sx={{ mb: { xs: 2, md: 3 }, fontSize: { xs: '1rem', md: '1.25rem' } }}>
-            Ange din adress i sökrutan för att börja.
-          </Typography>
+        
           <Button 
             variant="contained" 
             color="primary" 

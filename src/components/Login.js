@@ -24,7 +24,7 @@ const Login = () => {
       if (response && response.token) {
         setSuccess('Inloggningen lyckades!');
         
-        const {  schoolId } = response;
+        const { schoolId } = response;
         
         console.log("Inloggad användare:", response);
 
@@ -80,6 +80,13 @@ const Login = () => {
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Logga in'}
           </Button>
         </form>
+
+        {/* Lägg till länken till registreringssidan här */}
+        <Box mt={2}>
+          <Typography variant="body2">
+            Har du ingen inloggning? <Button onClick={() => navigate('/register')} color="secondary">Registrera dig här</Button>
+          </Typography>
+        </Box>
       </Box>
     </Container>
   );

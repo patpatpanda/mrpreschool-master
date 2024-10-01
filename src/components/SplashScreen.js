@@ -43,7 +43,7 @@ const SplashScreen = ({ onProceed }) => {
           }}
         >
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '1.5rem', md: '2rem' } }}>
-            Välkkommen!
+            Välkommen!
           </Typography>
           <Typography variant="body1" paragraph sx={{ mb: { xs: 2, md: 3 }, fontSize: { xs: '1rem', md: '1.25rem' } }}>
          

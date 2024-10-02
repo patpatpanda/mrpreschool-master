@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Box, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { Button, Box, IconButton, Drawer, List, ListItem, ListItemText, Switch, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import AuthService from './AuthService'; // Se till att AuthService är korrekt
 import { useMediaQuery } from '@mui/material';
+import PropTypes from 'prop-types'; // Lägg till import för PropTypes
 
-const CornerButtons = () => {
+const CornerButtons = ({ toggleTheme, themeMode }) => {  // Ta emot props för temaväxling
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   
   // Hämta den inloggade användaren (om det finns någon)
   const user = AuthService.getCurrentUser();
 
-  // Kontrollera om skärmen är mindre än 600px
+  // Kontrollera om skärmen är mindre än 1200px
   const isSmallScreen = useMediaQuery('(max-width:1200px)');
 
   const handleLogout = () => {
@@ -54,6 +55,14 @@ const CornerButtons = () => {
             </ListItem>
           </>
         )}
+        {/* Lägg till temaväxling i menyn */}
+        <ListItem>
+          <Typography variant="body1">Mörkt läge</Typography>
+          <Switch
+            checked={themeMode === 'dark'}  // Kontrollera om mörkt läge är aktivt
+            onChange={toggleTheme}  // Växla tema
+          />
+        </ListItem>
       </List>
     </Box>
   );
@@ -115,13 +124,26 @@ const CornerButtons = () => {
               >
                 Logga in (Endast för förskolor)
               </Button>
-             
             </>
           )}
+          {/* Lägg till temaväxling under Logga in/Logga ut */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="body1">Mörkt läge</Typography>
+            <Switch
+              checked={themeMode === 'dark'}  // Kontrollera om mörkt läge är aktivt
+              onChange={toggleTheme}  // Växla tema
+            />
+          </Box>
         </Box>
       )}
     </Box>
   );
+};
+
+// Lägg till PropTypes för att definiera de props komponenten tar emot
+CornerButtons.propTypes = {
+  toggleTheme: PropTypes.func.isRequired,  // toggleTheme måste vara en funktion
+  themeMode: PropTypes.string.isRequired,  // themeMode måste vara en sträng (antingen 'light' eller 'dark')
 };
 
 export default CornerButtons;

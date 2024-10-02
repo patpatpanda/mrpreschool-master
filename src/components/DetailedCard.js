@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Grid, Button, CircularProgress } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { styled, keyframes } from '@mui/material/styles';
+import { styled} from '@mui/material/styles';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -14,17 +14,6 @@ import { jwtDecode } from 'jwt-decode';
 // Registrera diagramkomponenter för Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Keyframes för titelanimation
-const slideIn = keyframes`
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
 
 // Funktion för autentisering
 const isAuthenticated = () => {
@@ -50,17 +39,6 @@ const isAuthenticated = () => {
   }
 };
 
-// Stil för titeln med animation
-const AnimatedTitle = styled(Typography)(({ theme }) => ({
-  animation: `${slideIn} 1s ease-in-out`,
-  fontSize: '1.5rem',
-  color: '#333',
-  textAlign: 'center',
-  marginTop: theme.spacing(2),
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.5rem',
-  },
-}));
 
 // Stil för bildcontainern med zoom-effekt
 const ImageContainer = styled(Box)(({ theme }) => ({
@@ -96,6 +74,8 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
+
+
 // Stil för dialogfönstret
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -105,13 +85,21 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
     width: '100%',
     height: '100%',
     margin: 0,
-    color: '#333',
+    color: theme.palette.text.primary,  // Dynamiskt baserad på tema
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
 
     '@media (min-width: 1200px)': {
       width: '70%',
     },
   },
+}));
+
+const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  padding: theme.spacing(2.5),
+  height: 'calc(100% - 64px)',
+  overflowY: 'auto',
+  color: theme.palette.text.primary,  // Dynamiskt baserad på tema
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
@@ -122,13 +110,6 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   background: theme.palette.primary.main,
-}));
-
-const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
-  padding: theme.spacing(2.5),
-  height: 'calc(100% - 64px)',
-  overflowY: 'auto',
 }));
 
 const DetailedCard = ({ schoolData, onClose }) => {
@@ -328,7 +309,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
       </StyledDialogTitle>
 
       <StyledDialogContent>
-        <AnimatedTitle>{namn}</AnimatedTitle>
+      
 
         {/* Bilden */}
         <ImageContainer>

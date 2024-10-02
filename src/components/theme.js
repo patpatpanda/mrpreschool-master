@@ -1,49 +1,65 @@
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+const lightTheme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: '#dd4122',  // Huvudfärgen, matchar den röda färgen från loggan
-      contrastText: '#ffffff',  // Vit text för att kontrastera mot den röda färgen
+      main: '#dd4122',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: '#dd4122',  // Orange som en kontrastfärg om det behövs
+      main: '#dd4122',
       contrastText: '#ffffff',
+    },
+    background: {
+      default: '#f4f4f4', // Bakgrundsfärg för ljust tema
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#000000', // Textfärg för ljust tema
     },
   },
   components: {
-    MuiButton: {
+    MuiCssBaseline: {
       styleOverrides: {
-        root: {
-          borderRadius: '20px',  // Rundade hörn för knapparna
-          textTransform: 'none',
-          fontSize: '0.9rem',  // Mindre textstorlek för knappar
-          padding: '6px 12px',  // Smalare padding för att passa in med små knappar
-          backgroundColor: '#dd4122',  // Sätter knappens färg till den från loggan
-          color: '#fff',
-          '&:hover': {
-            backgroundColor: '#c23b1d',  // Mörkare röd färg på hover
-          },
-          '@media (max-width:768px)': {
-            fontSize: '0.8rem',
-            padding: '5px 10px',
-          },
-        },
-        containedPrimary: {
-          backgroundColor: '#dd4122',  // Använd samma huvudfärg för primary buttons
-          '&:hover': {
-            backgroundColor: '#c23b1d',  // Mörkare röd på hover
-          },
-        },
-        containedSecondary: {
-          backgroundColor: '#ff9800',
-          '&:hover': {
-            backgroundColor: '#fb8c00',
-          },
+        '.cards-container': {
+          backgroundColor: '#ffffff', // Vit bakgrund i ljust läge
+          color: '#000000', // Svart text i ljust läge
         },
       },
     },
   },
 });
 
-export default theme;
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#dd4122',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#dd4122',
+      contrastText: '#ffffff',
+    },
+    background: {
+      default: '#121212', // Bakgrundsfärg för mörkt tema
+      paper: '#1d1d1d',
+    },
+    text: {
+      primary: '#ffffff', // Vit text för mörkt tema
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '.cards-container': {
+          backgroundColor: '#1d1d1d', // Mörk bakgrund i mörkt läge
+          color: '#ffffff', // Vit text i mörkt läge
+        },
+      },
+    },
+  },
+});
+
+export { lightTheme, darkTheme };

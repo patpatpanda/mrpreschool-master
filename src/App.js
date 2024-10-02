@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom'; // Lägg till useLocation här
+import { ThemeProvider, CssBaseline } from '@mui/material';  // Lägg till CssBaseline
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import MapComponent from './components/MapComponent';
 import Header from './components/Header';
-import theme from './components/theme';
+import { lightTheme, darkTheme } from './components/theme';  // Importera teman
 import SplashScreen from './components/SplashScreen';
 import FixedButton from './components/FixedButton';
 import './App.css';
@@ -26,19 +26,34 @@ function Analytics() {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [themeMode, setThemeMode] = useState('light');  // Standard läge är 'light'
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('appTheme');
+    if (savedTheme) {
+      setThemeMode(savedTheme);
+    }
+  }, []);
 
   const handleProceed = () => {
     setShowSplash(false);
   };
 
+  const toggleTheme = () => {
+    const newTheme = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newTheme);
+    localStorage.setItem('appTheme', newTheme);  // Spara temaval i localStorage
+  };
+
   const queryClient = new QueryClient();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
+      <CssBaseline />  {/* Lägg till CssBaseline för att applicera globala stilar */}
       <QueryClientProvider client={queryClient}>
         <Router>
           <div className="App-container">
-            <Header />
+            <Header toggleTheme={toggleTheme} themeMode={themeMode} />
             <Analytics />
 
             {showSplash ? (
@@ -55,8 +70,7 @@ function App() {
               </main>
             )}
 
-            <CornerButtons />
-
+            <CornerButtons toggleTheme={toggleTheme} themeMode={themeMode} />
             <FixedButton />
           </div>
         </Router>

@@ -120,25 +120,25 @@ const DetailedCard = ({ schoolData, onClose }) => {
   const [chartDataArray, setChartDataArray] = useState([]);
   const [remainingQuestions, setRemainingQuestions] = useState([]); // För resterande frågor
   const [showMore, setShowMore] = useState(false); // För att styra om knappen "Fler svar" visas
-  const [loadingFirstChart, setLoadingFirstChart] = useState(true); // Indikator för laddning av första diagrammet
-  const [loading, setLoading] = useState(false); // Laddning för fler frågor
+  const [loadingFirstChart, setLoadingFirstChart] = useState(true); 
+  const [loading, setLoading] = useState(false); 
   const [error, setError] = useState('');
-  const [noData, setNoData] = useState(false); // Ny flagga för att hantera när det inte finns data
+  const [noData, setNoData] = useState(false); 
 
   const handleEditClick = () => {
-    console.log('Editing school with ID:', id); // Logga rätt ID
+    console.log('Editing school with ID:', id);
     setEditing(true);
   };
 
   const handleUpdateSuccess = (updatedData) => {
-    // Uppdatera state för att visa den uppdaterade informationen direkt utan att ladda om sidan
+   
     setSchoolData(prevData => ({
       ...prevData,
-      ...updatedData  // Uppdatera de fält som har ändrats
+      ...updatedData  
     }));
-    setEditing(false); // Stäng redigeringsläget
+    setEditing(false); 
   
-    // Här kan du också stänga modalen eller visa en bekräftelse om så önskas
+   
   };
   
   

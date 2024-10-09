@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider, CssBaseline } from '@mui/material';  // Lägg till CssBaseline
+import { ThemeProvider, CssBaseline } from '@mui/material'; 
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import MapComponent from './components/MapComponent';
 import Header from './components/Header';
-import { lightTheme, darkTheme } from './components/theme';  // Importera teman
+import { lightTheme, darkTheme } from './components/theme';
 import SplashScreen from './components/SplashScreen';
 import FixedButton from './components/FixedButton';
 import './App.css';
@@ -49,17 +49,17 @@ function App() {
 
   return (
     <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
-      <CssBaseline />  {/* Lägg till CssBaseline för att applicera globala stilar */}
+      <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <Router>
-          <div className="App-container">
+          <div className="app-container">
             <Header toggleTheme={toggleTheme} themeMode={themeMode} />
             <Analytics />
 
             {showSplash ? (
               <SplashScreen onProceed={handleProceed} />
             ) : (
-              <main>
+              <main className="main-content">
                 <Routes>
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />

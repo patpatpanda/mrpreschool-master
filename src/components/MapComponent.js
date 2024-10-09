@@ -701,95 +701,114 @@ const findNearbyPlaces = useCallback(async (location) => {
     {/* Uppdatera search-container med dynamisk klass baserat på state */}
     <div className={`search-container ${showPlaces ? 'top' : 'center'} `}>
       <Container maxWidth="l">
-        <Box 
-          display="flex" 
-          alignItems="center" 
-          justifyContent="center" 
-          gap={2} 
-          flexWrap="nowrap"  // Gör att knappar och dropdown inte bryts till ny rad
-          sx={{
-            overflowX: 'auto',  // Möjliggör horisontell scrollning
-            whiteSpace: 'nowrap', // Förhindra att knappar bryts till ny rad
-            '&::-webkit-scrollbar': {
-              display: 'none', // Göm horisontell scrollbar (valfritt)
-            },
-            '-ms-overflow-style': 'none',  // Internet Explorer 10+
-            'scrollbar-width': 'none',  // Firefox
-            
-            // Justera layouten för olika skärmstorlekar
-            '@media (max-width: 600px)': {
-              justifyContent: 'flex-start',  // Justera innehållet för små skärmar
-              gap: '10px', // Mindre gap på små skärmar
-            },
-            '@media (min-width: 601px) and (max-width: 960px)': {
-              justifyContent: 'space-around',  // Mer utrymme på mellanstora skärmar som iPad
-              gap: '20px',  // Lite större mellanrum på surfplattor
-            },
-            '@media (min-width: 961px)': {
-              justifyContent: 'center',  // Centrera innehållet på större skärmar
-              gap: '30px', // Större gap på större skärmar
-            },
-          }}
-        >
-           <CustomButton
-          onClick={() => {
-            setSelectedButton('list');
-            setView('list'); 
-          }}
-          isSelected={selectedButton === 'list'}
-        >
-          <FontAwesomeIcon icon={faList} style={{ marginRight: '8px' }} /> {/* Lista ikon */}
-          Lista
-        </CustomButton>
+      <Box 
+  display="flex" 
+  alignItems="center" 
+  justifyContent="center" 
+  gap={2} 
+  flexWrap="nowrap"
+  sx={{
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
+    '-ms-overflow-style': 'none',
+    'scrollbar-width': 'none',
+    '@media (max-width: 600px)': {
+      justifyContent: 'flex-start',
+      gap: '10px',
+    },
+    '@media (min-width: 601px) and (max-width: 960px)': {
+      justifyContent: 'space-around',
+      gap: '20px',
+    },
+    '@media (min-width: 961px)': {
+      justifyContent: 'center',
+      gap: '30px',
+    },
+  }}
+>
+  {/* Toggle-knappen för Karta och Lista */}
+  <div style={{ display: 'inline-block' }}>
+  <div
+    onClick={() => setView('list')}
+    style={{
+      display: 'inline-block',
+      padding: '5px 10px',  // Mindre padding för en kompaktare knapp
+      backgroundColor: view === 'list' ? 'rgb(221, 65, 34)' : '#f1f1f1',  // Använd färgen när listan är vald
+      color: view === 'list' ? '#fff' : '#000',
+      border: '1px solid #ccc',
+      borderRadius: '5px 0 0 5px',  // Rundad vänsterkant
+      cursor: 'pointer',
+      fontSize: '14px',  // Minska textstorleken för att göra knappen mindre
+      margin: '0',  // Tar bort extra marginaler
+    }}
+  >
+    <FontAwesomeIcon icon={faList} style={{ marginRight: '5px' }} />  {/* Mindre marginal till ikonen */}
+    Lista
+  </div>
+  
+  <div
+    onClick={() => setView('map')}
+    style={{
+      display: 'inline-block',
+      padding: '5px 10px',  // Mindre padding för en kompaktare knapp
+      backgroundColor: view === 'map' ? 'rgb(221, 65, 34)' : '#f1f1f1',  // Använd färgen när kartan är vald
+      color: view === 'map' ? '#fff' : '#000',
+      border: '1px solid #ccc',
+      borderRadius: '0 5px 5px 0',  // Rundad högerkant
+      cursor: 'pointer',
+      fontSize: '14px',  // Minska textstorleken för att göra knappen mindre
+      margin: '0',  // Tar bort extra marginaler
+    }}
+  >
+    <FontAwesomeIcon icon={faMap} style={{ marginRight: '5px' }} />  {/* Mindre marginal till ikonen */}
+    Karta
+  </div>
+</div>
 
-        {/* Karta knapp */}
-        <CustomButton
-          onClick={() => {
-            setSelectedButton('map');
-            setView('map');
-          }}
-          isSelected={selectedButton === 'map'}
-        >
-          <FontAwesomeIcon icon={faMap} style={{ marginRight: '8px' }} /> {/* Karta ikon */}
-          Karta
-        </CustomButton>
-  
-          <CustomButton
-            onClick={() => {
-              setSelectedButton('closest'); // Sätt knappen som vald
-              filterClosestPreschools(); // Kör funktionen för att filtrera de 5 närmaste
-            }}
-            isSelected={selectedButton === 'closest'} // Kontrollera om knappen ska vara vald
-          >
-            De 5 närmaste
-          </CustomButton>
-  
-          <CustomButton
-            onClick={() => {
-              setSelectedButton('rank'); // Sätt knappen som vald
-              handleTopRanked(); // Kör funktionen för att visa högst rankade förskolor
-            }}
-            isSelected={selectedButton === 'rank'} // Kontrollera om knappen ska vara vald
-          >
-            Högst rank
-          </CustomButton>
-  
-          <OrganisationFilterDropdown 
-            organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
-            filter={filter}
-            handleFilterChange={handleFilterChange}
-            sx={{
-              minWidth: '200px', // Gör dropdown bredare
-              '@media (max-width: 600px)': {
-                minWidth: '100%', // Gör dropdown 100% bredd på små skärmar
-              },
-              '@media (min-width: 601px) and (max-width: 960px)': {
-                minWidth: '300px', // Anpassa bredd för iPad-storlek
-              },
-            }}
-          />
-        </Box>
-     
+
+  {/* De 5 närmaste */}
+  <CustomButton
+    onClick={() => {
+      setSelectedButton('closest');
+      filterClosestPreschools();
+    }}
+    isSelected={selectedButton === 'closest'}
+  >
+    De 5 närmaste
+  </CustomButton>
+
+  {/* Högst rank */}
+  <CustomButton
+    onClick={() => {
+      setSelectedButton('rank');
+      handleTopRanked();
+    }}
+    isSelected={selectedButton === 'rank'}
+  >
+    Högst rank
+  </CustomButton>
+
+  {/* Dropdown */}
+  <OrganisationFilterDropdown 
+    organisationTypes={['Kommunal', 'Fristående', 'Fristående (föräldrakooperativ)']}
+    filter={filter}
+    handleFilterChange={handleFilterChange}
+    sx={{
+      minWidth: '200px',
+      '@media (max-width: 600px)': {
+        minWidth: '100%',
+      },
+      '@media (min-width: 601px) and (max-width: 960px)': {
+        minWidth: '300px',
+      },
+    }}
+  />
+</Box>
+
+
   
           <form onSubmit={geocodeAddressHandler} style={{ width: '100%', marginTop: '5px', position: 'relative' }}>
           <TextField
@@ -891,9 +910,10 @@ const findNearbyPlaces = useCallback(async (location) => {
         </div>
       )}
 {/* Google Maps-kontainern */}
-<div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`}></div>
+{/* Google Maps-container */}
+<div ref={mapRef} className={`map-container ${view === 'list' ? 'hidden' : ''}`} />
 
-{/* Listvy-kontainern, endast synlig när "list view" är aktiv */}
+{/* Listvy-container, endast synlig när "list view" är aktiv */}
 <div className={`cards-container ${view === 'map' ? 'hidden' : ''}`}>
   {showPlaces && nearbyPlaces.length > 0 ? (
     nearbyPlaces.map((place, index) => (

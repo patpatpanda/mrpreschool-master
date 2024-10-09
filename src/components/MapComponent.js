@@ -468,17 +468,16 @@ const findNearbyPlaces = useCallback(async (location) => {
     } else {
       iconUrl = kooperativ;
     }
-    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, { lat: place.latitude, lng: place.longitude, });
+    
+    const walkingTimeInMinutes = await calculateWalkingTime(originLocation, { lat: place.latitude, lng: place.longitude });
     const formattedWalkingTime = walkingTimeInMinutes ? walkingTimeInMinutes.toFixed(2) : 'N/A';
   
-    // Hämta Malibu-data
     const malibuData = await fetchMalibuByName(place.namn);
     const helhetsomdome = malibuData ? malibuData.helhetsomdome : null;
   
-    // Funktion för att generera stjärnor och visa rating bredvid
     const getRatingWithIcon = (rating) => {
       if (rating === null) {
-        return 'Ingen data'; // Om inget betyg finns
+        return 'Ingen data';
       }
   
       return `
@@ -490,15 +489,13 @@ const findNearbyPlaces = useCallback(async (location) => {
       `;
     };
   
-    // Generera betygsikonen med värde eller visa "Ingen data"
     const ratingContent = getRatingWithIcon(helhetsomdome);
   
-    // Ta bort orden "förskola" och "föräldrakooperativet" från namnet om de finns
     const cleanedName = place.namn
       .replace(/förskolan/gi, '') 
       .replace(/förskola/gi, '')
-      .replace(/förskolor/gi, '') // Tar bort "förskola"
-      .replace(/föräldrakooperativet/gi, '') // Tar bort "föräldrakooperativet"
+      .replace(/förskolor/gi, '')
+      .replace(/föräldrakooperativet/gi, '')
       .trim();
   
     const marker = new google.maps.Marker({
@@ -511,10 +508,9 @@ const findNearbyPlaces = useCallback(async (location) => {
       },
     });
   
-    // Skapa InfoWindow med stjärn-ikon och betyg bredvid "Betyg"
     const infoWindow = new google.maps.InfoWindow({
       content: `
-        <div style="color: black; padding: 5px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 150px; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div id="infowindow-${place.id}" style="color: black; padding: 5px; font-size: 10px; font-weight: bold; border-radius: 2px; line-height: 1.1em; max-width: 150px; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
           <div style="margin: 0; padding: 0; text-align: center;">${cleanedName}</div>
           <div style="display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
             <span style="margin-right: 2px;">Betyg:</span>
@@ -526,8 +522,19 @@ const findNearbyPlaces = useCallback(async (location) => {
     
     infoWindow.open(map, marker);
   
+    // Lägg till en click-händelse för markören
     marker.addListener('click', () => {
       handleMarkerClick(place, formattedWalkingTime);  // Visa PreschoolCard
+    });
+  
+    // Lägg till en click-händelse för InfoWindow-innehållet
+    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+      const infoWindowElement = document.getElementById(`infowindow-${place.id}`);
+      if (infoWindowElement) {
+        infoWindowElement.addEventListener('click', () => {
+          handleMarkerClick(place, formattedWalkingTime);  // Visa PreschoolCard
+        });
+      }
     });
   
     clustererRef.current.addMarker(marker);
@@ -544,9 +551,8 @@ const findNearbyPlaces = useCallback(async (location) => {
     }
   
     setCurrentMarkers((prevMarkers) => [...prevMarkers, marker]);
-  };
-  
-  
+};
+
 
   const selectPlace = async (place, changeView = false) => {
     try {

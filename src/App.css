@@ -357,20 +357,22 @@ p {
   position: absolute;
   overflow: hidden;
   transform: translate3d(10px, -50%, 0);
-  background: #fff;
- 
   
+  background: #f0f0f0;
+
+
+
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: flex-start;
   font-size: 1rem;
-  max-width: 250px; /* Justerat max bredd */
-  max-height: 250px; /* Justerat max höjd */
+  
   height: auto !important;
   text-align: left;
   padding: 10px;
   font-family: Comic Sans MS, Comic Sans;
 }
+
 
 .gm-style .gm-style-iw-d {
   display: flex;

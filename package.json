@@ -17,7 +17,6 @@
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
-    "@vitejs/plugin-react": "^4.3.2",
     "axios": "^1.7.3",
     "chart.js": "^4.4.3",
     "fuse.js": "^7.0.0",
@@ -39,7 +38,6 @@
     "react-select": "^5.8.0",
     "react-spinners": "^0.14.1",
     "use-places-autocomplete": "^4.0.1",
-    "vite": "^5.4.8",
     "web-vitals": "^4.2.2"
   },
   "devDependencies": {
@@ -59,16 +57,17 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
+    "start": "react-scripts start",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "copy-build": "cpy 'build/**/*' '../MasterKinder/wwwroot' --parents",
+    "build-and-copy": "npm run build && npm run copy-build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
+    
     ]
   },
   "browserslist": {

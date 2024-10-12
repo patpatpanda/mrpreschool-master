@@ -144,7 +144,7 @@ button.MuiButtonBase-root {
 .header-container {
   height: 1px;
 
-  z-index: 1; /* Se till att headern ligger över andra element */
+  z-index: 10; /* Se till att headern ligger över andra element */
 
   
 }

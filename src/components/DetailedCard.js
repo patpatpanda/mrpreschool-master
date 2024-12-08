@@ -127,7 +127,7 @@ const DetailedCard = ({ schoolData, onClose }) => {
   };
 
   const fetchDataForYear = async (year, encodedName) => {
-    const url = `https://masterkinder20240523125154.azurewebsites.net/api/Survey/Results/${year}/${encodedName}`;
+    const url = `https://masterkinder1337.azurewebsites.net//api/Survey/Results/${year}/${encodedName}`;
     const response = await axios.get(url);
     return response.data.$values;
   };

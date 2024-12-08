@@ -41,7 +41,7 @@ const geocodeAddress = async (address) => {
   console.log('Geocoding address:', address);
   try {
     const fullAddress = `${address}, Stockholm, Sweden`;
-    const response = await axios.get(`https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/geocode/${encodeURIComponent(fullAddress)}`);
+    const response = await axios.get(`https://masterkinder1337.azurewebsites.net//api/Forskolan/geocode/${encodeURIComponent(fullAddress)}`);
     const data = response.data;
 
     if (data && data.latitude && data.longitude) {
@@ -413,7 +413,7 @@ const findNearbyPlaces = useCallback(async (location) => {
   const calculateWalkingTime = async (origin, destination) => {
     try {
       const response = await axios.get(
-        `https://masterkinder20240523125154.azurewebsites.net/api/Forskolan/walking-time`,
+        `https://masterkinder1337.azurewebsites.net//api/Forskolan/walking-time`,
         {
           params: {
             lat1: origin.lat(),

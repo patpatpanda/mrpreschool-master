@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const backendUrl = 'https://masterkinder20240523125154.azurewebsites.net';
+const backendUrl = 'https://masterkinder1337.azurewebsites.net/';
 
 const pdfDataCache = new Map();
 const schoolDetailsCache = new Map();
@@ -39,7 +39,7 @@ export const fetchSurveyResponsesByName = async (name) => {
 
 export const fetchSatisfactionSummary = async () => {
   try {
-    const response = await axios.get('https://https://masterkinder20240523125154.azurewebsites.net//api/Survey/satisfaction-summary');
+    const response = await axios.get('https://masterkinder1337.azurewebsites.net///api/Survey/satisfaction-summary');
     return response.data;
   } catch (error) {
     console.error('Error fetching satisfaction summary:', error);
@@ -118,7 +118,7 @@ export const fetchNearbySchools = async (lat, lng, organisationsform, typAvServi
 // Uppdatera skoldetaljer, fokusera på beskrivning och kontakter
 export const updateSchoolDetails = async (schoolId, updatedDetails) => {
   try {
-    const response = await axios.put(`https://masterkinder20240523125154.azurewebsites.net/api/schools/${schoolId}`, updatedDetails);
+    const response = await axios.put(`https://masterkinder1337.azurewebsites.net//api/schools/${schoolId}`, updatedDetails);
     return response.data;
   } catch (error) {
     console.error('Error updating school details:', error);
